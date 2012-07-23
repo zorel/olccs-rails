@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  url: MyText
+  status: MyString
+  indexed: false
+  previewed: false
+
+two:
+  url: MyText
+  status: MyString
+  indexed: false
+  previewed: false

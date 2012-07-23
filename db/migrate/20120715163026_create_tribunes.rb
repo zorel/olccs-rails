@@ -1,0 +1,17 @@
+class CreateTribunes < ActiveRecord::Migration
+  def change
+    create_table :tribunes do |t|
+      t.text :name
+      t.text :get_url
+      t.text :last_id_parameter
+      t.text :post_parameter
+      t.text :post_url
+      t.text :cookie_url
+      t.text :cookie_name
+      t.text :user_parameter
+      t.text :pwd_parameter
+
+      t.timestamps
+    end
+  end
+end

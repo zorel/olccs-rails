@@ -1,0 +1,2 @@
+module TribuneHelper
+end

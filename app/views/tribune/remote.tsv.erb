@@ -1,0 +1,4 @@
+<%= %w(id time info login message).join("\t") %>
+<% @results.each do |p| %>
+<%=raw [p.id, p.time, p.info, p.login, p.message].join("\t") %>
+<% end %>

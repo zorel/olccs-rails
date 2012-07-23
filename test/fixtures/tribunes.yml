@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  get_url: MyString
+  last_id_parameter: MyString
+  post_parameter: MyString
+  post_url: MyString
+  cookie_url: MyString
+  cookie_name: MyString
+  user_parameter: MyString
+  pwd_parameter: MyString
+
+two:
+  name: MyString
+  get_url: MyString
+  last_id_parameter: MyString
+  post_parameter: MyString
+  post_url: MyString
+  cookie_url: MyString
+  cookie_name: MyString
+  user_parameter: MyString
+  pwd_parameter: MyString
