@@ -19,34 +19,27 @@ class TribuneController < ApplicationController
   end
 
   def search
+    # TODO: pour la recherche, prévoir à l'affichage un truc pour prendre les posts des horloges pointées, et éventuellement un "contexte" en nombre de lignes affichables
     size = params[:size] || 150
-    if request.get?
-      if params[:query].nil?
-        respond_to do |format|
-          format.html { render }
-          format.xml { render :nothing => true}
-          format.tsv { render :nothing => true}
-        end
-      else
-        @results = @tribune.query(params[:query],size)
-        respond_to do |format|
-          format.html
-          format.xml { render :xml => to_xml(@results) }
-          format.tsv
-        end
+    page = params[:page] || 1
+    @results = []
+    if params[:query].nil?
+      respond_to do |format|
+        format.html { render }
+        format.xml { render :nothing => true}
+        format.tsv { render :nothing => true}
       end
-    elsif request.post?
-      if @query != ''
-        @results = @tribune.query(params[:query],size)
-        respond_to do |format|
-          format.tsv
-          format.xml { render :xml => to_xml(@results) }
-        end
-      else
-        render nothing: true
-      end
+    else
+      @results = @tribune.query(params[:query],page,10).results
+      puts @results.class
 
+      respond_to do |format|
+        format.html
+        format.xml { render :xml => to_xml(@results) }
+        format.tsv
+      end
     end
+
   end
 
   def stats

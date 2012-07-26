@@ -9,7 +9,7 @@ class Tribune < ActiveRecord::Base
   def backend(last=0, s=150)
     b = Tire.search(name) do
       query do
-        range :id, { :from => last }
+        range :id, { :from => last+1 }
       end
       sort do
         by :id, 'desc'
@@ -20,7 +20,8 @@ class Tribune < ActiveRecord::Base
     return b.results
   end
 
-  def query(q, s=150)
+  def query(q, page=1, s=150)
+    puts "#{q}, #{page}, #{s}"
     b = Tire.search(name) do
       query do
         string q
@@ -28,14 +29,16 @@ class Tribune < ActiveRecord::Base
       sort do
         by :id, 'desc'
       end
+      from (page.to_i - 1) * s
       size s
     end
 
-    return b.results
+    return b
   end
+
   def refresh
     client = HTTPClient.new
-    last_post = Post.last(:order => "p_id")
+    last_post = self.posts.last(:order => "p_id" )
     if last_post.nil?
       last_id = 0
     else
@@ -63,19 +66,19 @@ class Tribune < ActiveRecord::Base
 
   end
 
-  def post(m)
-    url = post_url
-    c = m.gsub('#{plus}#','+').gsub('#{amp}#','&').gsub('#{dcomma}#',';').gsub('#{percent}#','%')
-    i = c.index("=") || -1
 
-    body = { post_parameter.to_sym => c}
+  # @param [Hash] opts
+  def post(opts)
+    puts opts.inspect
+    body = { post_parameter.to_sym => opts[:message]}
     head = {
             "Referer" => post_url,
-            "Cookie"  => opts[:cookies],
             "User-Agent" => opts[:ua]}
 
     client = HTTPClient.new
-    client.post(post_url, body, head)
+    client.cookie_manager.parse(opts[:cookie], URI.parse(post_url))
+    # client.debug_dev=File.open('http.log', File::CREAT|File::TRUNC|File::RDWR )
+    res = client.post(post_url, body, head)
     refresh
   end
 end

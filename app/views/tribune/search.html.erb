@@ -1,6 +1,6 @@
 
 <% if @results.size !=0 %>
-<ul>
+<ol>
   <% @results.each do |p|
     d = t = p.info
     class_d = 'ua'
@@ -10,15 +10,17 @@
       class_d = 'login'
     end
     display = p.login != '' ? p.login : p.info %>
-  <li><span class="horloge"><%= p.time %></span><span class="<%=class_d%>" title="<%=t%>"><%= d %></span></li>
+  <!--<li><span class="horloge"><%= p.time %></span><span class="<%=class_d%>" title="<%=t%>"><%= d %></span></li>-->
+  <li><%= p.inspect%></li>
   <% end %>
-</ul>
+</ol>
 <% end %>
 
+<%= paginate @results, theme: "bootstrap" unless @results.empty? %>
 
-<%= form_tag url_for action: 'search' do |f| %>
+<%= form_tag url_for action: 'search', method: 'get' do |f| %>
     <div class="field">
       <%= label_tag "Query: " %>
-      <%= text_field_tag @query %>
+      <%= text_field_tag 'query' %>
     </div>
 <% end %>
