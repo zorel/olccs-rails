@@ -15,7 +15,7 @@ class WelcomeController < ApplicationController
     render :text => "plop"
   end
 
-  def remotephp
+  def backendphp
     tribune = Tribune.find_by_name(params[:name])
     uri = URI.parse(params[:url])
     last = CGI.parse(uri.query) ? CGI.parse(uri.query)[tribune.last_id_parameter][0].to_i : 0
@@ -37,10 +37,14 @@ class WelcomeController < ApplicationController
         }
       }
     end
-
     render :xml => builder.to_xml(:encoding => 'UTF-8', :save_with => Nokogiri::XML::Node::SaveOptions::AS_XML)
+  end
 
-
+  def totozphp
+    url = params[:url].sub(/\{question\}/,'?')
+    client = HTTPClient.new
+    r = client.get(url)
+    render :xml => r.body
   end
 
   def index

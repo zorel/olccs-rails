@@ -1,6 +1,7 @@
 class TribuneController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, :with => :record_not_found
   before_filter :set_tribune
+
   def remote
     last = params[:last] || 0
     size = params[:size] || 150
@@ -46,6 +47,10 @@ class TribuneController < ApplicationController
   end
 
   def login
+    @tribune.login({user: params[:user], password: params[:password], ua: "plop"}).each {|c|
+      cookies[c.name] = { value: c.value, expires: c.expires }
+    }
+    render :json => @tribune.login({user: params[:user], password: params[:password], ua: "plop"}).to_json
   end
 
   def history
@@ -54,6 +59,8 @@ class TribuneController < ApplicationController
   def refresh
     @tribune.refresh
   end
+
+
 
   private
   def set_tribune

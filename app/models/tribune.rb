@@ -21,7 +21,6 @@ class Tribune < ActiveRecord::Base
   end
 
   def query(q, page=1, s=150)
-    puts "#{q}, #{page}, #{s}"
     b = Tire.search(name) do
       query do
         string q
@@ -32,10 +31,11 @@ class Tribune < ActiveRecord::Base
       from (page.to_i - 1) * s
       size s
     end
-
+    logger.debug("*"*60 + b.to_json)
     return b
   end
 
+  # TODO Scheduler. Crontab, accès via controlleur?
   def refresh
     client = HTTPClient.new
     last_post = self.posts.last(:order => "p_id" )
@@ -50,7 +50,6 @@ class Tribune < ActiveRecord::Base
 
     response.xpath("/board/post[@id > #{last_id}]").reverse.each do |p|
       p_id = p.xpath("@id").to_s.to_i
-      puts p.xpath("message").inspect
       self.posts.build({ p_id: p.xpath("@id").to_s.to_i,
                      time: p.xpath("@time").to_s,
                      info: p.xpath("info").text,
@@ -59,23 +58,39 @@ class Tribune < ActiveRecord::Base
       })
 
     end
-    save
+    save!
     Tire.index name do
       self.refresh
     end
 
   end
 
+  # @param [Hash] opts
+  def login(opts)
+    client = HTTPClient.new
+    body = {
+        user_parameter.to_sym => opts[:user],
+        pwd_parameter.to_sym => opts[:password]
+        #remember_me_parameter.to_sym => 1
+    }
+    head = {
+        :Referer => cookie_url,
+        :User_Agent => opts[:ua]
+    }
+
+    r = client.post(cookie_url, body, head)
+    client.cookie_manager.cookies
+  end
 
   # @param [Hash] opts
   def post(opts)
-    puts opts.inspect
-    body = { post_parameter.to_sym => opts[:message]}
-    head = {
-            "Referer" => post_url,
-            "User-Agent" => opts[:ua]}
-
     client = HTTPClient.new
+    body = { post_parameter: opts[:message]}
+    head = {
+            :Referer => post_url,
+            :User-Agent => opts[:ua]}
+
+
     client.cookie_manager.parse(opts[:cookie], URI.parse(post_url))
     # client.debug_dev=File.open('http.log', File::CREAT|File::TRUNC|File::RDWR )
     res = client.post(post_url, body, head)

@@ -5,4 +5,5 @@ class Link < ActiveRecord::Base
 
   attr_accessible :indexed, :previewed, :status, :href, :post
 
+  # TODO Faire un truc propre pour gestion asynchrone (to_index? / indexed / etc.)
 end

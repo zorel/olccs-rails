@@ -6,17 +6,19 @@ class Post < ActiveRecord::Base
 
   validates_uniqueness_of :p_id, :scope => :tribune_id
 
-  CODERS = HTMLEntities.new
+  before_save :update_message
+  after_save :update_tire
 
   def search
 
   end
 
-  before_create do |post|
-    #puts "Grouin meuh, before_validation, #{post.tribune.inspect}"
-    #puts "=> #{post.message} <="
-    message_node = Nokogiri::XML.fragment(post.message).xpath('message')[0]
-    #puts "=> #{message_node.inspect} <="
+  private
+  def update_message
+
+    login = self.login.strip
+
+    message_node = Nokogiri::XML.fragment(self.message).xpath('message')[0]
     cdata, text, autre = false, false, false
     message_node.children.each do |n|
       if n.cdata?
@@ -44,17 +46,19 @@ class Post < ActiveRecord::Base
       end
     end
     m = n.to_xml(:encoding => 'UTF-8', :save_with => Nokogiri::XML::Node::SaveOptions::AS_XML).strip
-    post.message = m
+    logger.debug(m)
+    self.message = m
   end
 
-  after_save do |post|
-    Tire.index post.tribune.name do
-      store board: post.tribune.name,
-            time: post.time,
-            info: post.info.strip,
-            login: post.login.strip,
-            message: post.message.strip,
-            id: post.p_id,
+  def update_tire
+    a = self
+    Tire.index self.tribune.name do
+      store board: a.tribune.name,
+            time: a.time,
+            info: a.info.strip,
+            login: a.login.strip,
+            message: a.message.strip,
+            id: a.p_id,
             type: 'post'
     end
   end

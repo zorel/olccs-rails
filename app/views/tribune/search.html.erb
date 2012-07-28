@@ -2,21 +2,24 @@
 <% if @results.size !=0 %>
 <ol>
   <% @results.each do |p|
-    d = t = p.info
-    class_d = 'ua'
-    if p.login != ''
-      d = p.login
-      t = p.info
-      class_d = 'login'
-    end
-    display = p.login != '' ? p.login : p.info %>
-  <!--<li><span class="horloge"><%= p.time %></span><span class="<%=class_d%>" title="<%=t%>"><%= d %></span></li>-->
-  <li><%= p.inspect%></li>
-  <% end %>
+    if p.type == 'link' %>
+        <li class="link"><%= p.href %></li>
+    <% else
+        d = t = p.info
+        class_d = 'ua'
+        if p.login != ''
+          d = p.login
+          t = p.info
+          class_d = 'login'
+        end
+        display = p.login != '' ? p.login : p.info %>
+        <li class='post' id="p<%=p.p_id-%>"><span class="horloge"><%=p.time%></span> <span title="<%=t%>" class="<%=class_d%>"><%=d%></span> <%=raw p.message %></li>
+    <%end%>
+  <%end%>
 </ol>
 <% end %>
 
-<%= paginate @results, theme: "bootstrap" unless @results.empty? %>
+<%= paginate @results, theme: 'bootstrap' unless @results.empty? %>
 
 <%= form_tag url_for action: 'search', method: 'get' do |f| %>
     <div class="field">

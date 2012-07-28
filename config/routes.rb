@@ -58,7 +58,8 @@ Olccs::Application.routes.draw do
   # Note: This route will make all actions in every controller accessible via GET requests.
 
   match '/post.php' => 'welcome#postphp', :via => :post
-  match '/remote.php' => 'welcome#remotephp', :via => :get
+  match '/backend.php' => 'welcome#backendphp', :via => :get
+  match '/totoz.php' => 'welcome#totozphp', :via => :get
   
   match '/t(/:tribune(/:action))(.:format)' => 'tribune'
 

@@ -1,7 +1,8 @@
 class LinkObserver < ActiveRecord::Observer
-
+  # TODO rendre asynchrone
   # @param [Link] link
   def after_create(link)
+    link.logger.debug("Link after create for #{link.inspect} ")
     client = HTTPClient.new
     client.ssl_config.verify_mode=(OpenSSL::SSL::VERIFY_NONE)
 
@@ -13,8 +14,6 @@ class LinkObserver < ActiveRecord::Observer
       #if %w(text/html application/xhtml+xml application/xml).include?(content_type)
       r = client.get(href, query, headers, follow_redirect: true)
 
-      puts r.status
-      #link.logger.debug("URL #{href}, status #{body.status}")
       if r.status < 400
         href = link.href
         created_at = Time.now
@@ -28,6 +27,7 @@ class LinkObserver < ActiveRecord::Observer
       end
     rescue HTTPClient::BadResponseError => e
       link.logger.debug("FAIL! "*15)
+      link.logger.debug(e)
     end
   end
 end

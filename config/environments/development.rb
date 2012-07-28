@@ -16,7 +16,7 @@ Olccs::Application.configure do
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = false
 
-  # Print deprecation notices to the Rails logger
+  # Print deprecation notices to the Rails +logger
   config.active_support.deprecation = :log
 
   # Only use best-standards-support built into browsers
@@ -34,4 +34,13 @@ Olccs::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+
+  # See everything in the log (default is :info)
+  config.log_level = :debug
+
+  # Prepend all log lines with the following tags
+  #config.log_tags = [ :subdomain, :uuid ]
+
+  # Use a different logger for distributed setups
+  #config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
 end

@@ -7,7 +7,7 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 Tribune.create(name: 'shoop',
-               get_url: "http://dax.sveetch.net/tribune/remote.xml",
+               get_url: "http://dax.sveetch.net/tribune/remote/xml/",
                last_id_parameter: "last",
                post_parameter: "content",
                post_url: "http://dax.sveetch.net/tribune/post.xml",
@@ -16,7 +16,7 @@ Tribune.create(name: 'shoop',
                user_parameter: "username",
                pwd_parameter: "password")
 
-Tribune.create(name: 'euro',
+Tribune.create(name: 'euromussels',
                get_url: "http://euromussels.eu/?q=tribune.xml",
                last_id_parameter: "last_id",
                post_parameter: "message",
