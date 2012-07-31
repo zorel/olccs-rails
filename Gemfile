@@ -39,18 +39,28 @@ gem 'jquery-rails'
 # To use debugger
 # gem 'debugger'
 
+group :development do
+  gem "thin", "1.3.1"
+  gem "eventmachine", "1.0.0.rc.4"
+end
 
-gem "thin", "1.3.1"
-gem "eventmachine", "1.0.0.rc.4"
-
+# elasticsearch
 gem 'tire'
 
+# auth
 gem 'omniauth'
 gem 'omniauth-browserid'
 gem 'omniauth-google'
 gem 'omniauth-twitter'
 
+# http client
 gem 'httpclient'
+
+# xml parser/builder
 gem 'nokogiri'
 
+# Pagination
 gem 'kaminari'
+
+# perform async
+gem 'sidekiq'

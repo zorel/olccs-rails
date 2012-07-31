@@ -65,6 +65,7 @@ class Tribune < ActiveRecord::Base
 
   end
 
+  # TODO gestion du remember me
   # @param [Hash] opts
   def login(opts)
     client = HTTPClient.new

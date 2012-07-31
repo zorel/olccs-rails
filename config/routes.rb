@@ -63,6 +63,9 @@ Olccs::Application.routes.draw do
   
   match '/t(/:tribune(/:action))(.:format)' => 'tribune'
 
+  match '/auth/:provider/callback', :to => 'sessions#create'
+  match '/session/destroy', :to => 'sessions#destroy', :as => 'signout'
+
   match ':controller(/:action(/:id))(.:format)'
 
 end

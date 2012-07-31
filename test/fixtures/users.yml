@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  provider: MyText
+  uid: MyText
+  olcc_cookie: MyText
+
+two:
+  provider: MyText
+  uid: MyText
+  olcc_cookie: MyText

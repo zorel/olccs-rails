@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120721133758) do
+ActiveRecord::Schema.define(:version => 20120731083222) do
 
   create_table "links", :force => true do |t|
     t.text     "href"
@@ -44,6 +44,14 @@ ActiveRecord::Schema.define(:version => 20120721133758) do
     t.text     "pwd_parameter"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
+  end
+
+  create_table "users", :force => true do |t|
+    t.text     "provider"
+    t.text     "uid"
+    t.text     "olcc_cookie"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
 end

@@ -47,10 +47,12 @@ class TribuneController < ApplicationController
   end
 
   def login
-    @tribune.login({user: params[:user], password: params[:password], ua: "plop"}).each {|c|
+    tribune_login = @tribune.login({user: params[:user], password: params[:password], ua: "plop"})
+
+    tribune_login.each {|c|
       cookies[c.name] = { value: c.value, expires: c.expires }
     }
-    render :json => @tribune.login({user: params[:user], password: params[:password], ua: "plop"}).to_json
+    render :json => tribune_login.to_json
   end
 
   def history
