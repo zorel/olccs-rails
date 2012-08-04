@@ -17,7 +17,7 @@ class Tribune < ActiveRecord::Base
       size s
     end
     
-    return b.results
+    b.results
   end
 
   def query(q, page=1, s=150)
@@ -32,7 +32,7 @@ class Tribune < ActiveRecord::Base
       size s
     end
     logger.debug("*"*60 + b.to_json)
-    return b
+    b
   end
 
   # TODO Scheduler. Crontab, accès via controlleur?

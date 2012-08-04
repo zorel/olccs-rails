@@ -25,7 +25,7 @@ module Olccs
     # Activate observers that should always be running.
     # config.active_record.observers = :cacher, :garbage_collector, :forum_observer
 
-    config.active_record.observers = :link_observer
+    #config.active_record.observers = :link_observer
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
@@ -57,6 +57,7 @@ module Olccs
 
     # Enable the asset pipeline
     config.assets.enabled = true
+    config.assets.prefix = Rails.root.join('tmp/assets').to_s
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'

@@ -4,6 +4,7 @@ class CreateUsers < ActiveRecord::Migration
       t.text :provider
       t.text :uid
       t.text :olcc_cookie, :null => true
+      t.boolean :use_rules, :default => false
 
       t.timestamps
     end

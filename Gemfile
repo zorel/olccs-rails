@@ -19,7 +19,8 @@ group :assets do
 
   gem 'uglifier', '>= 1.0.3'
 
-  gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git', :branch => "static"
+  gem 'bootstrap-sass'
+  #gem 'twitter-bootstrap-rails' #, :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git', :branch => "static"
 end
 
 gem 'jquery-rails'
@@ -38,11 +39,6 @@ gem 'jquery-rails'
 
 # To use debugger
 # gem 'debugger'
-
-group :development do
-  gem "thin", "1.3.1"
-  gem "eventmachine", "1.0.0.rc.4"
-end
 
 # elasticsearch
 gem 'tire'
@@ -64,3 +60,10 @@ gem 'kaminari'
 
 # perform async
 gem 'sidekiq'
+gem 'slim'
+gem 'sinatra', :require => nil
+
+# growl for jquery
+gem "gritter", "1.0.1"
+
+gem 'certified'

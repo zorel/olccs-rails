@@ -2,6 +2,7 @@ class TribuneController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, :with => :record_not_found
   before_filter :set_tribune
 
+  # TODO: percolater chaque post en fonction des préfs utilisateurs
   def remote
     last = params[:last] || 0
     size = params[:size] || 150

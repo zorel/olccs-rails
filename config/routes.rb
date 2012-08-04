@@ -1,4 +1,10 @@
+require 'sidekiq/web'
+
 Olccs::Application.routes.draw do
+
+  get "user/prefs"
+
+  get "user/rules"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -68,4 +74,5 @@ Olccs::Application.routes.draw do
 
   match ':controller(/:action(/:id))(.:format)'
 
+  mount Sidekiq::Web => '/sidekiq'
 end

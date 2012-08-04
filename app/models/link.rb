@@ -5,5 +5,12 @@ class Link < ActiveRecord::Base
 
   attr_accessible :indexed, :previewed, :status, :href, :post
 
+  after_commit :index_link, :on => :create
   # TODO Faire un truc propre pour gestion asynchrone (to_index? / indexed / etc.)
+
+private
+  def index_link
+    logger.debug("Link after create for #{inspect} ")
+    LinkWorker.perform_async(id)
+  end
 end
