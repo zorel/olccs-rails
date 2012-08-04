@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120731083222) do
+ActiveRecord::Schema.define(:version => 20120803121016) do
 
   create_table "links", :force => true do |t|
     t.text     "href"
@@ -32,6 +32,16 @@ ActiveRecord::Schema.define(:version => 20120731083222) do
     t.integer "tribune_id"
   end
 
+  create_table "rules", :force => true do |t|
+    t.text     "name"
+    t.text     "filter"
+    t.text     "action"
+    t.text     "parameters"
+    t.integer  "user_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "tribunes", :force => true do |t|
     t.text     "name"
     t.text     "get_url"
@@ -42,16 +52,20 @@ ActiveRecord::Schema.define(:version => 20120731083222) do
     t.text     "cookie_name"
     t.text     "user_parameter"
     t.text     "pwd_parameter"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "last_updated",      :default => '2012-08-04 17:52:05'
+    t.integer  "refresh_interval",  :default => 15
+    t.datetime "created_at",                                           :null => false
+    t.datetime "updated_at",                                           :null => false
   end
 
   create_table "users", :force => true do |t|
     t.text     "provider"
     t.text     "uid"
+    t.text     "name"
     t.text     "olcc_cookie"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.boolean  "use_rules",   :default => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
   end
 
 end

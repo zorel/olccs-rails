@@ -59,13 +59,11 @@ class TribuneController < ApplicationController
   def history
   end
 
-  def refresh
-    @tribune.refresh
-  end
+  #def refresh
+  #  @tribune.refresh
+  #end
 
-
-
-  private
+private
   def set_tribune
     @tribune = Tribune.find_by_name(params[:tribune]) || raise(ActiveRecord::RecordNotFound)
   end

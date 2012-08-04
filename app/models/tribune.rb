@@ -2,7 +2,7 @@ class Tribune < ActiveRecord::Base
   has_many :posts
   has_many :links
 
-  attr_accessible :cookie_name, :cookie_url, :get_url, :last_id_parameter, :name, :post_parameter, :post_url, :pwd_parameter, :user_parameter
+  attr_accessible :cookie_name, :cookie_url, :get_url, :last_id_parameter, :name, :post_parameter, :post_url, :pwd_parameter, :user_parameter, :last_updated
 
   validates_uniqueness_of :name
 
@@ -63,6 +63,26 @@ class Tribune < ActiveRecord::Base
       self.refresh
     end
 
+  end
+
+  def refresh?
+    now = Time.now
+    to_be = (now - last_updated) > refresh_interval
+    if to_be
+      refresh
+      update_attributes last_updated: now
+      logger.info "Reload fini pour board #{name}"
+    else
+      logger.info "Pas de reload pour board #{name}"
+    end
+    to_be
+
+  end
+
+  def self.refresh_all
+    Tribune.all.each do |t|
+      t.refresh?
+    end
   end
 
   # TODO gestion du remember me

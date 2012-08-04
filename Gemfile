@@ -49,6 +49,9 @@ gem 'omniauth-browserid'
 gem 'omniauth-google'
 gem 'omniauth-twitter'
 
+# certificats SSL pour omniauth
+gem 'certified'
+
 # http client
 gem 'httpclient'
 
@@ -66,4 +69,8 @@ gem 'sinatra', :require => nil
 # growl for jquery
 gem "gritter", "1.0.1"
 
-gem 'certified'
+# crontab for ruby
+gem 'clockwork'
+
+# foreman, lancement de process
+gem 'foreman'
