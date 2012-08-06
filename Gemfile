@@ -46,7 +46,7 @@ gem 'tire'
 # auth
 gem 'omniauth'
 gem 'omniauth-browserid'
-gem 'omniauth-google'
+gem 'omniauth-openid'
 gem 'omniauth-twitter'
 
 # certificats SSL pour omniauth
