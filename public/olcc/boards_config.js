@@ -72,7 +72,6 @@ olo.getUrl = 'http://board.olivierl.org/remote.xml';
 olo.postUrl = 'http://board.olivierl.org/add.php';
 olo.color = '#80dafc';
 olo.alias = "olivierl";
-olo.slip = SLIP_TAGS_RAW;
 GlobalBoards['olo'] = olo;
 
 var ygllo = new Board('ygllo', false);
@@ -87,7 +86,6 @@ kad.getUrl = 'http://kadreg.org/board/backend.php';
 kad.postUrl = 'http://kadreg.org/board/add.php';
 kad.color = '#dae6e6';
 kad.alias = "kad,rincevent";
-kad.slip = SLIP_TAGS_RAW;
 GlobalBoards['kadreg'] = kad;
 
 var dae = new Board('darkside', false);
@@ -95,7 +93,6 @@ dae.getUrl = 'http://quadaemon.free.fr/remote.xml';
 dae.postUrl = 'http://quadaemon.free.fr/add.php';
 dae.color = '#daedae';
 dae.alias = "dae,daemon";
-dae.slip = SLIP_TAGS_RAW; // Protection temporaire
 GlobalBoards['darkside'] = dae;
 
 var axel = new Board('hadoken', false);
@@ -110,7 +107,6 @@ lo.getUrl = 'http://lordoric.free.fr/daBoard/remote.xml';
 lo.postUrl = 'http://lordoric.free.fr/daBoard/add.php';
 lo.color = '#dedede';
 lo.alias = "lo,lordoric";
-lo.slip = SLIP_TAGS_RAW; // Protection temporaire
 GlobalBoards['comptoir'] = lo;
 
 var gabu = new Board('gabuzomeu', false);

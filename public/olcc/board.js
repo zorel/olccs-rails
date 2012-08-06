@@ -10,7 +10,7 @@ function Board(name, perso) {
   this.getUrl = '';
   this.postUrl = '';
   this.postData = 'message=%m';
-  this.slip = SLIP_TAGS_ENCODED;
+  this.slip = SLIP_TAGS_RAW;
   
   // Données configurables
   this.color = '#dac0de';
