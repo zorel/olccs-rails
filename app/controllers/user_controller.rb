@@ -7,7 +7,7 @@ class UserController < ApplicationController
   end
 
   def save_olcc_cookie
-    current_user.update_attribute(olcc_cookie, cookies)
+    current_user.update_attribute('olcc_cookie', cookies)
   end
 
   def reload_olcc_cookie
@@ -15,7 +15,7 @@ class UserController < ApplicationController
   end
 
   def destroy_olcc_cookie
-    current_user.update_attribute(olcc_cookie, "")
+    current_user.update_attribute('olcc_cookie', "")
   end
 
   private
