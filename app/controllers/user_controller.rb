@@ -9,10 +9,10 @@ class UserController < ApplicationController
   def save_olcc_cookie
     save = []
     cookies.each do |c|
-      save << c
+      save << c unless c[0] == '_olccs_sessions'
     end
-    current_user.update_attribute('olcc_cookie', Base64.encode64(save.to_json))
-    render :text => save.to_yaml
+    current_user.update_column('olcc_cookie', Base64.encode64(save.to_json))
+    render :nothing => true
   end
 
   def reload_olcc_cookie
@@ -20,7 +20,7 @@ class UserController < ApplicationController
     saved_cookie.each do |c|
       cookies[c[0]] = c[1]
     end
-    render :text => cookies.to_yaml
+    redirect_to '/olcc/'
   end
 
   def destroy_olcc_cookie
