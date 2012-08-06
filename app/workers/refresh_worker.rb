@@ -5,13 +5,13 @@ class RefreshWorker
     tribune = Tribune.find(tribune_id)
 
     now = Time.now
-    to_be = (now - last_updated) > refresh_interval
+    to_be = (now - tribune.last_updated) > tribune.refresh_interval
     if to_be
       tribune.refresh
       tribune.update_attributes last_updated: now
-      logger.info "Reload fini pour board #{name}"
+      tribune.logger.info "Reload fini pour board #{tribune.name}"
     else
-      logger.info "Pas de reload pour board #{name}"
+      tribune.logger.info "Pas de reload pour board #{tribune.name}"
     end
     to_be
   end
