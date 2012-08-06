@@ -25,6 +25,7 @@ class TribuneController < ApplicationController
   end
 
   def search
+    # TODO: requête vide
     # TODO: pour la recherche, prévoir à l'affichage un truc pour prendre les posts des horloges pointées, et éventuellement un "contexte" en nombre de lignes affichables
     size = params[:size] || 150
     page = params[:page] || 1

@@ -95,15 +95,15 @@ class Tribune < ActiveRecord::Base
   # @param [Hash] opts
   def post(opts)
     client = HTTPClient.new
-    body = { post_parameter: opts[:message]}
+    body = { post_parameter.to_sym => opts[:message]}
     head = {
             :Referer => post_url,
             "User-Agent" => opts[:ua]}
 
-    client.cookie_manager.parse(opts[:cookie], URI.parse(post_url))
-    client.debug_dev=File.open('http.log', File::CREAT|File::TRUNC|File::RDWR )
+    client.cookie_manager.parse(opts[:cookie], URI.parse(post_url)) unless opts[:cookies].nil?
+    #client.debug_dev=File.open('http.log', File::CREAT|File::TRUNC|File::RDWR )
     res = client.post(post_url, body, head)
-    refresh
+    self.refresh
   end
 end
 #

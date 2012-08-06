@@ -48,7 +48,7 @@ class WelcomeController < ApplicationController
   end
 
   def index
-    @tribunes = Tribune.all
+    @tribunes = Tribune.all(:order => 'name asc')
   end
 
   def welcome
