@@ -9,7 +9,7 @@ class UserController < ApplicationController
   def save_olcc_cookie
     save = []
     cookies.each do |c|
-      save << k
+      save << c
     end
     current_user.update_attribute('olcc_cookie', save.to_json)
     render :text => save.to_yaml
