@@ -2,7 +2,7 @@
  * OnlineCoinCoin, by Chrisix (chrisix@gmail.com)
  * Définition de constantes, variables globales et fonctions utilitaires
  ************************************************************/
- 
+
 // Constantes globales génériques
 var VERSION = '0.4.2';
 
@@ -30,7 +30,7 @@ var BOSSMODE_RANDOM = 'Aléatoire';
 var BOSSMODE_PTRAMO = 'Pierre Tramo';
 var BOSSMODE_KERVIEL = 'J. Kerviel';
 var BOSSMODE_PBPG = 'pBpG';
-var BOSSMODE_DECIDEUR = 'Diçaïdor'
+var BOSSMODE_DECIDEUR = 'Diçaïdor';
 
 // Balltrap
 var BALLTRAP_ONCLICK = 'Launch on click';
@@ -38,8 +38,8 @@ var BALLTRAP_AUTO = 'Auto launch';
 var BALLTRAP_KILL = 'Kill on click';
 
 // Valeurs de config par défaut
-var DEFAULT_DEFAULT_UA = "onlineCoinCoin/"+VERSION;
-var DEFAULT_PINNI_SIZE = 1000;
+var DEFAULT_DEFAULT_UA = "onlineCoinCoin/olccs/"+VERSION;
+var DEFAULT_PINNI_SIZE = 5000;
 var DEFAULT_PINNI_KEEP = true;
 var DEFAULT_AUTOREFRESH = true;
 var DEFAULT_TIMEOUT = 30000;
@@ -52,7 +52,7 @@ var DEFAULT_FAVICON = "img/coin.png";
 var DEFAULT_BOSS_MODE = BOSSMODE_RANDOM;
 var DEFAULT_STYLE = 'default';
 var DEFAULT_PLONK = '';
-var DEFAULT_BALLTRAP = true;
+var DEFAULT_BALLTRAP = false;
 var DEFAULT_MAX_DUCKS = 15;
 var DEFAULT_BALLTRAP_MODE = BALLTRAP_AUTO;
 var DEFAULT_BALLTRAP_SILENT = false;
