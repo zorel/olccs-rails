@@ -65,7 +65,7 @@ class Tribune < ActiveRecord::Base
   end
 
   def refresh?
-    RefreshWorker.perform(id)
+    RefreshWorker.perform_async(id)
   end
 
   def self.refresh_all
