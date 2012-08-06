@@ -101,8 +101,15 @@ class Tribune < ActiveRecord::Base
             "User-Agent" => opts[:ua]}
 
     client.cookie_manager.parse(opts[:cookie], URI.parse(post_url))
-    # client.debug_dev=File.open('http.log', File::CREAT|File::TRUNC|File::RDWR )
+    client.debug_dev=File.open('http.log', File::CREAT|File::TRUNC|File::RDWR )
     res = client.post(post_url, body, head)
     refresh
   end
 end
+#
+#http%3A//euromussels.eu/%3Fq%3Dtribune/post&postdata=message=test
+#http%3A//euromussels.eu/%3Fq%3Dtribune/post&postdata=message=123
+#ua=onlineCoinCoin/0.4.2&name=euromussels&cookie=&posturl=
+#
+#            ua=[:zorel]&name=euromussels&cookie=&posturl=http%3A//euromussels.eu/%3Fq%3Dtribune/post&postdata=message=test
+#ua=onlineCoinCoin/0.4.2&name=euromussels&cookie=&posturl=http%3A//euromussels.eu/%3Fq%3Dtribune/post&postdata=message=123
