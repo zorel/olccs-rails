@@ -7,11 +7,20 @@ class UserController < ApplicationController
   end
 
   def save_olcc_cookie
-    current_user.update_attribute('olcc_cookie', cookies)
+    save = []
+    cookies.each do |c|
+      save << k
+    end
+    current_user.update_attribute('olcc_cookie', save.to_json)
+    render :text => save.to_yaml
   end
 
   def reload_olcc_cookie
-    cookies = current_user.olcc_cookie
+    saved_cookie = JSON.parse(current_user.olcc_cookie)
+    saved_cookie.each do |c|
+      cookies[c[0]] = c[1]
+    end
+    render :text => cookies.to_yaml
   end
 
   def destroy_olcc_cookie
