@@ -1,0 +1,6 @@
+<% content_for :navbar do %>
+<li><%= link_to "Search", :controller => 'tribune', :action => 'search' %></li>
+<% end %>
+
+<h2><%= @tribune.name %></h2>
+<p><%= @tribune.posts.count%> posts, <%= @tribune.links.count %> links.</p>

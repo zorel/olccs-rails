@@ -28,9 +28,10 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </a>
-      <a class="brand" href="#">Olccs</a>
+      <a class="brand" href="<%= root_url %>">Olccs</a>
       <div class="container nav-collapse">
         <ul class="nav">
+          <%= yield(:navbar) %>
         </ul>
       </div><!--/.nav-collapse -->
     </div>
@@ -48,14 +49,20 @@
         <div class="well sidebar-nav">
           <h3>Sidebar</h3>
           <ul class="nav nav-list">
-            <li class="nav-header">User</li>
-            <li id="user_nav">
-              <% if current_user %>
-                  Signed in as <%= current_user.name %>
-                  <%= link_to "Sign out", signout_path %>
+            <li id="user_nav" class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">Sign-in <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li>
+                <% if current_user %>
+                  Connecté en tant que <%= current_user.name %> (via <%= current_user.provider%>)
+                  <%= link_to "Se déconnecter", signout_path %>
               <% else %>
-                  <%= link_to "Sign in with Twitter", "/auth/twitter"%>
+                  <%= link_to "with Twitter", "/auth/twitter"%>
+                  <%= link_to "with Google", "/auth/google"%>
+                  <%= link_to "with BrowserID / Mozilla Personae", "/auth/browser_id"%>
               <% end %>
+                </li>
+              </ul>
             </li>
           </ul>
         </div><!--/.well -->
@@ -65,7 +72,7 @@
 
 
   <footer>
-    <p>&copy; Company 2012</p>
+    <p>Zorel 2012</p>
   </footer>
 
 </div> <!-- /container -->

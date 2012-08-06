@@ -1,5 +1,6 @@
 class UserController < ApplicationController
   # TODO finir all this shit
+  # TODO attention si user_id existant dans session mais pas dans base => 404 partout (sur tribune)
   def index
   end
 

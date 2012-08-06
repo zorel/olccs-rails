@@ -48,6 +48,7 @@ class WelcomeController < ApplicationController
   end
 
   def index
+    @tribunes = Tribune.all
   end
 
   def welcome

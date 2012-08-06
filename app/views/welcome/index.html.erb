@@ -1,2 +1,8 @@
-<h1>Welcome#index</h1>
-<p>Find me in app/views/welcome/index.html.erb</p>
+<h1>Tribunes</h1>
+<dl>
+  <% @tribunes.each do |t| %>
+  <dt><i class="icon-chevron-right"></i><%= t.name %></dt>
+      <dd><i class="icon-zoom-in"></i><%=  t.posts.count %> posts, <%= t.links.count %> liens</dd>
+      <dd><i class="icon-refresh"></i>Dernière mise à jour le <%= t.last_updated %></dd>
+  <% end %>
+</dl>

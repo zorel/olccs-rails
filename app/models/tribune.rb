@@ -1,6 +1,6 @@
 class Tribune < ActiveRecord::Base
   has_many :posts
-  has_many :links
+  has_many :links, :through => :posts
 
   attr_accessible :cookie_name, :cookie_url, :get_url, :last_id_parameter, :name, :post_parameter, :post_url, :pwd_parameter, :user_parameter, :last_updated
 
@@ -35,7 +35,6 @@ class Tribune < ActiveRecord::Base
     b
   end
 
-  # TODO Scheduler. Crontab, accès via controlleur?
   def refresh
     client = HTTPClient.new
     last_post = self.posts.last(:order => "p_id" )
@@ -66,17 +65,7 @@ class Tribune < ActiveRecord::Base
   end
 
   def refresh?
-    now = Time.now
-    to_be = (now - last_updated) > refresh_interval
-    if to_be
-      refresh
-      update_attributes last_updated: now
-      logger.info "Reload fini pour board #{name}"
-    else
-      logger.info "Pas de reload pour board #{name}"
-    end
-    to_be
-
+    RefreshWorker.perform(id)
   end
 
   def self.refresh_all
