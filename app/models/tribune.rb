@@ -98,8 +98,7 @@ class Tribune < ActiveRecord::Base
     body = { post_parameter: opts[:message]}
     head = {
             :Referer => post_url,
-            :User-Agent => opts[:ua]}
-
+            "User-Agent" => opts[:ua]}
 
     client.cookie_manager.parse(opts[:cookie], URI.parse(post_url))
     # client.debug_dev=File.open('http.log', File::CREAT|File::TRUNC|File::RDWR )
