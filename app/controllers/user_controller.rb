@@ -11,12 +11,12 @@ class UserController < ApplicationController
     cookies.each do |c|
       save << c
     end
-    current_user.update_attribute('olcc_cookie', save.to_json)
+    current_user.update_attribute('olcc_cookie', Base64.encode64(save.to_json))
     render :text => save.to_yaml
   end
 
   def reload_olcc_cookie
-    saved_cookie = JSON.parse(current_user.olcc_cookie)
+    saved_cookie = JSON.parse(Base64.decode64(current_user.olcc_cookie))
     saved_cookie.each do |c|
       cookies[c[0]] = c[1]
     end
