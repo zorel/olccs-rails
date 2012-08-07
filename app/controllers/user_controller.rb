@@ -9,7 +9,7 @@ class UserController < ApplicationController
   def save_olcc_cookie
     save = []
     cookies.each do |c|
-      save << c unless c[0] == '_olccs_sessions'
+      save << c unless c[0] == '_olccs_session'
     end
     current_user.update_column('olcc_cookie', Base64.encode64(save.to_json))
     render :nothing => true
