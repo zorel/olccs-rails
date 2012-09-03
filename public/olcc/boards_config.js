@@ -59,13 +59,13 @@ shoop.alias = "sveetch,dax";
 shoop.color = '#EDEDDB';
 GlobalBoards['shoop'] = shoop;
 
-var tif = new Board('tifauv', false);
-tif.getUrl = 'http://tribune.tifauv.homeip.net/tribune/remote?last=%i';
-tif.postUrl = 'http://tribune.tifauv.homeip.net/tribune/post_coincoin';
-tif.postData = "missive=%m";
+var tif = new Board('jplop', false);
+tif.getUrl = 'http://catwitch.eu/jplop/backend';
+tif.postUrl = 'http://catwitch.eu/jplop/post';
+tif.postData = "message=%m";
 tif.alias = "tif";
 tif.color = '#a9f9b9';
-GlobalBoards['tifauv'] = tif;
+GlobalBoards['jplop'] = tif;
 
 var olo = new Board('olo', false);
 olo.getUrl = 'http://board.olivierl.org/remote.xml';

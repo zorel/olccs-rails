@@ -16,8 +16,9 @@ ActiveRecord::Schema.define(:version => 20120803121016) do
   create_table "links", :force => true do |t|
     t.text     "href"
     t.text     "status"
-    t.boolean  "indexed",    :default => false
+    t.boolean  "to_index",   :default => true
     t.boolean  "previewed",  :default => false
+    t.boolean  "indexed",    :default => false
     t.integer  "post_id"
     t.datetime "created_at",                    :null => false
     t.datetime "updated_at",                    :null => false
@@ -52,10 +53,11 @@ ActiveRecord::Schema.define(:version => 20120803121016) do
     t.text     "cookie_name"
     t.text     "user_parameter"
     t.text     "pwd_parameter"
-    t.datetime "last_updated",      :default => '2012-08-04 17:52:05'
-    t.integer  "refresh_interval",  :default => 15
-    t.datetime "created_at",                                           :null => false
-    t.datetime "updated_at",                                           :null => false
+    t.text     "remember_me_parameter"
+    t.datetime "last_updated",          :default => '2012-09-02 20:39:21'
+    t.integer  "refresh_interval",      :default => 15
+    t.datetime "created_at",                                               :null => false
+    t.datetime "updated_at",                                               :null => false
   end
 
   create_table "users", :force => true do |t|

@@ -7,6 +7,7 @@ Olccs::Application.routes.draw do
   match '/post.php' => 'welcome#postphp', :via => :post
   match '/backend.php' => 'welcome#backendphp', :via => :get
   match '/totoz.php' => 'welcome#totozphp', :via => :get
+  match '/urls(.:format)' => 'welcome#urls', :via => :get
   
   match '/t(/:tribune(/:action))(.:format)' => 'tribune'
 

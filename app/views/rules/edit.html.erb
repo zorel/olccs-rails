@@ -1,6 +1,6 @@
 <h1>Editing rule</h1>
 
-<%= render 'form' %>
+<%= render 'rules/form', :collection => @rules, :as => :rule %>
 
 <%= link_to 'Show', @rule %> |
-<%= link_to 'Back', rules_path %>
+

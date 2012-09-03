@@ -46,7 +46,6 @@ class Post < ActiveRecord::Base
       end
     end
     m = n.to_xml(:encoding => 'UTF-8', :save_with => Nokogiri::XML::Node::SaveOptions::AS_XML).strip
-    logger.debug(m)
     self.message = m
   end
 

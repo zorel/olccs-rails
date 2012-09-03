@@ -1,4 +1,4 @@
-<h1>Tribunes</h1>
+<h1><%= @tribunes.count %> tribunes</h1>
 <dl>
   <% @tribunes.each do |t| %>
   <dt><i class="icon-chevron-right"></i><%= link_to t.name, controller: :tribune, action: :index, tribune: t.name %></dt>

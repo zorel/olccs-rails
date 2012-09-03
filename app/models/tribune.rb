@@ -2,21 +2,23 @@ class Tribune < ActiveRecord::Base
   has_many :posts
   has_many :links, :through => :posts
 
-  attr_accessible :cookie_name, :cookie_url, :get_url, :last_id_parameter, :name, :post_parameter, :post_url, :pwd_parameter, :user_parameter, :last_updated
+  attr_accessible :cookie_name, :cookie_url, :get_url, :last_id_parameter, :name, :post_parameter, :post_url, :pwd_parameter, :user_parameter, :last_updated, :remember_me_parameter, :refresh_interval
 
   validates_uniqueness_of :name
 
-  def backend(last=0, s=150)
+  def backend(last=0, s=150, user)
     b = Tire.search(name) do
       query do
-        range :id, { :from => last+1 }
+        range :id, {:from => last+1}
       end
       sort do
         by :id, 'desc'
       end
       size s
     end
-    
+
+
+
     b.results
   end
 
@@ -31,13 +33,13 @@ class Tribune < ActiveRecord::Base
       from (page.to_i - 1) * s
       size s
     end
-    logger.debug("*"*60 + b.to_json)
+    logger.debug(b.to_json)
     b
   end
 
   def refresh
     client = HTTPClient.new
-    last_post = self.posts.last(:order => "p_id" )
+    last_post = self.posts.last(:order => "p_id")
     if last_post.nil?
       last_id = 0
     else
@@ -45,23 +47,32 @@ class Tribune < ActiveRecord::Base
     end
     query = {"#{last_id_parameter}" => last_id}
 
-    response = Nokogiri::XML(client.get_content(get_url, query))
+    begin
+      r = client.get(get_url, query)
 
-    response.xpath("/board/post[@id > #{last_id}]").reverse.each do |p|
-      p_id = p.xpath("@id").to_s.to_i
-      self.posts.build({ p_id: p.xpath("@id").to_s.to_i,
-                     time: p.xpath("@time").to_s,
-                     info: p.xpath("info").text,
-                     login: p.xpath("login").text,
-                     message: p.xpath("message")
-      })
+      #puts "*"*80
+      #puts "#{name} => " + r.content.force_encoding('utf-8').encoding.to_s
+      #puts "#{name} => " + r.body_encoding.to_s
+      #puts "*"*80
+      response = Nokogiri::XML(r.content)
+      response.xpath("/board/post[@id > #{last_id}]").reverse.each do |p|
+        p_id = p.xpath("@id").to_s.to_i
+        self.posts.build({p_id: p.xpath("@id").to_s.to_i,
+                          time: p.xpath("@time").to_s,
+                          info: p.xpath("info").text.encode('utf-8'),
+                          login: p.xpath("login").text.encode('utf-8'),
+                          message: p.xpath("message")
+                         })
 
+      end
+      save!
+      Tire.index name do
+        self.refresh
+      end
+    rescue HTTPClient::BadResponseError => e
+      logger.error ("Refresh failed for #{name}")
+      logger.error (e)
     end
-    save!
-    Tire.index name do
-      self.refresh
-    end
-
   end
 
   def refresh?
@@ -74,14 +85,13 @@ class Tribune < ActiveRecord::Base
     end
   end
 
-  # TODO gestion du remember me
   # @param [Hash] opts
   def login(opts)
     client = HTTPClient.new
     body = {
         user_parameter.to_sym => opts[:user],
-        pwd_parameter.to_sym => opts[:password]
-        #remember_me_parameter.to_sym => 1
+        pwd_parameter.to_sym => opts[:password],
+        remember_me_parameter.to_sym => 1
     }
     head = {
         :Referer => cookie_url,
@@ -95,15 +105,21 @@ class Tribune < ActiveRecord::Base
   # @param [Hash] opts
   def post(opts)
     client = HTTPClient.new
-    body = { post_parameter.to_sym => opts[:message]}
+    body = {post_parameter.to_sym => opts[:message]}
     head = {
-            :Referer => post_url,
-            "User-Agent" => opts[:ua]}
+        :Referer => post_url,
+        "User-Agent" => opts[:ua]}
 
-    client.cookie_manager.parse(opts[:cookie], URI.parse(post_url)) unless opts[:cookies].nil?
+    client.cookie_manager.parse(opts[:cookie], URI.parse(post_url)) unless opts[:cookie].nil?
     #client.debug_dev=File.open('http.log', File::CREAT|File::TRUNC|File::RDWR )
-    res = client.post(post_url, body, head)
-    self.refresh
+    begin
+      res = client.post(post_url, body, head)
+    rescue Exception => e
+      logger.error("Post fail for #{name}")
+      logger.error(e)
+    else
+      self.refresh
+    end
   end
 end
 #

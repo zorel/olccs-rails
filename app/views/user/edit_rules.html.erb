@@ -1,0 +1,13 @@
+<h1>Editing rule</h1>
+<%= form_tag url_for controller: 'user', action: 'save_rules' do |f| %>
+    <% @rules.each do |r| %>
+        <%= fields_for r do |r_form| %>
+            <%= r_form.text_field :filter %>
+            <%= r_form.text_field :name %>
+        <% end %>
+    <% end %>
+    <%= submit_tag %>
+<% end %>
+
+<%= link_to 'Show', @rule %> |
+

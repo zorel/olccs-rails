@@ -9,13 +9,45 @@ class TribuneController < ApplicationController
   # TODO: percolater chaque post en fonction des préfs utilisateurs
   def remote
     last = params[:last] || 0
-    size = params[:size] || 150
+    size = params[:size] || 10
 
     @results = @tribune.backend(last,size)
+    res = nil
+
+    if current_user
+      puts "percolation pour #{@current_user.name}"
+      md5 = Digest::MD5.hexdigest("#{@current_user.provider}#{@current_user.uid}")
+
+
+      index = Tire.index(@tribune.name)
+
+      # TODO: a déplacer dans le modèle Tribune au niveau de la génération du backend
+      res = @results.collect do |r|
+        content = r['_source']
+        #raise content['message'].to_yaml
+        matches = index.percolate(message: content['message'], time: content['time'], login: content['login'], info: content['info'], type:'post') do
+          term :usermd5, md5
+        end
+
+        #raise matches.to_yaml
+        if matches.include?('warning')
+          logger.debug "ici, dans le filtre, #{content.inspect}"
+
+          plop = OlccsPluginsManager.instance.repository[:plopify]
+          new_message = plop.instance.process(content['message'])
+          content['message'] = new_message
+          #logger.debug "ici, dans le filtre, #{content.methods.sort}"
+          logger.debug("============> " + matches.to_s + " " + content['message'] + " --#{new_message}--")
+          #raise content.to_yaml
+        end
+
+        content
+      end
+    end
 
     respond_to do |format|
       format.tsv
-      format.xml { render xml: to_xml(@results) }
+      format.xml { render xml: to_xml(res) }
     end
 
   end
@@ -25,12 +57,11 @@ class TribuneController < ApplicationController
   end
 
   def search
-    # TODO: requête vide
     # TODO: pour la recherche, prévoir à l'affichage un truc pour prendre les posts des horloges pointées, et éventuellement un "contexte" en nombre de lignes affichables
     size = params[:size] || 150
     page = params[:page] || 1
     @results = []
-    if params[:query].nil?
+    if params[:query].nil? || params[:query] == ""
       respond_to do |format|
         format.html { render }
         format.xml { render :nothing => true}
@@ -38,7 +69,7 @@ class TribuneController < ApplicationController
       end
     else
       @results = @tribune.query(params[:query],page,10).results
-      puts @results.class
+      #raise @results.to_yaml
 
       respond_to do |format|
         format.html
@@ -50,6 +81,15 @@ class TribuneController < ApplicationController
   end
 
   def stats
+  end
+
+  def urls
+    @urls = @tribune.links.order("created_at desc").limit(42)
+
+    respond_to do |format|
+      format.rss
+      format.xml
+    end
   end
 
   def login
@@ -64,9 +104,9 @@ class TribuneController < ApplicationController
   def history
   end
 
-  #def refresh
-  #  @tribune.refresh
-  #end
+  def refresh
+    @tribune.refresh
+  end
 
 private
   def set_tribune

@@ -10,6 +10,7 @@ class CreateTribunes < ActiveRecord::Migration
       t.text :cookie_name
       t.text :user_parameter
       t.text :pwd_parameter
+      t.text :remember_me_parameter
       t.datetime :last_updated, :default => Time.now
       t.integer :refresh_interval, :default => 15
       t.timestamps

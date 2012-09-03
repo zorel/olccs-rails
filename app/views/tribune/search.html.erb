@@ -1,19 +1,20 @@
 
 <% if @results.size !=0 %>
 <ol>
-  <% @results.each do |p|
-    if p.type == 'link' %>
-        <li class="link"><%= p.href %></li>
+  <% @results.each do |res|
+    p = res['_source']
+    if res['_type'] == 'link' %>
+        <li class="link"><%= p['href'] %></li>
     <% else
-        d = t = p.info
+        d = t = p['info']
         class_d = 'ua'
-        if p.login != ''
-          d = p.login
-          t = p.info
+        if p['login'] != ''
+          d = p['login']
+          t = p['info']
           class_d = 'login'
         end
-        display = p.login != '' ? p.login : p.info %>
-        <li class='post' id="p<%=p.p_id-%>"><span class="horloge"><%=p.time%></span> <span title="<%=t%>" class="<%=class_d%>"><%=d%></span> <%=raw p.message %></li>
+        display = p['login'].presence || p['info'] %>
+        <li class='post' id="p<%=res['_id']-%>"><span class="horloge"><%=p['time']%></span> <span title="<%=t%>" class="<%=class_d%>"><%=d%></span> <%=raw p['message'] %></li>
     <%end%>
   <%end%>
 </ol>
