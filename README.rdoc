@@ -4,6 +4,7 @@ Online Coincoin Server permet de remplacer les backend.php et post.php en ajouta
 les remote.xml des différentes tribunes et remet à disposition des backend en json ou xml, en plus d'autres fonctionnalités.
 
 Les fonctionnalités prévues ou implémentées sont (en vrac):
+
 - normalisation des remotes (xml tags non encodés)
 - authentification par services tiers (openid/twitter/etc.)
 - sauvegarde/restauration des cookies
@@ -17,5 +18,6 @@ Les buts sont de palier les problèmes de lenteur de certaines tribunes et de fo
 On pourra par exemple construire des backends multitribunes, avoir des bigornophones cross tribunes, des bloub detector de pointe, tout en ayant un rendu rapide des remote sur les tribunes les plus lentes, et ainsi éviter le croixroutage dans olcc, et améliorer la charge sur les serveurs legacy par la baisse du nombre des requêtes.
 
 Online Coincoin Server est composé de:
+
 - une application rails
 - un serveur elasticsearch
