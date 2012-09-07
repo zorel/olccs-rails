@@ -4,13 +4,13 @@ Online Coincoin Server permet de remplacer les backend.php et post.php en ajouta
 les remote.xml des différentes tribunes et remet à disposition des backend en json ou xml, en plus d'autres fonctionnalités.
 
 Les fonctionnalités prévues ou implémentées sont (en vrac):
- - normalisation des remotes (xml tags non encodés)
- - authentification par services tiers (openid/twitter/etc.)
- - sauvegarde/restauration des cookies
- - gestion de filtres/règles personnels sur les messages en entrée (lors de la lecture du backend) ou en sortie (lors de la génération)
- - historique et indexation du contenu des URL, avec remote.xml des URL postées par tribune, et pour toutes les tribunes configurées
- - gestion des tags sur les urls
- - envoi de contenu par mail (pour partage à partir d'un smartphone)
+- normalisation des remotes (xml tags non encodés)
+- authentification par services tiers (openid/twitter/etc.)
+- sauvegarde/restauration des cookies
+- gestion de filtres/règles personnels sur les messages en entrée (lors de la lecture du backend) ou en sortie (lors de la génération)
+- historique et indexation du contenu des URL, avec remote.xml des URL postées par tribune, et pour toutes les tribunes configurées
+- gestion des tags sur les urls
+- envoi de contenu par mail (pour partage à partir d'un smartphone)
 
 Les buts sont de palier les problèmes de lenteur de certaines tribunes et de fournir un accès via recherche plein texte pour les posts et le contenu des url postées.
 
