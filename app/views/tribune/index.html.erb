@@ -13,4 +13,11 @@
         <%= render 'post', post: content %>
     <%end%>
   </ul>
+  <form action="/tribune/post" id="postForm" method="post">
+    <div id="postDiv"><input id="missive" maxlength="600" name="missive" size="80" type="text" value=""  disabled="disabled" />
+      <input name="commit" type="submit" value="Poster" disabled="disabled"/>
+      <!--<img alt="Spinner" id="please_wait" src="/images/spinner.gif?1184154283" style="visibility:hidden" />-->
+      <!--<img alt="Autoreload" id="autoreload" src="/images/autoreload.gif?1184154283" style="visibility:hidden" />-->
+    </div>
+  </form>
 </div>

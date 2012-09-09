@@ -9,4 +9,4 @@
      class_d = 'login'
    end
    display = post['login'].presence || post['info'] %>
-<li class='post' id="p<%=post['id']-%>"><span class="horloge"><%=time%></span> <span title="<%=post['info']%>" class="<%=class_d%>"><%=d%></span> <%=raw post['message'] %></li>
+<li class='post' id="p<%=post['id']-%>"><span class="horloge"><%=time%></span> <span title="<%=post['info']%>" class="<%=class_d%>"><%=d%></span> <span class="message"><%=raw post['message'] %></span></li>
