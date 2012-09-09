@@ -1,5 +1,6 @@
 <%= %w(id time info login message).join("\t") %>
-<% @results.each do |p| %>
-    <%= p.class %>
-<%=raw [p.id, p.time, p.info, p.login, p.message].join("\t") %>
+<% @results.each do |p|
+  content = p['_source']
+%>
+<%=raw [content['id'], content['time'], content['info'], content['login'], content['message']].join("\t") %>
 <% end %>

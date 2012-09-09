@@ -4,3 +4,13 @@
 
 <h2><%= @tribune.name %></h2>
 <p><%= @tribune.posts.count%> posts, <%= @tribune.links.count %> links.</p>
+
+<div id="tribune">
+  <ul id="list_tribune">
+    <%
+    @tribune.backend.each do |p|
+      content = p['_source'] %>
+        <%= render 'post', post: content %>
+    <%end%>
+  </ul>
+</div>

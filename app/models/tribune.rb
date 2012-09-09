@@ -9,7 +9,7 @@ class Tribune < ActiveRecord::Base
   #TODO Faire un chargement par fichier remote.xml afin de charger un historique
   #TODO Faire un chargement via bdd pour historique khapin
 
-  def backend(last=0, s=150, user)
+  def backend(last=0, s=150)
     b = Tire.search(name) do
       query do
         range :id, {:from => last+1}

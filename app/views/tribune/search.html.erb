@@ -5,16 +5,8 @@
     p = res['_source']
     if res['_type'] == 'link' %>
         <li class="link"><%= p['href'] %></li>
-    <% else
-        d = t = p['info']
-        class_d = 'ua'
-        if p['login'] != ''
-          d = p['login']
-          t = p['info']
-          class_d = 'login'
-        end
-        display = p['login'].presence || p['info'] %>
-        <li class='post' id="p<%=res['_id']-%>"><span class="horloge"><%=p['time']%></span> <span title="<%=t%>" class="<%=class_d%>"><%=d%></span> <%=raw p['message'] %></li>
+    <% else %>
+      <%=  render 'post', post: p %>
     <%end%>
   <%end%>
 </ol>

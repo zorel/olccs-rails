@@ -1,0 +1,12 @@
+<%
+   time = Time.strptime(post['time'], '%Y%m%d%H%M%S').strftime('%H:%M:%S')
+   d = post['info'][0..20]
+   t = post['info']
+   class_d = 'ua'
+   if post['login'] != ''
+     d = post['login']
+     t = post['info']
+     class_d = 'login'
+   end
+   display = post['login'].presence || post['info'] %>
+<li class='post' id="p<%=post['id']-%>"><span class="horloge"><%=time%></span> <span title="<%=post['info']%>" class="<%=class_d%>"><%=d%></span> <%=raw post['message'] %></li>
