@@ -367,6 +367,8 @@ SPAN.clock:after {
 SPAN.login {
   display: block;
   float: left;
+  overflow-x: hidden;
+  white-space: nowrap;
   width: 100px;
   color: #833;
 }

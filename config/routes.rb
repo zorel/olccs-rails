@@ -14,9 +14,10 @@ Olccs::Application.routes.draw do
   match '/auth/:provider/callback', :to => 'sessions#create'
   match '/session/destroy', :to => 'sessions#destroy', :as => 'signout'
 
-  match '/u(/:action)(.:format)' => 'user'
+  match '/u' => 'user#index', :as => :user
+  match '/u(/:action(.:format))' => 'user'
 
-  match ':controller(/:action(/:id))(.:format)'
+  #match ':controller(/:action(/:id))(.:format)'
 
   mount Sidekiq::Web => '/sidekiq'
 end

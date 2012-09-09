@@ -10,14 +10,30 @@ class UserController < ApplicationController
   end
 
   def edit_rules
-    @rules = @current_user.rules
+    @user = @current_user
+    @rules = @user.rules
     #
     #index = Tire.index('shoop') do
     #  md5 = Digest::MD5.hexdigest("#{c.provider}#{c.uid}")
     #  register_percolator_query('plopify', usermd5: md5) { string 'histoire' }
     #end
-
+    #3.times {@current_user.rules.build}
     render "edit_rules"
+  end
+
+  def save_rules
+    @user = @current_user
+
+    respond_to do |format|
+      if @user.update_attributes(params[:user])
+        format.html { redirect_to @user, notice: 'Pika was successfully updated.' }
+        format.json { head :no_content }
+      else
+        format.html { render action: "edit" }
+        format.json { render json: @user.errors, status: :unprocessable_entity }
+      end
+    end
+
   end
 
   def save_olcc_cookie

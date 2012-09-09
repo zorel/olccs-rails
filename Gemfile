@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.8'
+gem 'rails', '>=3.2.8'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -19,7 +19,7 @@ group :assets do
 
   gem 'uglifier', '>= 1.0.3'
 
-  gem 'bootstrap-sass'
+  gem 'bootstrap-sass', '~> 2.1.0.0'
   #gem 'twitter-bootstrap-rails' #, :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git', :branch => "static"
 end
 
@@ -67,7 +67,7 @@ gem 'slim'
 gem 'sinatra', :require => nil
 
 # growl for jquery
-gem "gritter", "1.0.1"
+gem "gritter", ">=1.0.1"
 
 # crontab for ruby
 gem 'clockwork'

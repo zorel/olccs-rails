@@ -1,0 +1,16 @@
+<fieldset>
+  <div class="input-prepend">
+    <span class="add-on">Name</span><%= f.text_field :name, :placeholder => 'Rule name' %>
+    <br/>
+  </div>
+  <div class="input-prepend">
+    <span class="add-on">Query</span><%= f.text_field :filter, :placeholder => 'Filter / Query' %>
+    <br/>
+  </div>
+  <div class="input-prepend">
+    <span class="add-on">Action</span><%= f.text_field :parameters, :placeholder => 'Action' %>
+    <br/>
+  </div>
+  <%= f.hidden_field :_destroy %>
+  <%= link_to "Remove", "#", class: "remove_fields btn btn-danger" %>
+</fieldset>

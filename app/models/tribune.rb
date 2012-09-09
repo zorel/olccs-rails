@@ -6,6 +6,9 @@ class Tribune < ActiveRecord::Base
 
   validates_uniqueness_of :name
 
+  #TODO Faire un chargement par fichier remote.xml afin de charger un historique
+  #TODO Faire un chargement via bdd pour historique khapin
+
   def backend(last=0, s=150, user)
     b = Tire.search(name) do
       query do
@@ -16,8 +19,6 @@ class Tribune < ActiveRecord::Base
       end
       size s
     end
-
-
 
     b.results
   end
@@ -72,6 +73,8 @@ class Tribune < ActiveRecord::Base
     rescue HTTPClient::BadResponseError => e
       logger.error ("Refresh failed for #{name}")
       logger.error (e)
+    ensure
+      update_column :last_updated, now
     end
   end
 
