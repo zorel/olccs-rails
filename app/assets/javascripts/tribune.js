@@ -237,6 +237,7 @@ function pushHorlogeRecurse(array, h, obj) {
     }
 }
 //var re_horloge = new RegExp("((?:1[0-2]|0[1-9])/(?:3[0-1]|[1-2][0-9]|0[1-9])#)?((?:2[0-3]|[0-1][0-9])):([0-5][0-9])(:[0-5][0-9])?([¹²³]|[:\^][1-9]|[:\^][1-9][0-9])?(@[A-Za-z0-9_]+)?", "");
+var re_horloge2 = new RegExp("(?:(?:([0-2]?[0-9])\:([0-5][0-9])\:([0-5][0-9])|([0-2]?[0-9])([0-5][0-9])([0-5][0-9]))(?:[\:\^]([0-9]{1,2})|([¹²³]))?)|([0-2]?[0-9])\:([0-5][0-9])", "g");
 var re_horloge = new RegExp("(?:(?:([0-2]?[0-9])\:([0-5][0-9])\:([0-5][0-9])|([0-2]?[0-9])([0-5][0-9])([0-5][0-9]))(?:[\:\^]([0-9]{1,2})|([¹²³]))?)|([0-2]?[0-9])\:([0-5][0-9])");
 
 function getHorloge(span) {
@@ -293,7 +294,6 @@ function writeClocks(message) {
 }
 
 function initSpan(span) {
-    console.log(span)
     if (span.className.substring(0, 7) == "horloge") {
         span.onmouseover = highlight;
         span.onmouseout = unhighlight;
@@ -584,7 +584,10 @@ function removeMe(idToRemove) {
 $(window).load(function () {
     initTribune();
     $("#tribune span.message").each( function() {
-        $(this).replaceWith(writeClocks(this.textContent))
+        this.innerHTML = this.innerHTML.replace (re_horloge2, function(matched) {
+            return '<span class="horloge_ref">' + matched + '</span>';
+        })
+//        $(this).replaceWith(writeClocks(this.textContent))
     });
     $("#tribune span").each( function() {
         initSpan(this);
