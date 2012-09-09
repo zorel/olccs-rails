@@ -74,7 +74,7 @@ class Tribune < ActiveRecord::Base
       logger.error ("Refresh failed for #{name}")
       logger.error (e)
     ensure
-      update_column :last_updated, now
+      update_column :last_updated, Time.now
     end
   end
 
