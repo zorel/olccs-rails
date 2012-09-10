@@ -3,6 +3,7 @@ class TribuneController < ApplicationController
   before_filter :set_tribune
 
   def index
+    #TODO: refresh ajax, possibilité de post, pagination
 
   end
 
@@ -88,7 +89,26 @@ class TribuneController < ApplicationController
 
     respond_to do |format|
       format.rss
-      format.xml
+      format.xml {
+        builder = Nokogiri::XML::Builder.new do |xml|
+          xml.board(:site => root_url) {
+            @urls.each { |u|
+              xml.post(:id => u.id, :time => u.post.time) {
+                xml.info {
+                  xml << u.post.info
+                }
+                xml.login {
+                  xml << u.post.login
+                }
+                xml.message {
+                  xml << "Sur #{u.post.tribune.name}: <a href='#{u.href}'>#{u.href}</a>"
+                }
+              }
+            }
+          }
+        end
+        render :xml => builder.to_xml(:encoding => 'UTF-8', :save_with => Nokogiri::XML::Node::SaveOptions::AS_XML)
+      }
     end
   end
 

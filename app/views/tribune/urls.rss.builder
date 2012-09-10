@@ -3,7 +3,7 @@ xml.rss :version => "2.0" do
   xml.channel do
     xml.title "Liste des liens pour #{@tribune.name}"
     xml.description "les 42 derniers liens postés sur #{@tribune.name}"
-    xml.link url_for controller: 't', tribune: @tribune
+    xml.link url_for controller: 'tribune', tribune: @tribune.name
 
     for url in @urls
       xml.item do
