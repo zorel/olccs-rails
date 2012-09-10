@@ -8,7 +8,7 @@
 <div id="tribune">
   <ul id="list_tribune">
     <%
-    @tribune.backend.each do |p|
+    @tribune.backend(0,150).reverse_each do |p|
       content = p['_source'] %>
         <%= render 'post', post: content %>
     <%end%>

@@ -9,7 +9,7 @@ class TribuneController < ApplicationController
   # TODO: percolater chaque post en fonction des préfs utilisateurs
   def remote
     last = params[:last] || 0
-    size = params[:size] || 10
+    size = params[:size] || 150
 
     @results = @tribune.backend(last,size)
     #res = nil
