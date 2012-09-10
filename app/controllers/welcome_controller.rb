@@ -25,25 +25,7 @@ class WelcomeController < ApplicationController
       end
     end
 
-    builder = Nokogiri::XML::Builder.new do |xml|
-      xml.board(:site => tribune.name) {
-        tribune.backend(last).each { |p|
-          content = p['_source']
-          xml.post(:id => content['id'], :time => content['time']) {
-            xml.info {
-              xml << content['info']
-            }
-            xml.login {
-              xml << content['login']
-            }
-            xml.message {
-              xml << content['message']
-            }
-          }
-        }
-      }
-    end
-    render :xml => builder.to_xml(:encoding => 'UTF-8', :save_with => Nokogiri::XML::Node::SaveOptions::AS_XML)
+    render :xml => posts_to_xml(tribune.backend(last), tribune.name)
   end
 
   def totozphp
@@ -59,24 +41,7 @@ class WelcomeController < ApplicationController
     respond_to do |format|
       format.rss
       format.xml {
-        builder = Nokogiri::XML::Builder.new do |xml|
-          xml.board(:site => root_url) {
-            @urls.each { |u|
-              xml.post(:id => u.id, :time => u.post.time) {
-                xml.info {
-                  xml << u.post.info
-                }
-                xml.login {
-                  xml << u.post.login
-                }
-                xml.message {
-                  xml << "Sur #{u.post.tribune.name}: <a href='#{u.href}'>#{u.href}</a>"
-                }
-              }
-            }
-          }
-        end
-        render :xml => builder.to_xml(:encoding => 'UTF-8', :save_with => Nokogiri::XML::Node::SaveOptions::AS_XML)
+        render :xml => urls_to_xml(@urls, root_url)
       }
     end
   end
@@ -91,26 +56,4 @@ class WelcomeController < ApplicationController
   def about
   end
 
-  # @param [Array] posts
-  # @return [String]
-  def to_xml(posts)
-    builder = Nokogiri::XML::Builder.new do |xml|
-      xml.board(:site => @tribune.name) {
-        posts.each { |p|
-          xml.post(:id => p['id'], :time => p['time']) {
-            xml.info {
-              xml << p['info']
-            }
-            xml.login {
-              xml << p['login']
-            }
-            xml.message {
-              xml << p['message']
-            }
-          }
-        }
-      }
-    end
-    builder.to_xml(:encoding => 'UTF-8', :save_with => Nokogiri::XML::Node::SaveOptions::AS_XML)
-  end
 end

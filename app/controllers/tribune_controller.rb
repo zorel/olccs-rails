@@ -48,7 +48,7 @@ class TribuneController < ApplicationController
 
     respond_to do |format|
       format.tsv
-      format.xml { render xml: to_xml(@results) }
+      format.xml { render xml: posts_to_xml(@results, @tribune.name) }
     end
 
   end
@@ -87,29 +87,7 @@ class TribuneController < ApplicationController
   def urls
     @urls = @tribune.links.order("created_at desc").limit(42)
 
-    respond_to do |format|
-      format.rss
-      format.xml {
-        builder = Nokogiri::XML::Builder.new do |xml|
-          xml.board(:site => root_url) {
-            @urls.each { |u|
-              xml.post(:id => u.id, :time => u.post.time) {
-                xml.info {
-                  xml << u.post.info
-                }
-                xml.login {
-                  xml << u.post.login
-                }
-                xml.message {
-                  xml << "Sur #{u.post.tribune.name}: <a href='#{u.href}'>#{u.href}</a>"
-                }
-              }
-            }
-          }
-        end
-        render :xml => builder.to_xml(:encoding => 'UTF-8', :save_with => Nokogiri::XML::Node::SaveOptions::AS_XML)
-      }
-    end
+    render :xml => urls_to_xml(@urls, @tribune.name)
   end
 
   def login
@@ -137,30 +115,6 @@ private
 
   def record_not_found
     render :text => "404 Not Found", :status => 404
-  end
-
-  # @param [Array] posts
-  # @return [String]
-  def to_xml(posts)
-    builder = Nokogiri::XML::Builder.new do |xml|
-      xml.board(:site => @tribune.name) {
-        posts.each { |p|
-          content = p['_source']
-          xml.post(:id => content['id'], :time => content['time']) {
-            xml.info {
-              xml << content['info']
-            }
-            xml.login {
-              xml << content['login']
-            }
-            xml.message {
-              xml << content['message']
-            }
-          }
-        }
-      }
-    end
-    builder.to_xml(:encoding => 'UTF-8', :save_with => Nokogiri::XML::Node::SaveOptions::AS_XML)
   end
 
 end
