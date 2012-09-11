@@ -4,9 +4,10 @@ var lastHorlogeInit;
 var canfix;
 var tribune;
 var skip_update = 0;
+var post_template = "<li id='p{{id}}'><span class='horloge'>{{time}}</span> <span class='{{class_display}}' title='{{&info}}'>{{&ua_or_login}}</span> <span class='message'>{{&message}}</span></li>";
 
 var myrules = {
-    'a.smiley:mouseover': function (el, ev) {
+    'a.smiley:mouseover':function (el, ev) {
         return overlib('<img src="' + el.href + '"/>', FULLHTML);
         /*(el.href,ev);*/
     },
@@ -71,7 +72,7 @@ function setSelectionRange(field, start, end) {
 }
 
 function appendHorlogeToMessage(text) {
-    var missive = form.missive;
+    var missive = form.message;
     var temp = missive.value;
     var range = getSelectionRange(missive);
     missive.focus();
@@ -87,14 +88,14 @@ function appendHorlogeToMessage(text) {
 function getYPosition(obj) {
     if (!obj) return;
     // récupère la position d'un objet selon les méthodes alloués par le browser
-    if( obj.offsetParent ) {
-          for( var posY = 0; obj.offsetParent; obj = obj.offsetParent ) {
-                posY += obj.offsetTop;
-           }
-            return posY;
-        } else {
-            return obj.y;
+    if (obj.offsetParent) {
+        for (var posY = 0; obj.offsetParent; obj = obj.offsetParent) {
+            posY += obj.offsetTop;
         }
+        return posY;
+    } else {
+        return obj.y;
+    }
 }
 
 function getScrollY() {
@@ -241,7 +242,7 @@ function pushHorlogeRecurse(array, h, obj) {
 var re_horloge = new RegExp("(?:(?:([0-2]?[0-9])\:([0-5][0-9])\:([0-5][0-9])|([0-2]?[0-9])([0-5][0-9])([0-5][0-9]))(?:[\:\^]([0-9]{1,2})|([¹²³]))?)|([0-2]?[0-9])\:([0-5][0-9])");
 
 function getHorloge(span) {
-    if (span.horloge) return span.horloge
+    if (span.horloge) return span.horloge;
     var match = re_horloge.exec(textContent(span));
     match.shift();
     if ((typeof match[6] != 'undefined') && (match[6] != '')) {
@@ -275,7 +276,7 @@ function writeClocks(message) {
 
     // On recherche les indices des horloges
     var h = re_horloge.exec(message);
-    while(h && h.length > 0) {
+    while (h && h.length > 0) {
         var hpos = offset + h.index;
         indexes.push([hpos, '<span class="horloge_ref">']);
         offset = hpos + h[0].length
@@ -286,9 +287,9 @@ function writeClocks(message) {
     }
 
     // Insertion des balises
-    for (var i=indexes.length-1; i>=0; i--) {
+    for (var i = indexes.length - 1; i >= 0; i--) {
         var pos_str = indexes[i];
-        message = message.substr(0, pos_str[0])+pos_str[1]+message.substr(pos_str[0]);
+        message = message.substr(0, pos_str[0]) + pos_str[1] + message.substr(pos_str[0]);
     }
     return message;
 }
@@ -413,90 +414,134 @@ function initTribune() {
 
 /* TRibUnE 2.0 */
 function tribune_update() {
-    var all = $$("#list_tribune li");
+    var list_tribune = $("#list_tribune");
+    var all = $("#list_tribune li");
     var last, first;
     if (all.length > 0) {
-        last = all.last().id;
-        first = all.first().id;
+        last = all.last()[0].id;
     } else {
         last = first = "p0";
     }
-    new Ajax.Request("/tribune/update",
-        {asynchronous:true,
-            onComplete:function (t) {
-                try {
-                    posts = eval(t.responseText)
-                    if (typeof(posts) != 'undefined' && posts != null) {
-                        var lastId = parseInt(last.substring(1, last.length));
-                        var numposts = all.length;
-                        posts.each(function (p) {
-                                a = $("p" + p['id'])
-                                if ((typeof(a) == 'undefined' || a == null) && p['id'] > lastId) {
-                                    post = "<li " +
-                                        p['li_class'] +
-                                        " id=\"p" +
-                                        p['id'] +
-                                        "\"><span class=\"horloge\">" +
-                                        p['horloge'] +
-                                        "</span> <span title=\"" +
-                                        p['user_agent'] +
-                                        "\" class=\"" +
-                                        p['span_class'] +
-                                        "\"> " +
-                                        p['affichage'] +
-                                        "</span> "
-                                        + p['post'] +
-                                        "</li>";
-                                    new Insertion.Bottom("list_tribune", post);
-                                    var allsmiley = $$("#p" + p['id'] + " a.smiley");
-                                    allsmiley.each(function (s) {
-                                            s.onmouseover = function (e) {
-                                                return overlib('<img src="' + s.href + '"/>', FULLHTML);
-                                                /*(el.href,ev);*/
-                                            }
-                                            s.onmouseout = function (e) {
-                                                return nd();
-                                            }
-                                        }
-                                    )
-                                    var alllinks = $("#p" + p['id'])
-                                    try {
-                                        SNAP_COM.shot.shot_scan(alllinks);
-                                    } catch (e) {
-                                    }
 
-                                    var allspans = $("p" + p['id']).getElementsByTagName('span');
-                                    for (var i = 0; i < allspans.length; i++) {
-                                        initSpan(allspans[i]);
-                                    }
-                                    if (++numposts > 150) {
-                                        var first = $$("#list_tribune li").first()
-                                        var ul = $$("#list_tribune").first()
-                                        var spans = first.getElementsByTagName('span');
-                                        ul.removeChild(first);
-                                        for (var j = 0; j < spans.length; j++) {
-                                            if (spans[j].className.indexOf('horloge_ref') != -1) {
-                                                removeHorloge(spans[j].highlight, spans[j]);
-                                            } else if (spans[j].className.indexOf('horloge') != -1) {
-                                                removeHorloge(spans[j].highlight, spans[j].parentNode);
-                                            }
-                                        }
-                                    }
-                                }
+    var last_id = parseInt(last.substring(1, last.length));
+
+    $.ajax({
+        statusCode:{
+            404:function () {
+                alert("404 not found on ajax refresh o_O");
+            }
+        },
+        dataType:'json',
+        data:{id:last_id},
+        success:function (remote) {
+            posts = remote['posts'].reverse();
+            if (posts.size == 0) {
+                return true;
+            }
+            var numposts = all.length;
+
+            $.each(posts, (function (i, p) {
+                a = $("#p" + p['id']);
+
+                if (a.length == 0 && p['id'] > last_id) {
+                    r = $(Mustache.render(post_template, p));
+                    list_tribune.append(r);
+
+                    $("span", r).each(function (i, span) {
+                        initSpan(span);
+                    });
+
+                    if (++numposts > 150) {
+                        var first = $("#tribune li").first();
+                        var spans = $("span", first).each(function (i, span) {
+                            if (span.className.indexOf('horloge_ref') != -1) {
+                                removeHorloge(span.highlight, span);
+                            } else if (span.className.indexOf('horloge') != -1) {
+                                removeHorloge(span.highlight, span.parentNode);
                             }
-                        );
+                        });
+                        first.remove();
                     }
-                } catch (ex) {
-
                 }
-                $('autoreload').style.visibility = 'hidden';
-            },
-            onLoading:function () {
-                $('autoreload').style.visibility = 'visible';
-            },
-            parameters:{last:last, first:first}
+            }));
         }
-    );
+    });
+//    new Ajax.Request("/tribune/update",
+//        {asynchronous:true,
+//            onComplete:function (t) {
+//                try {
+//                    posts = eval(t.responseText)
+//                    if (typeof(posts) != 'undefined' && posts != null) {
+//                        var lastId = parseInt(last.substring(1, last.length));
+//                        var numposts = all.length;
+//                        posts.each(function (p) {
+//                                a = $("p" + p['id'])
+//                                if ((typeof(a) == 'undefined' || a == null) && p['id'] > lastId) {
+//                                    post = "<li " +
+//                                        p['li_class'] +
+//                                        " id=\"p" +
+//                                        p['id'] +
+//                                        "\"><span class=\"horloge\">" +
+//                                        p['horloge'] +
+//                                        "</span> <span title=\"" +
+//                                        p['user_agent'] +
+//                                        "\" class=\"" +
+//                                        p['span_class'] +
+//                                        "\"> " +
+//                                        p['affichage'] +
+//                                        "</span> "
+//                                        + p['post'] +
+//                                        "</li>";
+//                                    new Insertion.Bottom("list_tribune", post);
+//                                    var allsmiley = $$("#p" + p['id'] + " a.smiley");
+//                                    allsmiley.each(function (s) {
+//                                            s.onmouseover = function (e) {
+//                                                return overlib('<img src="' + s.href + '"/>', FULLHTML);
+//                                                /*(el.href,ev);*/
+//                                            }
+//                                            s.onmouseout = function (e) {
+//                                                return nd();
+//                                            }
+//                                        }
+//                                    )
+//                                    var alllinks = $("#p" + p['id'])
+//                                    try {
+//                                        SNAP_COM.shot.shot_scan(alllinks);
+//                                    } catch (e) {
+//                                    }
+//
+//                                    var allspans = $("p" + p['id']).getElementsByTagName('span');
+//                                    for (var i = 0; i < allspans.length; i++) {
+//                                        initSpan(allspans[i]);
+//                                    }
+//                                    if (++numposts > 150) {
+//                                        var first = $$("#list_tribune li").first()
+//                                        var ul = $$("#list_tribune").first()
+//                                        var spans = first.getElementsByTagName('span');
+//                                        ul.removeChild(first);
+//                                        for (var j = 0; j < spans.length; j++) {
+//                                            if (spans[j].className.indexOf('horloge_ref') != -1) {
+//                                                removeHorloge(spans[j].highlight, spans[j]);
+//                                            } else if (spans[j].className.indexOf('horloge') != -1) {
+//                                                removeHorloge(spans[j].highlight, spans[j].parentNode);
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                        );
+//                    }
+//                } catch (ex) {
+//
+//                }
+//                $('autoreload').style.visibility = 'hidden';
+//            },
+//            onLoading:function () {
+//                $('autoreload').style.visibility = 'visible';
+//            },
+//            parameters:{last:last, first:first}
+//        }
+//    );
 
     return true;
 }
@@ -581,16 +626,19 @@ function removeMe(idToRemove) {
     }
 }
 
-$(window).load(function () {
+$(document).ready(function () {
     initTribune();
-//    $("#tribune span.message").each( function() {
-//        this.innerHTML = this.innerHTML.replace (re_horloge2, function(matched) {
-//            console.log(matched)
-//            return '<span class="horloge_ref">' + matched + '</span>';
-//        })
-////        $(this).replaceWith(writeClocks(this.textContent))
-//    });
-    $("#tribune span").each( function() {
-        initSpan(this);
+    $("#tribune span").each(function (i, span) {
+        initSpan(span);
     });
+
+    $("#form_post").bind("ajax:success", function () {
+        tribune_update();
+    });
+
+    tribune_update();
+    var x = setInterval(function() {tribune_update()}, 10000);
+
 });
+
+

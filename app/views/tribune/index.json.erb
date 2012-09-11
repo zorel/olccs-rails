@@ -1,0 +1,8 @@
+{
+    "board":{
+        "site": "<%=@tribune.name%>"
+    },
+    "posts":[
+            <%= render :partial => 'result', :collection => @results, :spacer_template => 'spacer' %>
+    ]
+}

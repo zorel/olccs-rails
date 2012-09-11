@@ -236,3 +236,17 @@ Tribune.create(name: 'ygllo',
                user_parameter: '',
                pwd_parameter: ''
 )
+
+
+Tribune.create(name: 'djangotribune-demo',
+               refresh_interval: 120,
+               get_url: 'http://sveetchies.sveetch.net/tribune/remote/xml/',
+               last_id_parameter: 'last_id',
+               post_parameter: 'content',
+               post_url: 'http://sveetchies.sveetch.net/tribune/post/xml/',
+               cookie_url: '',
+               cookie_name: '',
+               remember_me_parameter: '',
+               user_parameter: '',
+               pwd_parameter: ''
+)

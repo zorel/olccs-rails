@@ -1,23 +1,19 @@
 <% content_for :navbar do %>
-<li><%= link_to "Search", :controller => 'tribune', :action => 'search' %></li>
+    <li><%= link_to "Search", :controller => 'tribune', :action => 'search' %></li>
+    <li><%= link_to "Stats", :controller => 'tribune', :action => 'stats' %></li>
 <% end %>
 
 <h2><%= @tribune.name %></h2>
-<p><%= @tribune.posts.count%> posts, <%= @tribune.links.count %> links.</p>
+<p><%= @tribune.posts.count %> posts, <%= @tribune.links.count %> links.</p>
 
 <div id="tribune">
   <ul id="list_tribune">
-    <%
-    @tribune.backend(0,150).reverse_each do |p|
-      content = p['_source'] %>
-        <%= render 'post', post: content %>
-    <%end%>
   </ul>
-  <form action="/tribune/post" id="postForm" method="post">
-    <div id="postDiv"><input id="missive" maxlength="600" name="missive" size="80" type="text" value=""  disabled="disabled" />
-      <input name="commit" type="submit" value="Poster" disabled="disabled"/>
-      <!--<img alt="Spinner" id="please_wait" src="/images/spinner.gif?1184154283" style="visibility:hidden" />-->
-      <!--<img alt="Autoreload" id="autoreload" src="/images/autoreload.gif?1184154283" style="visibility:hidden" />-->
-    </div>
-  </form>
+  <%= form_tag url_for(:action => 'post'), :id => 'form_post', :remote => true do |f| %>
+      <%= text_field_tag 'message', nil, :class => 'span10', :placeholder => 'Message' %><%= button_tag 'Poster', :class => 'btn' %>
+  <% end %>
+  <!--<div id="postDiv"><input id="missive" maxlength="600" name="missive" size="80" type="text" value=""  disabled="disabled" />-->
+  <!--<input name="commit" type="submit" value="Poster" disabled="disabled"/>-->
+  <!--<img alt="Spinner" id="please_wait" src="/images/spinner.gif?1184154283" style="visibility:hidden" />-->
+  <!--<img alt="Autoreload" id="autoreload" src="/images/autoreload.gif?1184154283" style="visibility:hidden" />-->
 </div>

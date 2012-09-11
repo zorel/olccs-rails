@@ -12,7 +12,7 @@ class Tribune < ActiveRecord::Base
   def backend(last=0, s=150)
     b = Tire.search(name) do
       query do
-        range :id, {:from => last+1}
+        range :id, {:from => last.to_i+1}
       end
       sort do
         by :id, 'desc'
@@ -60,8 +60,8 @@ class Tribune < ActiveRecord::Base
         p_id = p.xpath("@id").to_s.to_i
         self.posts.build({p_id: p.xpath("@id").to_s.to_i,
                           time: p.xpath("@time").to_s,
-                          info: p.xpath("info").text.encode('utf-8'),
-                          login: p.xpath("login").text.encode('utf-8'),
+                          info: p.xpath("info").text.encode('utf-8').strip,
+                          login: p.xpath("login").text.encode('utf-8').strip,
                           message: p.xpath("message")
                          })
 

@@ -4,6 +4,15 @@ class TribuneController < ApplicationController
 
   def index
     #TODO: refresh ajax, possibilité de post, pagination
+    last = params[:last] || 0
+    size = params[:size] || 150
+    @results = @tribune.backend(last, size).results
+
+    #raise @posts.to_yaml
+    respond_to do |format|
+      format.html
+      format.json
+    end
 
   end
 
@@ -54,7 +63,10 @@ class TribuneController < ApplicationController
   end
 
   def post
-
+    @tribune.post message: params[:message],
+        ua: request.user_agent,
+        cookies: request.cookies
+    render :nothing => true
   end
 
   def search

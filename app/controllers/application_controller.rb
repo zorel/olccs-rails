@@ -24,7 +24,7 @@ private
       xml.board(:site => site) {
         posts.each { |p|
           content = p['_source']
-          xml.post(:id => content['id'], :time => content['time']) {
+          xml.post(:id => content['id'], :time => content['time'], :board => content['board']) {
             xml.info {
               xml << content['info']
             }
@@ -45,7 +45,7 @@ private
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.board(:site => site) {
         @urls.each { |u|
-          xml.post(:id => u.id, :time => u.post.time) {
+          xml.post(:id => u.id, :time => u.post.time, :board => u.post.tribune.name) {
             xml.info {
               xml << u.post.info
             }
