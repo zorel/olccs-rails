@@ -32,6 +32,27 @@
         <ul class="nav">
           <li><a href="/olcc/">Olcc</a></li>
           <%= yield(:navbar) %>
+          <li>
+            <div class="btn-group">
+              <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                Action
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                  <% if current_user %>
+                      <li><%= current_user.name %> (via <%= current_user.provider %>)
+                        <%= link_to "Logout", signout_path %>
+                      </li>
+                  <% else %>
+                          <!--<li><%= link_to "Sign-in with Twitter", "/auth/twitter" %></li>-->
+                          <li><%= link_to "Sign-in with Google", "/auth/google" %></li>
+                          <!--<li><%= link_to "with BrowserID / Mozilla Personae", "/auth/browser_id" %></li>-->
+
+
+                  <% end %>
+                             </ul>
+            </div>
+          </li>
         </ul>
       </div>
       <!--/.nav-collapse -->
@@ -39,43 +60,21 @@
   </div>
 </div>
 
-<div class="container-fluid">
+<div class="container">
 
   <div class="content">
-    <div class="row-fluid">
-      <div class="span2">
-        <div class="well sidebar-nav">
-          <h3>Sidebar</h3>
-          <ul class="nav nav-list">
-            <% if current_user %>
-                <li>Connecté en tant que <%= current_user.name %> (via <%= current_user.provider %>)
-                  <%= link_to "Se déconnecter", signout_path %>
-                </li>
-            <% else %>
-                <li id="user_nav" class="dropdown">
-                  <a class="dropdown-toggle" data-toggle="dropdown" href="#">Sign-in <b class="caret"></b></a>
-                  <ul class="dropdown-menu">
-                    <li><%= link_to "with Twitter", "/auth/twitter" %></li>
-                    <li><%= link_to "with Google", "/auth/google" %></li>
-                    <!--<li><%= link_to "with BrowserID / Mozilla Personae", "/auth/browser_id" %></li>-->
-                  </ul>
-                </li>
-            <% end %>
-          </ul>
-        </div>
-        <!--/.well -->
-      </div>
-      <!--/span-->
+    <div class="row">
+
       <div class="span10">
+        <% flash.each do |key, value| %>
+            <%= content_tag(:div, value, :class => "alert alert.success", "data-dismiss".to_sym => 'alert') %>
+        <% end %>
         <%= yield %>
       </div>
     </div>
-    <!--/row-->
   </div>
-  <!--/content-->
 
 </div>
-<!-- /container -->
 
 <!-- Javascripts
 ================================================== -->

@@ -25,7 +25,7 @@ class WelcomeController < ApplicationController
       end
     end
 
-    render :xml => posts_to_xml(tribune.backend(last), tribune.name)
+    render :xml => posts_to_xml(tribune.backend(last, 300, current_user), tribune.name)
   end
 
   def totozphp

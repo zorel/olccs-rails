@@ -1,6 +1,7 @@
 class Tribune < ActiveRecord::Base
   has_many :posts
   has_many :links, :through => :posts
+  has_many :rules
 
   attr_accessible :cookie_name, :cookie_url, :get_url, :last_id_parameter, :name, :post_parameter, :post_url, :pwd_parameter, :user_parameter, :last_updated, :remember_me_parameter, :refresh_interval
 
@@ -9,7 +10,7 @@ class Tribune < ActiveRecord::Base
   #TODO Faire un chargement par fichier remote.xml afin de charger un historique
   #TODO Faire un chargement via bdd pour historique khapin
 
-  def backend(last=0, s=150)
+  def backend(last=0, s=150, user=nil)
     b = Tire.search(name) do
       query do
         range :id, {:from => last.to_i+1}
@@ -20,7 +21,44 @@ class Tribune < ActiveRecord::Base
       size s
     end
 
-    b.results
+    r = b.results.results.collect do |i|
+      i['_source']
+    end
+
+    return r if user.nil?
+
+    logger.debug("On commence la percolation")
+    md5 = user.md5
+
+    index = Tire.index(name)
+
+    res = r.collect do |content|
+      #raise content['message'].to_yaml
+      matches = index.percolate(message: content['message'], time: content['time'], login: content['login'], info: content['info'], type: 'post') do
+        term :md5, md5
+      end
+
+      #raise matches.to_yaml
+      unless matches.nil?
+        matched = []
+        matches.each do |m|
+          rule_name = m.split('_')[1]
+          rule = user.rules.find_by_name(rule_name)
+          action = rule.action.to_sym
+          logger.debug "ici, dans le filtre, #{content.inspect} pour #{rule_name}"
+          plop = OlccsPluginsManager.instance.repository[action]
+          unless plop.nil?
+            new_message = plop.instance.process(content['message'])
+            content['message'] = new_message
+            matched << m
+          end
+        end
+        content['rules'] = matched.join(',')
+      end
+
+      content
+    end
+
   end
 
   def query(q, page=1, s=150)

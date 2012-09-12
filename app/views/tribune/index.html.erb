@@ -10,7 +10,7 @@
   <ul id="list_tribune">
   </ul>
   <%= form_tag url_for(:action => 'post'), :id => 'form_post', :remote => true do |f| %>
-      <%= text_field_tag 'message', nil, :class => 'span10', :placeholder => 'Message' %><%= button_tag 'Poster', :class => 'btn' %>
+      <%= text_field_tag 'message', nil, :class => 'span8', :placeholder => 'Message' %><%= button_tag 'Poster', :class => 'btn', :id => "submit" %>
   <% end %>
   <!--<div id="postDiv"><input id="missive" maxlength="600" name="missive" size="80" type="text" value=""  disabled="disabled" />-->
   <!--<input name="commit" type="submit" value="Poster" disabled="disabled"/>-->

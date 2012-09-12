@@ -23,7 +23,7 @@ private
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.board(:site => site) {
         posts.each { |p|
-          content = p['_source']
+          content = p
           xml.post(:id => content['id'], :time => content['time'], :board => content['board']) {
             xml.info {
               xml << content['info']

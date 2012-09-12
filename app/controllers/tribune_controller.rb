@@ -2,11 +2,21 @@ class TribuneController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, :with => :record_not_found
   before_filter :set_tribune
 
+  def populate_perco
+    redirect_to root_url if current_user.nil?
+    user = current_user
+    md5 = Digest::MD5.hexdigest("#{user.provider}#{user.uid}")
+    Tire.index(@tribune.name) do
+      register_percolator_query("#{md5}_ototu", :md5 => md5) { string 'login:ototu' }
+    end
+  end
+
+
   def index
     #TODO: refresh ajax, possibilité de post, pagination
     last = params[:last] || 0
     size = params[:size] || 150
-    @results = @tribune.backend(last, size).results
+    @results = @tribune.backend(last, size, current_user)
 
     #raise @posts.to_yaml
     respond_to do |format|
@@ -21,38 +31,12 @@ class TribuneController < ApplicationController
     last = params[:last] || 0
     size = params[:size] || 150
 
-    @results = @tribune.backend(last,size)
+    @results = @tribune.backend(last,size,current_user)
     #res = nil
     #
     #if current_user
     #  puts "percolation pour #{@current_user.name}"
-    #  md5 = Digest::MD5.hexdigest("#{@current_user.provider}#{@current_user.uid}")
-    #
-    #
-    #  index = Tire.index(@tribune.name)
-    #
-    #  # TODO: a déplacer dans le modèle Tribune au niveau de la génération du backend
-    #  res = @results.collect do |r|
-    #    content = r['_source']
-    #    #raise content['message'].to_yaml
-    #    matches = index.percolate(message: content['message'], time: content['time'], login: content['login'], info: content['info'], type:'post') do
-    #      term :usermd5, md5
-    #    end
-    #
-    #    #raise matches.to_yaml
-    #    if matches.include?('warning')
-    #      logger.debug "ici, dans le filtre, #{content.inspect}"
-    #
-    #      plop = OlccsPluginsManager.instance.repository[:plopify]
-    #      new_message = plop.instance.process(content['message'])
-    #      content['message'] = new_message
-    #      #logger.debug "ici, dans le filtre, #{content.methods.sort}"
-    #      logger.debug("============> " + matches.to_s + " " + content['message'] + " --#{new_message}--")
-    #      #raise content.to_yaml
-    #    end
-    #
-    #    content
-    #  end
+
     #end
 
     respond_to do |format|

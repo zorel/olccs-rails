@@ -8,9 +8,12 @@
     <br/>
   </div>
   <div class="input-prepend">
-    <span class="add-on">Action</span><%= f.text_field :parameters, :placeholder => 'Action' %>
+    <span class="add-on">Action</span><%= f.select :action, OlccsPluginsManager.instance.repository.collect{|k,v| k.to_s}%>
     <br/>
-  </div>
+  </div> <div class="input-prepend">
+  <span class="add-on">Tribune</span><%= f.select :tribune_id, Tribune.all(:order => :name).collect {|a| [a.name, a.id]}%>
+  <br/>
+</div>
   <%= f.hidden_field :_destroy %>
   <%= link_to "Remove", "#", class: "remove_fields btn btn-danger" %>
 </fieldset>

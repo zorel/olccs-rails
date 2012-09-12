@@ -6,6 +6,7 @@ class CreateRules < ActiveRecord::Migration
       t.text :action
       t.text :parameters
       t.integer :user_id
+      t.integer :tribune_id
 
       t.timestamps
     end

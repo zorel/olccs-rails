@@ -627,16 +627,43 @@ function removeMe(idToRemove) {
 }
 
 $(document).ready(function () {
+    if ($("#tribune").length == 0){
+        return true;
+    }
     initTribune();
-    $("#tribune span").each(function (i, span) {
+
+    $("#tribune span").each(function(i, span) {
         initSpan(span);
     });
 
-    $("#form_post").bind("ajax:success", function () {
-        tribune_update();
-    });
+//    $("#tribune span.totoz").live("mouseover", function() {
+//        $("#tribune span.totoz").each(function(i, span) {
+//            if( $(this).data('qtip') ) { return true; }
+//            var totoz_name=$(span).text();
+//            totoz_name = totoz_name.substring(2,totoz_name.length-1);
+//            $(this).qtip({
+//                content:"<img src='http://sfw.totoz.eu/" + encodeURI(totoz_name) + ".gif'/>",
+//                delay: 0,
+//                show: { effect: { type: 'none', length: 0 } }
+//            })
+//        })
+//    });
+
+    $("#form_post")
+        .live("ajax:beforeSend", function() {
+            $("#submit").attr('disabled','disabled');
+        })
+        .live("ajax:success", function() {
+            tribune_update();
+        })
+        .live("ajax:complete", function() {
+            $("#submit").removeAttr('disabled');
+            $("#message").val("");
+        })
+    ;
 
     tribune_update();
+
     var x = setInterval(function() {tribune_update()}, 10000);
 
 });

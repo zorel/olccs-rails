@@ -10,8 +10,9 @@ class UserController < ApplicationController
   end
 
   def edit_rules
-    @user = @current_user
+    @user = current_user
     @rules = @user.rules
+    #raise current_user.to_yaml
     #
     #index = Tire.index('shoop') do
     #  md5 = Digest::MD5.hexdigest("#{c.provider}#{c.uid}")
@@ -22,11 +23,14 @@ class UserController < ApplicationController
   end
 
   def save_rules
-    @user = @current_user
+    @user = current_user
 
     respond_to do |format|
       if @user.update_attributes(params[:user])
-        format.html { redirect_to @user, notice: 'Pika was successfully updated.' }
+        format.html {
+          flash[:notice] = "Rules successfully updated"
+          redirect_to :action => 'edit_rules'
+        }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

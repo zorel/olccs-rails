@@ -1,22 +1,25 @@
 <%
-p = result['_source']
-time = Time.strptime(p['time'], '%Y%m%d%H%M%S').strftime('%H:%M:%S')
-ua_or_login = p['info'][0..20]
+time = Time.strptime(result['time'], '%Y%m%d%H%M%S').strftime('%H:%M:%S')
+ua_or_login = result['info'][0..20]
 class_display = 'ua'
-if p['login'] != ''
-   ua_or_login = p['login']
+if result['login'] != ''
+   ua_or_login = result['login']
    class_display = 'login'
 end
 re = Regexp.new("(?<=\s|^|>|#)(?:(?:([0-2]?[0-9])\:([0-5][0-9])\:([0-5][0-9])|([0-2]?[0-9])([0-5][0-9])([0-5][0-9]))(?:[\:\^]([0-9]{1,2})|([¹²³]))?)|([0-2]?[0-9])\:([0-5][0-9])(?=\s|$|<)")
-message = p['message'].gsub(re) {|s|
+totoz = Regexp.new("\\\[:([0-9a-zA-Z \*\$@'_-]+)\\\]")
+message = result['message'].gsub(re) {|s|
    "<span class='horloge_ref'>#{s}</span>"
 }
-display = p['login'].presence || p['info']
+message.gsub!(totoz) {|s|
+    "<span class='totoz'>#{s}</span>"
+}
+display = result['login'].presence || result['info']
 %>
 {
-    "id": <%=p['id']%>,
+    "id": <%=result['id']%>,
     "time":"<%=time%>",
-    "info":<%=raw p['info'].to_json%>,
+    "info":<%=raw result['info'].to_json%>,
     "class_display":"<%=class_display%>",
     "ua_or_login":<%=raw ua_or_login.to_json%>,
     "message":<%=raw message.to_json%>
