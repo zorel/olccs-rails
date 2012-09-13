@@ -66,6 +66,10 @@ gem 'sidekiq'
 gem 'slim'
 gem 'sinatra', :require => nil
 
+# Markdown rendering
+gem 'redcarpet'
+gem 'markdown-rails'
+
 # growl for jquery
 gem "gritter", ">=1.0.1"
 

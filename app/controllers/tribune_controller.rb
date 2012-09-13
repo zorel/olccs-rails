@@ -2,18 +2,18 @@ class TribuneController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, :with => :record_not_found
   before_filter :set_tribune
 
-  def populate_perco
-    redirect_to root_url if current_user.nil?
-    user = current_user
-    md5 = Digest::MD5.hexdigest("#{user.provider}#{user.uid}")
-    Tire.index(@tribune.name) do
-      register_percolator_query("#{md5}_ototu", :md5 => md5) { string 'login:ototu' }
-    end
-  end
+  #def populate_perco
+  #  redirect_to root_url if current_user.nil?
+  #  user = current_user
+  #  md5 = Digest::MD5.hexdigest("#{user.provider}#{user.uid}")
+  #  Tire.index(@tribune.name) do
+  #    register_percolator_query("#{md5}_ototu", :md5 => md5) { string 'login:ototu' }
+  #  end
+  #end
 
 
   def index
-    #TODO: refresh ajax, possibilité de post, pagination
+    #TODO: pagination
     last = params[:last] || 0
     size = params[:size] || 150
     @results = @tribune.backend(last, size, current_user)
@@ -24,6 +24,27 @@ class TribuneController < ApplicationController
       format.json
     end
 
+  end
+
+  def xmlconfig
+#    <?xml version="1.0" encoding="utf-8" ?>
+#        <site name="kadreg" title="Da lent bouchot" baseurl="http://kadreg.org" version="1.0" xmlns="urn:moules:board:config:1.0">
+#    <account>
+#    <cookie name="md5"/>
+#    <cookie name="unique_id"/>
+#    <login method="post" path="/login.html">
+#    <field name="login">$l</field>
+#<field name="passwd">$p</field>
+#    </login>
+#<logout method="get" path="/close_session.html"/>
+#</account>
+#<module type="application/board+xml" name="board" title="Tribune">
+#<backend path="/board/backend.php" public="true" tags_encoded="false" refresh="60"/>
+#<post method="post" path="/board/add.php" anonymous="false" max_length="128">
+#<field name="message">$m</field>
+#</post>
+#</module>
+#</site>
   end
 
   # TODO: percolater chaque post en fonction des préfs utilisateurs

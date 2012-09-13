@@ -1,13 +1,29 @@
-<h1>Rules</h1>
+<h1 xmlns="http://www.w3.org/1999/html">Rules</h1>
 
-<%=  form_for @user, :url => {action: :save_rules} do |f| %>
-    <%=  f.fields_for :rules do |builder| %>
+<%= form_for @user, :url => {action: :save_rules} do |f| %>
+    <%= f.fields_for :rules do |builder| %>
         <%= render 'rule_fields', f: builder %>
-    <%end%>
-    <%=  link_to_add_fields "Add rule", f, :rules %>
+    <% end %>
+    <%= link_to_add_fields "Add rule", f, :rules %>
     <div class="actions">
-      <%= f.submit "Submit modifications", {class: "btn"}%>
+      <%= f.submit "Submit modifications", {class: "btn"} %>
     </div>
 <% end %>
-
+<div style="visibility: hidden;" id="help-query">
+  <div id="title">Syntaxe de requêtage</div>
+  <div id="content">
+    <div style="font-size: 80%;">
+    <p>
+      Voir <a href="https://lucene.apache.org/core/3_6_1/queryparsersyntax.html">le site Lucene</a> pour la syntaxe
+      complète. Les requêtes gèrent le français, deux recherches sur "table" et "tables" auront le même résultat.
+      Exemples:
+    </p>
+    <ul>
+      <li>table volante</li>
+      <li>"table volante"</li>
+      <li>login:ptramo table OR volante</li>
+      <li>time:[20111225175421 TO 20120101120000]</li>
+    </ul></div>
+  </div>
+</div>
 

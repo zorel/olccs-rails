@@ -17,6 +17,8 @@ Olccs::Application.routes.draw do
   match '/u' => 'user#index', :as => :user
   match '/u(/:action(.:format))' => 'user'
 
+  match '/about' => 'welcome#about'
+
   #match ':controller(/:action(/:id))(.:format)'
 
   mount Sidekiq::Web => '/sidekiq'

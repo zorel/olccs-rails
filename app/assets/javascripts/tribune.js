@@ -649,6 +649,7 @@ $(document).ready(function () {
 //        })
 //    });
 
+
     $("#form_post")
         .live("ajax:beforeSend", function() {
             $("#submit").attr('disabled','disabled');

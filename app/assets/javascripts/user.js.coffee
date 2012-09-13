@@ -13,3 +13,14 @@ jQuery ->
     regexp = new RegExp($(this).data('id'), 'g')
     $(this).before($(this).data('fields').replace(regexp, time))
     event.preventDefault()
+
+  $("input[data-help='query']").each (i,input) ->
+      c = $("#help-query > #content").html()
+      t = $("#help-query > #title").text()
+      console.log(c)
+      $(input).popover({
+        title: t
+        content: c
+        trigger: "focus"
+      })
+

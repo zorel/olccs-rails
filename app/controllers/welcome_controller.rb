@@ -50,9 +50,6 @@ class WelcomeController < ApplicationController
     @tribunes = Tribune.all(:order => 'name asc')
   end
 
-  def welcome
-  end
-
   def about
   end
 

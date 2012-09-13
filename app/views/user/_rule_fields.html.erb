@@ -1,17 +1,17 @@
 <fieldset class="well">
   <div class="input-prepend">
-    <span class="add-on">Name</span><%= f.text_field :name, :placeholder => 'Rule name' %>
+    <span class="add-on">Name</span><%= f.text_field :name, "data-help".to_sym => 'name', :placeholder => 'Rule name' %>
     <br/>
   </div>
   <div class="input-prepend">
-    <span class="add-on">Query</span><%= f.text_field :filter, :placeholder => 'Filter / Query' %>
+    <span class="add-on">Query</span><%= f.text_field :filter, "data-help".to_sym => 'query', :placeholder => 'Filter / Query' %>
     <br/>
   </div>
   <div class="input-prepend">
-    <span class="add-on">Action</span><%= f.select :action, OlccsPluginsManager.instance.repository.collect{|k,v| k.to_s}%>
+    <span class="add-on">Action</span><%= f.select :action, OlccsPluginsManager.instance.repository.collect{|k,v| k.to_s}, {}, {"data-help".to_sym => 'action'}%>
     <br/>
   </div> <div class="input-prepend">
-  <span class="add-on">Tribune</span><%= f.select :tribune_id, Tribune.all(:order => :name).collect {|a| [a.name, a.id]}%>
+  <span class="add-on">Tribune</span><%= f.select :tribune_id, Tribune.all(:order => :name).collect {|a| [a.name, a.id]}, {}, {"data-help".to_sym => 'tribune'}%>
   <br/>
 </div>
   <%= f.hidden_field :_destroy %>

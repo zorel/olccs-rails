@@ -14,5 +14,7 @@
 //= require jquery_ujs
 //= require bootstrap-dropdown
 //= require bootstrap-alert
+//= require bootstrap-tooltip
+//= require bootstrap-popover
 //= require_tree .
 

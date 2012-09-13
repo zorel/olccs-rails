@@ -34,25 +34,31 @@
           <%= yield(:navbar) %>
           <li>
             <div class="btn-group">
-              <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                Action
+              <a class="btn dropdown-toggle btn-small" data-toggle="dropdown" href="#">
+                <% if current_user %>
+                    <%= current_user.name %>
+                <% else %>
+                    Se logguer
+                <% end %>
                 <span class="caret"></span>
               </a>
               <ul class="dropdown-menu">
-                  <% if current_user %>
-                      <li><%= current_user.name %> (via <%= current_user.provider %>)
-                        <%= link_to "Logout", signout_path %>
-                      </li>
-                  <% else %>
-                          <!--<li><%= link_to "Sign-in with Twitter", "/auth/twitter" %></li>-->
-                          <li><%= link_to "Sign-in with Google", "/auth/google" %></li>
-                          <!--<li><%= link_to "with BrowserID / Mozilla Personae", "/auth/browser_id" %></li>-->
-
-
-                  <% end %>
-                             </ul>
+                <% if current_user %>
+                    <li><a tabindex="-1" href="#">(via <%= current_user.provider %>)</a></li>
+                    <li><%= link_to "Logout", signout_path %></li>
+                    <li class="divider"></li>
+                    <li><%= link_to "Règles", "/u/edit_rules"%></li>
+              <% else %>
+                    <!--<li><%= link_to "Sign-in with Twitter", "/auth/twitter" %></li>-->
+                    <li><%= link_to "avec Google", "/auth/google" %></li>
+                    <!--<li><%= link_to "with BrowserID / Mozilla Personae", "/auth/browser_id" %></li>-->
+                <% end %>
+              </ul>
             </div>
           </li>
+        </ul>
+        <ul class="nav pull-right">
+          <li><a href="<%= url_for :about %>">About</a></li>
         </ul>
       </div>
       <!--/.nav-collapse -->
