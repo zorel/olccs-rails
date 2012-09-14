@@ -22,6 +22,8 @@ Les fonctionnalités prévues ou implémentées sont (en vrac):
 - gestion de filtres/règles personnels sur les messages en entrée (lors de la lecture du backend) ou en sortie (lors de la génération) *done*
 - gestion des substitutions dynamiques (par exemple #{totoz:boobs} pour avoir un totoz aléatoire de boobs)
 - historique et indexation du contenu des URL, avec remote.xml des URL postées par tribune, et pour toutes les tribunes configurées *done*
+- une page d'archive des url avec preview
+- des jolis graphes pour des stats (répartition par jour/heure, etc)
 - gestion des tags sur les urls
 - envoi de contenu par mail (pour partage à partir d'un smartphone)
 - backend multitribunes
@@ -51,11 +53,11 @@ Olccs a accès aux cookies stockés dans les préférences d'olcc. Forcément, i
 Ces données ne sont pas conservées si vous n'utilisez pas la fonctionnalité de sauvegarde des cookies. La fonctionnalité
 de sauvegarde utilise un système de chiffrage réversible (ROT13) pour la sécurisation extrême de vos cookies.
 
-Les cookies ne sont pas logguées.
+Les cookies ne sont pas loggués.
 
-Ces cookies ne m'intéresse pas, ma passion n'étant pas de voler l'identité d'un inconnu pour aller poster un *I'm gay* sur
+Ces cookies ne m'intéressent pas, ma passion n'étant pas de voler l'identité d'un inconnu pour aller poster un *I'm gay* sur
 une tribune perdue sur le net.
 
 Et pour finir, si ces tribunes étaient correctement codées, un simple cookie ne permettrait pas beaucoup plus que de poster
 un message (et pas de changer un mot de passe par exemple). L'accès aux préférences et la possibilité de changer de mot de
-passe devrait être protégé par un login de toutes façons.
+passe devrait être protégé par une phase de login complète.
