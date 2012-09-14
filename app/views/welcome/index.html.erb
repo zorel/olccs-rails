@@ -5,8 +5,10 @@
       <dd><i class="icon-zoom-in"></i><%=  t.posts.count %> posts, <%= t.links.count %> liens</dd>
       <dd><i class="icon-refresh"></i>Dernière mise à jour le <%= t.last_updated %></dd>
       <dd><%= form_tag({controller: :tribune, tribune: t.name, action: :search}, method: 'get', :class => "well form-search") do |f| %>
+	<div class="input-append">
         <%= text_field_tag(:query, '', class: "input-medium search-query") %>
         <button type="submit" class="btn">Search</button>
+	</div>
       <% end %></dd>
   <% end %>
 </dl>
