@@ -53,4 +53,8 @@ class WelcomeController < ApplicationController
   def about
   end
 
+  def aide
+
+  end
+
 end
