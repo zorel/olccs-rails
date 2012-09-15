@@ -10,31 +10,41 @@ class Tribune < ActiveRecord::Base
   #TODO Faire un chargement par fichier remote.xml afin de charger un historique
   #TODO Faire un chargement via bdd pour historique khapin
 
-  def backend(last=0, s=150, user=nil)
-    b = Tire.search(name) do
-      query do
-        range :id, {:from => last.to_i+1}
-      end
-      sort do
-        by :id, 'desc'
-      end
-      size s
-    end
+  # @param [Hash] opts
+  def backend(opts={})
+    # s supprimé de la liste: utilisation de la pagination avec du per_page de kaminari
+    conf = {
+        :last => 0,
+        :user => nil,
+        :page => 1,
+    }.merge(opts)
 
-    r = b.results.results.collect do |i|
-      i['_source']
-    end
+    b = self.posts.page(conf[:page]).where("p_id > ?", conf[:last]).order("p_id DESC")
 
-    return r if user.nil?
+    #b = Tire.search(name) do
+    #  query do
+    #    range :id, {:from => last.to_i+1}
+    #  end
+    #  sort do
+    #    by :id, 'desc'
+    #  end
+    #  size s
+    #end
+
+    #r = b.results.results.collect do |i|
+    #  i['_source']
+    #end
+
+    return [b.to_a, b] if conf[:user].nil?
 
     logger.debug("On commence la percolation")
-    md5 = user.md5
+    md5 = conf[:user].md5
 
     index = Tire.index(name)
 
-    res = r.collect do |content|
+    res = b.collect do |content|
       #raise content['message'].to_yaml
-      matches = index.percolate(message: content['message'], time: content['time'], login: content['login'], info: content['info'], type: 'post') do
+      matches = index.percolate(message: content.message, time: content.time, login: content.login, info: content.info, type: 'post') do
         term :md5, md5
       end
 
@@ -43,20 +53,22 @@ class Tribune < ActiveRecord::Base
         matched = []
         matches.each do |m|
           rule_name = m.split('_')[1]
-          rule = user.rules.find_by_name(rule_name)
+          rule = conf[:user].rules.find_by_name(rule_name)
+
           action = rule.action.to_sym
+          #raise rule.to_yaml
           logger.debug "ici, dans le filtre, #{content.inspect} pour #{rule_name}"
           plop = OlccsPluginsManager.instance.repository[action]
           unless plop.nil?
             new_message = plop.instance.process(content['message'])
             content['message'] = new_message
-            matched << m
+            matched << action
           end
         end
         content['rules'] = matched.join(',')
       end
 
-      content
+      [content, b]
     end
 
   end
@@ -72,7 +84,7 @@ class Tribune < ActiveRecord::Base
       from (page.to_i - 1) * s
       size s
     end
-    logger.debug(b.to_json)
+    #logger.debug(b.to_json)
     b
   end
 
@@ -146,10 +158,13 @@ class Tribune < ActiveRecord::Base
   # @param [Hash] opts
   def post(opts)
     client = HTTPClient.new
-    body = {post_parameter.to_sym => opts[:message]}
+    body = {
+        post_parameter.to_sym => opts[:message]
+    }
     head = {
         :Referer => post_url,
-        "User-Agent" => opts[:ua]}
+        "User-Agent" => opts[:ua]
+    }
 
     client.cookie_manager.parse(opts[:cookie], URI.parse(post_url)) unless opts[:cookie].nil?
     #client.debug_dev=File.open('http.log', File::CREAT|File::TRUNC|File::RDWR )

@@ -9,6 +9,7 @@
 <div id="tribune">
   <ul id="list_tribune">
   </ul>
+  <%= paginate @posts , theme: 'bootstrap' %>
   <%= form_tag url_for(:action => 'post'), :id => 'form_post', :remote => true do |f| %>
       <%= text_field_tag 'message', nil, :class => 'span8', :placeholder => 'Message' %><%= button_tag 'Poster', :class => 'btn', :id => "submit" %>
   <% end %>
@@ -16,4 +17,5 @@
   <!--<input name="commit" type="submit" value="Poster" disabled="disabled"/>-->
   <!--<img alt="Spinner" id="please_wait" src="/images/spinner.gif?1184154283" style="visibility:hidden" />-->
   <!--<img alt="Autoreload" id="autoreload" src="/images/autoreload.gif?1184154283" style="visibility:hidden" />-->
+
 </div>

@@ -300,9 +300,9 @@ function BoardGetBackend(board) {
     var xhr = new XMLHttpRequest();
     // Le paramètre random est là pour IE6 qui ne tient pas compte des directives de cache
     var get_url = '/backend.php?r=' + Math.random();
-    get_url += '&name=' + escape(board.name);
-    if (board.cookie) get_url += '&cookie=' + escape(board.cookie);
-    if (board.lastModified) get_url += '&lastModified=' + escape(board.lastModified);
+    get_url += '&name=' + encodeURIComponent(board.name);
+    if (board.cookie) get_url += '&cookie=' + encodeURIComponent(board.cookie);
+    if (board.lastModified) get_url += '&lastModified=' + encodeURIComponent(board.lastModified);
     get_url += '&url=' + to_url(board.getUrl.replace("%i", board.lastId || ""));
     xhr.open('GET', get_url, true);
     xhr.onreadystatechange = function () {
@@ -350,9 +350,10 @@ function BoardPost(board, msg) {
     }
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     var data = 'ua=' + to_url(board.ua || settings.value('default_ua'))
-        + '&name=' + escape(board.name)
-        + '&cookie=' + escape(board.cookie)
-        + '&posturl=' + escape(board.postUrl)
+        + '&name=' + encodeURIComponent(board.name)
+        + '&perso=' + encodeURIComponent(board.perso)
+        + '&cookie=' + encodeURIComponent(board.cookie)
+        + '&posturl=' + encodeURIComponent(board.postUrl)
         + '&postdata=' + to_url(postdata);
     xhr.send(data);
 }

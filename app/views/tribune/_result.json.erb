@@ -17,10 +17,11 @@ message.gsub!(totoz) {|s|
 display = result['login'].presence || result['info']
 %>
 {
-    "id": <%=result['id']%>,
+    "id": <%=result['p_id']%>,
     "time":"<%=time%>",
     "info":<%=raw result['info'].to_json%>,
     "class_display":"<%=class_display%>",
     "ua_or_login":<%=raw ua_or_login.to_json%>,
-    "message":<%=raw message.to_json%>
+    "message":<%=raw message.to_json%>,
+    "rules": "<%=result['rules']%>"
 }

@@ -9,6 +9,8 @@ class Post < ActiveRecord::Base
   before_save :update_message
   after_save :update_tire
 
+  paginates_per 150
+
   def search
 
   end

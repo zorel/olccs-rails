@@ -23,16 +23,15 @@ private
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.board(:site => site) {
         posts.each { |p|
-          content = p
-          xml.post(:id => content['id'], :time => content['time'], :board => content['board']) {
+          xml.post(:id => p.p_id, :time => p.time, :board => p.tribune.name) {
             xml.info {
-              xml << content['info']
+              xml << p.info
             }
             xml.login {
-              xml << content['login']
+              xml << p.login
             }
             xml.message {
-              xml << content['message']
+              xml << p.message
             }
           }
         }
@@ -45,7 +44,7 @@ private
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.board(:site => site) {
         @urls.each { |u|
-          xml.post(:id => u.id, :time => u.post.time, :board => u.post.tribune.name) {
+          xml.post(:id => u.p_id, :time => u.post.time, :board => u.post.tribune.name) {
             xml.info {
               xml << u.post.info
             }

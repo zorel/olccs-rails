@@ -15,10 +15,14 @@ class TribuneController < ApplicationController
   def index
     #TODO: pagination
     last = params[:last] || 0
-    size = params[:size] || 150
-    @results = @tribune.backend(last, size, current_user)
+    page = params[:page] || 1
+    # size = params[:size] || 150 cf partie dans tribune.rb => param supprimé
+    r = @tribune.backend(:last => last, :user => current_user, :page => page)
+    @results = r[0]
+    @posts = r[1]
 
-    #raise @posts.to_yaml
+    #raise @results.to_yaml
+
     respond_to do |format|
       format.html
       format.json
@@ -47,12 +51,11 @@ class TribuneController < ApplicationController
 #</site>
   end
 
-  # TODO: percolater chaque post en fonction des préfs utilisateurs
   def remote
     last = params[:last] || 0
-    size = params[:size] || 150
+    page = params[:page] || 1
 
-    @results = @tribune.backend(last,size,current_user)
+    @results = @tribune.backend({:last => last, :user => current_user, :page => page})[0]
     #res = nil
     #
     #if current_user
@@ -104,7 +107,11 @@ class TribuneController < ApplicationController
   def urls
     @urls = @tribune.links.order("created_at desc").limit(42)
 
-    render :xml => urls_to_xml(@urls, @tribune.name)
+    respond_to do |format|
+      format.rss
+      format.xml {render :xml => urls_to_xml(@urls, @tribune.name)}
+    end
+
   end
 
   def login
