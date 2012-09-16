@@ -68,7 +68,7 @@ class Tribune < ActiveRecord::Base
         content['rules'] = matched.join(',')
       end
 
-      [content, b]
+      [content.to_a, b]
     end
 
   end
