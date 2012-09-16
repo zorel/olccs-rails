@@ -13,7 +13,6 @@ class TribuneController < ApplicationController
 
 
   def index
-    #TODO: pagination
     last = params[:last] || 0
     page = params[:page] || 1
     # size = params[:size] || 150 cf partie dans tribune.rb => param supprimé

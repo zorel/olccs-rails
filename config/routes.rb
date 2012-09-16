@@ -19,6 +19,7 @@ Olccs::Application.routes.draw do
 
   match '/about' => 'welcome#about'
   match '/aide' => 'welcome#aide'
+  match '/api' => 'welcome#api'
 
   #match ':controller(/:action(/:id))(.:format)'
 
