@@ -8,6 +8,8 @@ Le menu du site présente toujours au moins 5 parties:
 * L'aide
 * Le lien d'À Propos.
 
+Pour l'API, voir [cette page](/api).
+
 # Racine du site
 
 <table class="table">

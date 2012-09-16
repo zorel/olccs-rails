@@ -168,14 +168,12 @@ class Tribune < ActiveRecord::Base
 
     client.cookie_manager.parse(opts[:cookie], URI.parse(post_url)) unless opts[:cookie].nil?
     #client.debug_dev=File.open('http.log', File::CREAT|File::TRUNC|File::RDWR )
-    begin
-      res = client.post(post_url, body, head)
-    rescue Exception => e
-      logger.error("Post fail for #{name}")
-      logger.error(e)
-    else
-      self.refresh
-    end
+
+    res = client.post(post_url, body, head)
+    self.refresh
+  rescue Exception => e
+    logger.error("Post fail for #{name}")
+    logger.error(e)
   end
 end
 #

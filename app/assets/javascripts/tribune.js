@@ -416,9 +416,10 @@ function initTribune() {
 function tribune_update() {
     var list_tribune = $("#list_tribune");
     var all = $("#list_tribune li");
-    var last, first;
+    var last, first, scroll;
     if (all.length > 0) {
         last = all.last()[0].id;
+        scroll = true;
     } else {
         last = first = "p0";
     }

@@ -53,7 +53,7 @@ class WelcomeController < ApplicationController
   def about
   end
 
-  def aide
+  def help
   end
 
   def api

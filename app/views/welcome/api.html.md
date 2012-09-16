@@ -45,7 +45,7 @@
                             <td>Numéro de la page à générer</td>
                         </tr>
                         <tr>
-                            <td>last_id</td>
+                            <td>last</td>
                             <td>Génération du remote optimisé à partir de l'id last</td>
                         </tr>
                     </tbody>
