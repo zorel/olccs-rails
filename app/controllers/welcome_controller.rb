@@ -1,4 +1,8 @@
 class WelcomeController < ApplicationController
+
+  protect_from_forgery :except => :postphp
+
+
   def postphp
     postdata = params[:postdata]
     cookie = params[:cookie]
@@ -10,7 +14,7 @@ class WelcomeController < ApplicationController
     message.slice!(Regexp.new("#{tribune.post_parameter}="))
     message = message.gsub('#{plus}#','+').gsub('#{amp}#','&').gsub('#{dcomma}#',';').gsub('#{percent}#','%')
 
-    tribune.post({message: message, cookie: cookie, ua: ua})
+    tribune.post({message: message, cookies: cookie, ua: ua})
 
     render :text => "plop"
   end

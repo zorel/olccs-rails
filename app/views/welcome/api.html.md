@@ -1,4 +1,4 @@
-# Gestion des formats.
+# Gestion des formats
 
 Certaines API peuvent génèrer plusieurs formats (html, rss, tsv, xml ou json). La sélection de ces formats se fait en fonction
 de 2 mécanismes: le type mime et l'extension. La négociation de contenu via le header Accept en http permet de spécifier

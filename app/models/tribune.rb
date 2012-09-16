@@ -166,8 +166,7 @@ class Tribune < ActiveRecord::Base
         "User-Agent" => opts[:ua]
     }
 
-    client.cookie_manager.parse(opts[:cookie], URI.parse(post_url)) unless opts[:cookie].nil?
-    #client.debug_dev=File.open('http.log', File::CREAT|File::TRUNC|File::RDWR )
+    client.cookie_manager.parse(opts[:cookies], URI.parse(post_url)) unless opts[:cookies].nil?
 
     res = client.post(post_url, body, head)
     self.refresh
