@@ -83,8 +83,9 @@
             </td>
         </tr>
         <tr>
-            <td>POST /t/:tribune/post</td>
+            <td>POST /t/:tribune/post.:format</td>
             <td>Poste un message sur la tribune concernée. Olccs envoie tous les cookies présentés vers la tribune, ainsi que l'UA.
+                Supporte 3 formats: html (retour vide dans ce cas), tsv et xml (retourne le backend pour ces 2 formats)
                 <table class="table">
                     <thead>
                         <tr>
@@ -96,6 +97,10 @@
                         <tr>
                             <td>message</td>
                             <td>Le message au format "standard"</td>
+                        </tr>
+                        <tr>
+                            <td>last</td>
+                            <td>Pour les posts tsv et xml, ne retourne que les posts dont l'id est supérieur à last</td>
                         </tr>
                     </tbody>
                 </table>

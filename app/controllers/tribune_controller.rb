@@ -70,13 +70,21 @@ class TribuneController < ApplicationController
   end
 
   def post
-    xpostid = @tribune.post message: params[:message],
+    last = params[:last] || 0
+
+    x = @tribune.post message: params[:message],
         ua: request.user_agent,
         cookies: request.cookies
 
-    response.headers['X-Post-Id'] = xpostid unless xpostid.nil?
+    response.headers['X-Post-Id'] = x unless x.nil?
 
-    render :nothing => true
+    @results = @tribune.backend({:last => last, :user => current_user})[0]
+
+    respond_to do |format|
+      format.html { render :nothing => true}
+      format.tsv { render :template => 'tribune/remote'}
+      format.xml {render xml: posts_to_xml(@results, @tribune.name) }
+    end
   end
 
   def search
