@@ -67,10 +67,10 @@ class Tribune < ActiveRecord::Base
         end
         content['rules'] = matched.join(',')
       end
-
-      [content.to_a, b]
+      content
     end
-
+    #raise res.to_yaml
+    [res, b]
   end
 
   def query(q, page=1, s=150)
