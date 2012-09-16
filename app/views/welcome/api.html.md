@@ -1,3 +1,78 @@
+# Gestion des formats.
+
+Certaines API peuvent génèrer plusieurs formats (html, rss, tsv, xml ou json). La sélection de ces formats se fait en fonction
+de 2 mécanismes: le type mime et l'extension. La négociation de contenu via le header Accept en http permet de spécifier
+quel type mime le client préfère recevoir. En fonction de ces paramètres, voici les formats renvoyés au client:
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Type mime</th>
+            <th>Extension</th>
+            <th>Format retourné</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <ul>
+                    <li>text/html</li>
+                    <li>application/xhtml+xml</li>
+                </ul>
+            </td>
+            <td>html</td>
+            <td>HTML. Utilisé pour la partie Web du site.</td>
+        </tr>
+        <tr>
+            <td>
+                <ul>
+                    <li>application/xml</li>
+                    <li>text/xml</li>
+                    <li>application/x-xml</li>
+                </ul>
+            </td>
+            <td>xml</td>
+            <td>XML, c'est à dire format remote.xml</td>
+        </tr>
+        <tr>
+            <td>
+                <ul>
+                    <li>text/tsv</li>
+                </ul>
+            </td>
+            <td>tsv</td>
+            <td>Tab Separated Values. Format pour le remote, donc pour contenir une liste de posts</td>
+        </tr>
+        <tr>
+            <td>
+                <ul>
+                    <li>application/rss+xml</li>
+                </ul>
+            </td>
+            <td>rss</td>
+            <td>Really Simple Syndication, utilisé pour les API de liste d'urls</td>
+        </tr>
+        <tr>
+            <td>
+                <ul>
+                    <li>application/json</li>
+                    <li>text/x-json</li>
+                </ul>
+            </td>
+            <td>json</td>
+            <td>JavaScript Object Notation. Non utilisé par les API pour le moment, juste pour le backend de la tribune Web</td>
+        </tr>
+    </tbody>
+</table>
+
+Exemples:
+
+* /t/euromussels/remote.tsv => format tab separated value
+* /t/euromussels/remote + Accept text/tsv => format tab separated value
+* /t/euromussels/remote + Accept text/xml => format xml remote(.xml)
+
+
+
 # Racine du site
 
 <table class="table">

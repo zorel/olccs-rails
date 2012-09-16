@@ -178,10 +178,3 @@ class Tribune < ActiveRecord::Base
     logger.error(e)
   end
 end
-#
-#http%3A//euromussels.eu/%3Fq%3Dtribune/post&postdata=message=test
-#http%3A//euromussels.eu/%3Fq%3Dtribune/post&postdata=message=123
-#ua=onlineCoinCoin/0.4.2&name=euromussels&cookie=&posturl=
-#
-#            ua=[:zorel]&name=euromussels&cookie=&posturl=http%3A//euromussels.eu/%3Fq%3Dtribune/post&postdata=message=test
-#ua=onlineCoinCoin/0.4.2&name=euromussels&cookie=&posturl=http%3A//euromussels.eu/%3Fq%3Dtribune/post&postdata=message=123
