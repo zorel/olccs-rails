@@ -70,9 +70,12 @@ class TribuneController < ApplicationController
   end
 
   def post
-    @tribune.post message: params[:message],
+    xpostid = @tribune.post message: params[:message],
         ua: request.user_agent,
         cookies: request.cookies
+
+    response.headers['X-Post-Id'] = xpostid unless xpostid.nil?
+
     render :nothing => true
   end
 

@@ -171,6 +171,7 @@ class Tribune < ActiveRecord::Base
 
     res = client.post(post_url, body, head)
     self.refresh
+    res.headers['X-Post-Id']
   rescue Exception => e
     logger.error("Post fail for #{name}")
     logger.error(e)
