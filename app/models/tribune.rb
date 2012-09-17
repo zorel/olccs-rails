@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 class Tribune < ActiveRecord::Base
   has_many :posts
   has_many :links, :through => :posts
@@ -19,7 +21,7 @@ class Tribune < ActiveRecord::Base
         :page => 1,
     }.merge(opts)
 
-    b = self.posts.page(conf[:page]).where("p_id > ?", conf[:last]).order("p_id DESC")
+    b = self.posts.live.page(conf[:page]).where("p_id > ?", conf[:last]).order("p_id DESC")
 
     #b = Tire.search(name) do
     #  query do
@@ -90,7 +92,7 @@ class Tribune < ActiveRecord::Base
 
   def refresh
     client = HTTPClient.new
-    last_post = self.posts.last(:order => "p_id")
+    last_post = self.posts.live.last(:order => "p_id")
     if last_post.nil?
       last_id = 0
     else
@@ -157,6 +159,7 @@ class Tribune < ActiveRecord::Base
 
   # @param [Hash] opts
   def post(opts)
+
     client = HTTPClient.new
     body = {
         post_parameter.to_sym => opts[:message]
@@ -166,14 +169,50 @@ class Tribune < ActiveRecord::Base
         "User-Agent" => opts[:ua]
     }
 
-    client.cookie_manager.parse(opts[:cookies], URI.parse(post_url)) unless opts[:cookies].nil?
+    cookies = opts[:cookies].collect { |k,v| "#{k}=#{v.encode('utf-8')}"}.join(';').encode('utf-8')
+
+    client.cookie_manager.parse(cookies, URI.parse(post_url)) unless opts[:cookies].nil?
 
     res = client.post(post_url, body, head)
+
     self.refresh
+
     res.headers['X-Post-Id']
 
   rescue Exception => e
     logger.error("Post fail for #{name}")
     logger.error(e)
+  end
+
+  def load_from_csv(directory)
+    cpt = 0
+    Dir.glob(directory+'/*.csv') do |filename|
+      puts "Gestion de #{filename} à #{Time.now}"
+      transaction do
+        CSV.foreach(filename, {:col_sep => ';'}) do |r|
+          cpt+=1
+          p_id = r[1].to_i
+          time = Time.strptime(r[2], '%Y-%m-%d %H:%M:%S').strftime('%Y%m%d%H%M%S')
+          login = r[3] || ""
+          info = r[4] || ""
+          message = r[5] || ""
+
+          archive = p_id > 1507459 ? 1 : 0
+
+          self.posts.build({p_id: p_id,
+                            time: time,
+                            info: info.encode('utf-8').strip,
+                            login: login.encode('utf-8').strip,
+                            message: "<message>#{message.encode('utf-8').strip}</message>",
+                            archive: archive
+                           })
+          puts "#{cpt}" if (cpt % 1000 == 0)
+        end
+        save!
+      end
+      puts "#{filename} terminé à #{Time.now}"
+      File.rename(filename, "#{filename}.done")
+
+    end
   end
 end

@@ -26,11 +26,11 @@ var SLIP_TAGS_RAW = 'Raw tags';
 var SLIP_TAGS_ENCODED = 'Tags encoded';
 
 // Boss-mode
-var BOSSMODE_RANDOM = 'Aléatoire';
+var BOSSMODE_RANDOM = 'Aleatoire';
 var BOSSMODE_PTRAMO = 'Pierre Tramo';
 var BOSSMODE_KERVIEL = 'J. Kerviel';
 var BOSSMODE_PBPG = 'pBpG';
-var BOSSMODE_DECIDEUR = 'Diçaïdor';
+var BOSSMODE_DECIDEUR = 'Dissailledor';
 
 // Balltrap
 var BALLTRAP_ONCLICK = 'Launch on click';

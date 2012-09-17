@@ -9,7 +9,7 @@ class Link < ActiveRecord::Base
   # DONE Faire un truc propre pour gestion asynchrone (to_index? / indexed / etc.)
   # DONE faire en sorte que la même URL ne soit pas indexée plusieurs fois
   def index
-    return 1 unless to_index
+    return 1 unless to_index or self.post.archive != 0
 
     client = HTTPClient.new
     client.ssl_config.verify_mode=(OpenSSL::SSL::VERIFY_NONE)

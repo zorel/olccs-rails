@@ -78,3 +78,4 @@ gem 'clockwork'
 
 # foreman, lancement de process
 gem 'foreman'
+

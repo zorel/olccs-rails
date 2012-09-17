@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120916164659) do
+ActiveRecord::Schema.define(:version => 20120917101222) do
 
   create_table "links", :force => true do |t|
     t.text     "href"
@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(:version => 20120916164659) do
     t.text    "time"
     t.text    "message"
     t.integer "tribune_id"
+    t.integer "archive",    :default => 0
   end
 
   create_table "rules", :force => true do |t|
@@ -65,7 +66,7 @@ ActiveRecord::Schema.define(:version => 20120916164659) do
     t.text     "user_parameter"
     t.text     "pwd_parameter"
     t.text     "remember_me_parameter"
-    t.datetime "last_updated",          :default => '2012-09-02 20:39:21'
+    t.datetime "last_updated",          :default => '2012-09-17 11:52:47'
     t.integer  "refresh_interval",      :default => 15
     t.datetime "created_at",                                               :null => false
     t.datetime "updated_at",                                               :null => false

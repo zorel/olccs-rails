@@ -88,6 +88,8 @@ class TribuneController < ApplicationController
       format.tsv { render :template => 'tribune/remote'}
       format.xml {render xml: posts_to_xml(@results, @tribune.name) }
     end
+
+    #render :nothing => true
   end
 
   def search

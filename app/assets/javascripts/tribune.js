@@ -666,7 +666,7 @@ $(document).ready(function () {
 
     tribune_update();
 
-    var x = setInterval(function() {tribune_update()}, 10000);
+    var x = setInterval(function() {tribune_update()}, 30000);
 
 });
 
