@@ -79,7 +79,9 @@ class TribuneController < ApplicationController
         ua: request.user_agent,
         cookies: request.cookies
 
-    response.headers['X-Post-Id'] = x unless x.nil?
+    unless x.nil?
+      response.headers['X-Post-Id'] = x
+    end
 
     @results = @tribune.backend({:last => last, :user => current_user})[0]
 

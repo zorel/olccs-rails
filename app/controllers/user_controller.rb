@@ -52,7 +52,6 @@ class UserController < ApplicationController
   def reload_olcc_cookie
     saved_cookie = JSON.parse(Base64.decode64(current_user.olcc_cookie))
     saved_cookie.each do |c|
-      puts c.inspect
       cookies[c[0]] = c[1]
     end
     redirect_to '/olcc/'

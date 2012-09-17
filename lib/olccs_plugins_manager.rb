@@ -19,6 +19,5 @@ class OlccsPluginsManager
 
     puts "repo: #{@repository.to_s}"
 
-
   end
 end
