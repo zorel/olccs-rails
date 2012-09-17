@@ -174,7 +174,7 @@ class Tribune < ActiveRecord::Base
         c = "#{k}=#{v.encode('utf-8')}"
         client.cookie_manager.parse(c, URI.parse(post_url))
       end
-    end unless opts[:cookies].nil?
+    end unless opts[:cookies].nil? or opts[:cookies]==''
 
     res = client.post(post_url, body, head)
 
@@ -184,7 +184,7 @@ class Tribune < ActiveRecord::Base
 
   rescue Exception => e
     logger.error("Post fail for #{name}")
-    logger.error(e)
+    logger.error(e.backtrace)
   end
 
   def load_from_csv(directory)
