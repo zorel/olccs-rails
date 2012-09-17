@@ -170,8 +170,10 @@ class Tribune < ActiveRecord::Base
     }
 
     opts[:cookies].each do |k, v|
-      c = "#{k}=#{v.encode('utf-8')}"
-      client.cookie_manager.parse(c, URI.parse(post_url))
+      if v != ""
+        c = "#{k}=#{v.encode('utf-8')}"
+        client.cookie_manager.parse(c, URI.parse(post_url))
+      end
     end unless opts[:cookies].nil?
 
     res = client.post(post_url, body, head)
