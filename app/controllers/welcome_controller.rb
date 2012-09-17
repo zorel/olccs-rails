@@ -24,8 +24,8 @@ class WelcomeController < ApplicationController
     uri = URI.parse(params[:url])
     last = 0
     if uri.query && CGI.parse(uri.query)
-      if CGI.parse(uri.query)[tribune.last_id_parameter][0]
-        last = CGI.parse(uri.query)[tribune.last_id_parameter][0].to_i
+      if CGI.parse(uri.query)['last'][0]
+        last = CGI.parse(uri.query)['last'][0].to_i
       end
     end
 
