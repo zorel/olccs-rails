@@ -169,12 +169,14 @@ class Tribune < ActiveRecord::Base
         "User-Agent" => opts[:ua]
     }
 
-    opts[:cookies].each do |k, v|
-      if v != ""
-        c = "#{k}=#{v.encode('utf-8')}"
-        client.cookie_manager.parse(c, URI.parse(post_url))
+    unless opts[:cookies].nil? opts[:cookies]==''
+      opts[:cookies].each do |k, v|
+        if v != ""
+          c = "#{k}=#{v.encode('utf-8')}"
+          client.cookie_manager.parse(c, URI.parse(post_url))
+        end
       end
-    end unless opts[:cookies].nil? or opts[:cookies]==''
+    end
 
     res = client.post(post_url, body, head)
 
@@ -184,6 +186,7 @@ class Tribune < ActiveRecord::Base
 
   rescue Exception => e
     logger.error("Post fail for #{name}")
+    logger.error(opts)
     logger.error(e.backtrace)
   end
 
