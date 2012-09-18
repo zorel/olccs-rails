@@ -171,7 +171,7 @@ class Tribune < ActiveRecord::Base
 
     unless opts[:cookies].nil? and opts[:cookies]==''
       if opts[:cookies].class == String
-        client.cookie_manager.parse(c, URI.parse(post_url))
+        client.cookie_manager.parse(opts[:cookies], URI.parse(post_url))
       elsif opts[:cookies.class] == Hash
         opts[:cookies].each do |k, v|
           if v != ""
@@ -191,6 +191,7 @@ class Tribune < ActiveRecord::Base
   rescue Exception => e
     logger.error("Post fail for #{name}")
     logger.error(opts)
+    logger.error(e)
     logger.error(e.backtrace)
   end
 
