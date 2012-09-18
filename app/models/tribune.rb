@@ -223,7 +223,6 @@ class Tribune < ActiveRecord::Base
       end
       puts "#{filename} terminé à #{Time.now}"
       File.rename(filename, "#{filename}.done")
-
     end
   end
 end

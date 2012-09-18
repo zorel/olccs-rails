@@ -79,3 +79,6 @@ gem 'clockwork'
 # foreman, lancement de process
 gem 'foreman'
 
+# https://github.com/macournoyer/thin/issues/119 (sudo gem install thin -- --with-cflags=\"-O2 -pipe -march=native -w\")
+gem 'thin'
+
