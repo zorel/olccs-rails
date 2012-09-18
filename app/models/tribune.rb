@@ -200,13 +200,13 @@ class Tribune < ActiveRecord::Base
     Dir.glob(directory+'/*.csv') do |filename|
       puts "Gestion de #{filename} à #{Time.now}"
       transaction do
-        CSV.foreach(filename, {:col_sep => ';'}) do |r|
+        CSV.foreach(filename, {:col_sep => ','}) do |r|
           cpt+=1
-          p_id = r[1].to_i
-          time = Time.strptime(r[2], '%Y-%m-%d %H:%M:%S').strftime('%Y%m%d%H%M%S')
-          login = r[3] || ""
-          info = r[4] || ""
-          message = r[5] || ""
+          p_id = r[0].to_i
+          time = Time.strptime(r[1], '%Y-%m-%d %H:%M:%S').strftime('%Y%m%d%H%M%S')
+          login = r[2] || ""
+          info = r[3] || ""
+          message = r[4] || ""
 
           archive = p_id > 1507459 ? 1 : 0
 
@@ -217,12 +217,17 @@ class Tribune < ActiveRecord::Base
                             message: "<message>#{message.encode('utf-8').strip}</message>",
                             archive: archive
                            })
-          puts "#{cpt}" if (cpt % 1000 == 0)
+          puts "#{cpt}" if (cpt % 10 == 0)
         end
         save!
       end
       puts "#{filename} terminé à #{Time.now}"
       File.rename(filename, "#{filename}.done")
     end
+
+  rescue Exception => e
+    puts e
+    puts e.backtrace
+    
   end
 end
