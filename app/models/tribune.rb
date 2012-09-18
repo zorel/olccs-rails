@@ -169,11 +169,15 @@ class Tribune < ActiveRecord::Base
         "User-Agent" => opts[:ua]
     }
 
-    unless opts[:cookies].nil? opts[:cookies]==''
-      opts[:cookies].each do |k, v|
-        if v != ""
-          c = "#{k}=#{v.encode('utf-8')}"
-          client.cookie_manager.parse(c, URI.parse(post_url))
+    unless opts[:cookies].nil? and opts[:cookies]==''
+      if opts[:cookies].class == String
+        client.cookie_manager.parse(c, URI.parse(post_url))
+      elsif opts[:cookies.class] == Hash
+        opts[:cookies].each do |k, v|
+          if v != ""
+            c = "#{k}=#{v.encode('utf-8')}"
+            client.cookie_manager.parse(c, URI.parse(post_url))
+          end
         end
       end
     end
