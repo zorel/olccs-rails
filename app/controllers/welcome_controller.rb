@@ -1,8 +1,12 @@
+# encoding: UTF-8
+
+# Controleur de gestion de la racine du site
 class WelcomeController < ApplicationController
 
   protect_from_forgery :except => :postphp
 
-
+  # Compatibilité olcc pour le post d'un message
+  # TODO: gestion des tribunes persos non indexées
   def postphp
     postdata = params[:postdata]
     cookie = params[:cookie]
@@ -19,6 +23,8 @@ class WelcomeController < ApplicationController
     render :text => "plop"
   end
 
+  # Compatibilité olcc pour la demande du backend
+  # TODO: gestion des tribunes persos non indexées
   def backendphp
     tribune = Tribune.find_by_name(params[:name])
     uri = URI.parse(params[:url])
@@ -32,6 +38,7 @@ class WelcomeController < ApplicationController
     render :xml => posts_to_xml(tribune.backend(:last => last, :size => 300, :user => current_user)[0], tribune.name)
   end
 
+  # Compatibilité olcc pour la recherche des totoz
   def totozphp
     url = params[:url].sub(/\{question\}/,'?')
     client = HTTPClient.new
@@ -39,6 +46,13 @@ class WelcomeController < ApplicationController
     render :xml => r.body
   end
 
+  # Compatibilité olcc pour l'upload de fichier
+  # TODO: ben todo
+  def attachphp
+
+  end
+
+  # Voir la doc d'API
   def urls
     @urls = Link.limit(42).order("created_at desc")
 
@@ -50,10 +64,12 @@ class WelcomeController < ApplicationController
     end
   end
 
+  # Voir l'aide
   def index
     @tribunes = Tribune.all(:order => 'name asc')
   end
 
+  # Voir l'aide
   def about
   end
 

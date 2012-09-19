@@ -1,3 +1,4 @@
+# Controleur de gestion de l'utilisateur et de ses préférences. Se référer à l'aide pour plus d'infos
 class UserController < ApplicationController
   # TODO finir all this shit
   # TODO attention si user_id existant dans session mais pas dans base => 404 partout (sur tribune)
@@ -5,10 +6,12 @@ class UserController < ApplicationController
 
   #accepts_nested_attributes_for :rule
 
+  # Voir l'aide
   def index
 
   end
 
+  # Voir l'aide
   def edit_rules
     @user = current_user
     @rules = @user.rules
@@ -40,6 +43,7 @@ class UserController < ApplicationController
 
   end
 
+  # Voir l'aide
   def save_olcc_cookie
     save = []
     cookies.each do |c|
@@ -49,6 +53,7 @@ class UserController < ApplicationController
     render :nothing => true
   end
 
+  # Voir l'aide
   def reload_olcc_cookie
     saved_cookie = JSON.parse(Base64.decode64(current_user.olcc_cookie))
     saved_cookie.each do |c|
@@ -57,6 +62,7 @@ class UserController < ApplicationController
     redirect_to '/olcc/'
   end
 
+  # Voir l'aide
   def destroy_olcc_cookie
     current_user.update_column('olcc_cookie', "")
   end

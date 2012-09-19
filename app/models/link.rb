@@ -1,3 +1,4 @@
+# Modèle de gestion des URLs
 class Link < ActiveRecord::Base
   belongs_to :post
 
@@ -8,6 +9,10 @@ class Link < ActiveRecord::Base
   after_commit :index_link, :on => :create
   # DONE Faire un truc propre pour gestion asynchrone (to_index? / indexed / etc.)
   # DONE faire en sorte que la même URL ne soit pas indexée plusieurs fois
+
+  # Effectue l'indexation du lien dans elasticsearch:
+  # * Télécharge le fichier (15Mo max)
+  # * le dépose dans ElasticSearch configuré pour indexer le contenu grace à https://github.com/elasticsearch/elasticsearch-mapper-attachments
   def index
     return 1 unless to_index or self.post.archive != 0
 

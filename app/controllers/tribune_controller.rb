@@ -1,3 +1,7 @@
+# encoding: UTF-8
+
+# Controleur de gestion de tribune, gère le multiformat xml/rss/html/json là où c'est nécessaire. Se réferer à la document
+# de l'API pour les informations nécessaires
 class TribuneController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, :with => :record_not_found
 
@@ -14,7 +18,7 @@ class TribuneController < ApplicationController
   #  end
   #end
 
-
+  # Voir la doc d'API
   def index
     last = params[:last] || 0
     page = params[:page] || 1
@@ -53,6 +57,7 @@ class TribuneController < ApplicationController
 #</site>
   end
 
+  # Voir la doc d'API
   def remote
     last = params[:last] || 0
     page = params[:page] || 1
@@ -72,6 +77,7 @@ class TribuneController < ApplicationController
 
   end
 
+  # Voir la doc d'API
   def post
     last = params[:last] || 0
 
@@ -94,6 +100,7 @@ class TribuneController < ApplicationController
     #render :nothing => true
   end
 
+  # Voir la doc d'API
   def search
     # TODO: pour la recherche, prévoir à l'affichage un truc pour prendre les posts des horloges pointées, et éventuellement un "contexte" en nombre de lignes affichables
     size = params[:size] || 150
@@ -118,9 +125,11 @@ class TribuneController < ApplicationController
 
   end
 
+  # Voir la doc d'API
   def stats
   end
 
+  # Voir la doc d'API
   def urls
     @urls = @tribune.links.order("created_at desc").limit(42)
 
@@ -131,6 +140,7 @@ class TribuneController < ApplicationController
 
   end
 
+  # Voir la doc d'API
   def login
     tribune_login = @tribune.login({user: params[:user], password: params[:password], ua: "plop"})
 
@@ -140,9 +150,11 @@ class TribuneController < ApplicationController
     render :json => tribune_login.to_json
   end
 
+  # Voir la doc d'API
   def history
   end
 
+  # Voir la doc d'API
   def refresh
     @tribune.refresh
   end
@@ -151,8 +163,6 @@ private
   def set_tribune
     @tribune = Tribune.find_by_name(params[:tribune]) || raise(ActiveRecord::RecordNotFound)
   end
-
-  private
 
   def record_not_found
     render :text => "404 Not Found", :status => 404

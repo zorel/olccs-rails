@@ -1,8 +1,10 @@
+# Controleur racine
 class ApplicationController < ActionController::Base
   protect_from_forgery
   helper_method :current_user, :posts_to_xml, :urls_to_xml
 
 private
+  # Sélection de l'utilisateur en fonction de la session.
   def current_user
     begin
       @current_user = User.find(session[:user_id])
@@ -11,14 +13,23 @@ private
     end
   end
 
+  # Conversion d'un timestamp
+  # @param [String] time Le timestamp format YYYYMMDDhhmmss
+  # @return [String] Le timestamp format hh:mm:ss
   def time_to_horloge(time)
     Time.strptime(time, '%Y%m%d%H%M%S').strftime('%H:%M:%S')
   end
 
+  # Convertion d'un timestamp
+  # @param [String] time Le timestamp format YYYYMMDDhhmmss
+  # @return [String] Le timestamp format DD/MM#hh:mm:ss
   def time_to_full_horloge(time)
     Time.strptime(time, '%Y%m%d%H%M%S').strftime('%d/%m#%H:%M:%S')
   end
 
+  # Génération du remote à partir d'une liste de posts
+  # @param [Array] posts Le tableau de {Post}
+  # @param [String] site Le nom du site à générer dans le tag board
   def posts_to_xml(posts, site)
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.board(:site => site) {
