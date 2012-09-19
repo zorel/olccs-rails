@@ -255,6 +255,5 @@ class Tribune < ActiveRecord::Base
   rescue Exception => e
     puts e
     puts e.backtrace
-
   end
 end
