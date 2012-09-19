@@ -1,5 +1,7 @@
 # encoding: UTF-8
 
+# Modèle de représentation de tribune. Effectue toutes les interractions avec la tribune cible et présente aux
+# modèles et controlleurs utilisateurs une API standard quelque soit la tribune.
 class Tribune < ActiveRecord::Base
   has_many :posts
   has_many :links, :through => :posts
@@ -9,9 +11,10 @@ class Tribune < ActiveRecord::Base
 
   validates_uniqueness_of :name
 
-  #TODO Faire un chargement par fichier remote.xml afin de charger un historique
-  #TODO Faire un chargement via bdd pour historique khapin
+  # TODO Faire un chargement par fichier remote.xml afin de charger un historique
 
+  # Génère le backend pour la tribune. Si un utilisateur est connecté, on effectué également une percolation de chacun
+  # des posts du backend pour lancer les actions dessus.
   # @param [Hash] opts
   def backend(opts={})
     # s supprimé de la liste: utilisation de la pagination avec du per_page de kaminari
@@ -75,6 +78,8 @@ class Tribune < ActiveRecord::Base
     [res, b]
   end
 
+  # Effectue une recherche dans Elasticsearch pour la tribune
+  # TODO: refaire cette partie pour options en hash
   def query(q, page=1, s=150)
     b = Tire.search(name) do
       query do
@@ -90,6 +95,10 @@ class Tribune < ActiveRecord::Base
     b
   end
 
+  # Effectue le rafraichissement de la tribune
+  #
+  # * Lance la requête vers la tribune cible avec le last id positionné
+  # * Filtre le contenu avec Nokogiri pour (au cas où la tribune n'accepte pas le last id)
   def refresh
     client = HTTPClient.new
     last_post = self.posts.live.last(:order => "p_id")
@@ -134,13 +143,18 @@ class Tribune < ActiveRecord::Base
     RefreshWorker.perform_async(id)
   end
 
+  # Lance le refresh conditionnel sur toutes les tribunes
   def self.refresh_all
     Tribune.all.each do |t|
       t.refresh?
     end
   end
 
-  # @param [Hash] opts
+  # Permet le login sur la tribune cible par envoie du login/mdp vers le formulaire de login, et retourne les cookies
+  #
+  # TODO: mettre à jour la partie sur les cookies pour renvoyer ce que plopoid accepte
+  # @param [Hash<user,password>] opts Paramètre contenant nom d'utilisateur et mot de passe
+  # @return [Hash] Renvoie le hash de cookies
   def login(opts)
     client = HTTPClient.new
     body = {
@@ -157,7 +171,11 @@ class Tribune < ActiveRecord::Base
     client.cookie_manager.cookies
   end
 
-  # @param [Hash] opts
+  # Poste un nouveau message sur la tribune cible
+  #
+  # TODO: refaire la partie sur les cookies
+  # @param [Hash<message, ua, cookies>] opts Hash de paramètre
+  # @return [Integer] Renvoie le X-Post-Id du post (nil si la tribune ne renvoie pas de X-Post-Id)
   def post(opts)
 
     client = HTTPClient.new
@@ -195,18 +213,27 @@ class Tribune < ActiveRecord::Base
     logger.error(e.backtrace)
   end
 
+  # Chargement en masse de posts dans la base
+  #
+  # Charge chaque csv dans une transaction pour optimiser les temps de traitement
+  #
+  # Liste des champs dans le CSV: post_id, time (format YYYYMMDDhhmmss), login, info/ua, message
+  #
+  # Dans phpmyadmin, faire un export format csv pour excel.
+  # @param [String] directory Chemin où sont situés les fichiers .csv
+
   def load_from_csv(directory)
     cpt = 0
     Dir.glob(directory+'/*.csv') do |filename|
       puts "Gestion de #{filename} à #{Time.now}"
       transaction do
-        CSV.foreach(filename, {:col_sep => ';'}) do |r|
+        CSV.foreach(filename, {:col_sep => ','}) do |r|
           cpt+=1
-          p_id = r[1].to_i
-          time = Time.strptime(r[2], '%Y-%m-%d %H:%M:%S').strftime('%Y%m%d%H%M%S')
-          login = r[3] || ""
-          info = r[4] || ""
-          message = r[5] || ""
+          p_id = r[0].to_i
+          time = Time.strptime(r[1], '%Y-%m-%d %H:%M:%S').strftime('%Y%m%d%H%M%S')
+          login = r[2] || ""
+          info = r[3] || ""
+          message = r[4] || ""
 
           archive = p_id > 1507459 ? 1 : 0
 
@@ -217,12 +244,17 @@ class Tribune < ActiveRecord::Base
                             message: "<message>#{message.encode('utf-8').strip}</message>",
                             archive: archive
                            })
-          puts "#{cpt}" if (cpt % 1000 == 0)
+          puts "#{cpt}" if (cpt % 10 == 0)
         end
         save!
       end
       puts "#{filename} terminé à #{Time.now}"
       File.rename(filename, "#{filename}.done")
     end
+
+  rescue Exception => e
+    puts e
+    puts e.backtrace
+
   end
 end
