@@ -19,12 +19,12 @@ class Tribune < ActiveRecord::Base
   def backend(opts={})
     # s supprimé de la liste: utilisation de la pagination avec du per_page de kaminari
     conf = {
-        :last => 0,
+        :last => -1073741824,
         :user => nil,
         :page => 1,
     }.merge(opts)
-
-    b = self.posts.live.page(conf[:page]).where("p_id > ?", conf[:last]).order("p_id DESC")
+    # TODO ça merde avec la pagination, le p_id > 0 certainement
+    b = self.posts.page(conf[:page]).where("p_id > ?", conf[:last]).order("p_id DESC")
 
     #b = Tire.search(name) do
     #  query do
@@ -101,7 +101,7 @@ class Tribune < ActiveRecord::Base
   # * Filtre le contenu avec Nokogiri pour (au cas où la tribune n'accepte pas le last id)
   def refresh
     client = HTTPClient.new
-    last_post = self.posts.live.last(:order => "p_id")
+    last_post = self.posts.last(:order => "p_id")
     if last_post.nil?
       last_id = 0
     else
@@ -222,38 +222,41 @@ class Tribune < ActiveRecord::Base
   # Dans phpmyadmin, faire un export format csv pour excel.
   # @param [String] directory Chemin où sont situés les fichiers .csv
 
-  def load_from_csv(directory)
-    cpt = 0
-    Dir.glob(directory+'/*.csv') do |filename|
-      puts "Gestion de #{filename} à #{Time.now}"
-      transaction do
-        CSV.foreach(filename, {:col_sep => ','}) do |r|
-          cpt+=1
-          p_id = r[0].to_i
-          time = Time.strptime(r[1], '%Y-%m-%d %H:%M:%S').strftime('%Y%m%d%H%M%S')
-          login = r[2] || ""
-          info = r[3] || ""
-          message = r[4] || ""
-
-          archive = p_id > 1507459 ? 1 : 0
-
-          self.posts.build({p_id: p_id,
-                            time: time,
-                            info: info.encode('utf-8').strip,
-                            login: login.encode('utf-8').strip,
-                            message: "<message>#{message.encode('utf-8').strip}</message>",
-                            archive: archive
-                           })
-          puts "#{cpt}" if (cpt % 10 == 0)
-        end
-        save!
-      end
-      puts "#{filename} terminé à #{Time.now}"
-      File.rename(filename, "#{filename}.done")
-    end
-
-  rescue Exception => e
-    puts e
-    puts e.backtrace
-  end
+  #def load_from_csv(directory)
+  #  cpt = 0
+  #  coder = HTMLEntities.new # pour vieux posts dlfp
+  #  # sed -i.bak 's/"N,//' *.csv
+  #
+  #  Dir.glob(directory+'/*.csv') do |filename|
+  #    puts "Gestion de #{filename} à #{Time.now}"
+  #    #transaction do
+  #      CSV.foreach(filename, {:col_sep => ','}) do |r|
+  #        cpt+=1
+  #        puts r[0].to_i
+  #        # pour ancien site dlfp
+  #        p_id = r[0].to_i - 3050553
+  #        id = p_id
+  #        time = Time.strptime(r[1], '%Y-%m-%d %H:%M:%S').strftime('%Y%m%d%H%M%S')
+  #        login = r[2] || ""
+  #        info = r[3] || ""
+  #        # pour dlfp. Sinon, supprimer le decode
+  #        message = coder.decode(r[4]) || ""
+  #
+  #        self.posts.build({p_id: p_id,
+  #                          time: time,
+  #                          info: info.encode('utf-8').strip,
+  #                          login: login.encode('utf-8').strip,
+  #                          message: "<message>#{message.encode('utf-8').strip}</message>"
+  #                         })
+  #      end
+  #    #end
+  #    save!
+  #    puts "#{filename} terminé à #{Time.now}"
+  #    File.rename(filename, "#{filename}.done")
+  #  end
+  #
+  #rescue Exception => e
+  #  puts e
+  #  puts e.backtrace
+  #end
 end

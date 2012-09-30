@@ -4,16 +4,14 @@ class Post < ActiveRecord::Base
   belongs_to :tribune
   has_many :links
 
-  attr_accessible :tribune, :time, :info, :login, :message, :p_id, :archive
+  attr_accessible :tribune, :time, :info, :login, :message, :p_id
 
-  validates_uniqueness_of :p_id, :scope => [:tribune_id, :archive]
+  #validates_uniqueness_of :p_id, :scope => [:tribune_id]
 
   before_save :update_message
   after_save :update_tire
 
   paginates_per 150
-
-  scope :live, :conditions => {archive: 0}
 
   def search
 

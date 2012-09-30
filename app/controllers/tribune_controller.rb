@@ -20,7 +20,7 @@ class TribuneController < ApplicationController
 
   # Voir la doc d'API
   def index
-    last = params[:last] || 0
+    last = params[:last] || -1073741824
     page = params[:page] || 1
     # size = params[:size] || 150 cf partie dans tribune.rb => param supprimé
     r = @tribune.backend(:last => last, :user => current_user, :page => page)
@@ -79,7 +79,7 @@ class TribuneController < ApplicationController
 
   # Voir la doc d'API
   def post
-    last = params[:last] || 0
+    last = params[:last] || -1073741824
 
     x = @tribune.post message: params[:message],
         ua: request.user_agent,
@@ -113,7 +113,7 @@ class TribuneController < ApplicationController
         format.tsv { render :nothing => true}
       end
     else
-      @results = @tribune.query(params[:query],page,10).results
+      @results = @tribune.query(params[:query],page,150).results
       #raise @results.to_yaml
 
       respond_to do |format|
