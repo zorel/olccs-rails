@@ -69,6 +69,35 @@ class WelcomeController < ApplicationController
     @tribunes = Tribune.all(:order => 'name asc')
   end
 
+  def boards
+    boards = Tribune.all
+    builder = Nokogiri::XML::Builder.new do |xml|
+      xml.sites {
+        boards.each { |b|
+          xml.site(:name => b.name) {
+            xml.module(:name => "board", :title => "tribune", :type => "application/board+xml") {
+              xml.backend(:path => b.get_url, :public => "true", :tags_encoded => "false", :refresh => 10)
+              xml.post(:method => "post", :path => b.post_url, :anonymous => "true", :max_length => 512) {
+                xml.field(:name => b.post_parameter) {
+                  "$m"
+                }
+              }
+              xml.login(:method => "post", :path => b.cookie_url) {
+                xml.username(:name => b.user_parameter)
+                xml.password(:name => b.pwd_parameter)
+                xml.remember(:name => b.remember_me_parameter)
+                xml.cookie(:name => b.cookie_name)
+              }
+            }
+          }
+        }
+      }
+    end
+
+    render :xml => builder.to_xml(:encoding => 'UTF-8', :save_with => Nokogiri::XML::Node::SaveOptions::AS_XML)
+  end
+
+
   # Voir l'aide
   def about
   end
