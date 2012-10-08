@@ -15,7 +15,7 @@ class WelcomeController < ApplicationController
     tribune = Tribune.find_by_name(params[:name])
 
     message = postdata
-    message.slice!(Regexp.new("#{tribune.post_parameter}="))
+    message.slice!("#{tribune.post_parameter}=")
     message = message.gsub('#{plus}#','+').gsub('#{amp}#','&').gsub('#{dcomma}#',';').gsub('#{percent}#','%')
 
     tribune.post({message: message, cookies: cookie, ua: ua})
