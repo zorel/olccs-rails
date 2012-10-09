@@ -190,7 +190,7 @@ class Tribune < ActiveRecord::Base
     unless opts[:cookies].nil? and opts[:cookies]==''
       if opts[:cookies].class == String
         client.cookie_manager.parse(opts[:cookies], URI.parse(post_url))
-      elsif opts[:cookies.class] == Hash
+      elsif opts[:cookies].class == Hash
         opts[:cookies].each do |k, v|
           if v != ""
             c = "#{k}=#{v.encode('utf-8')}"
