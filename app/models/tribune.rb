@@ -40,7 +40,7 @@ class Tribune < ActiveRecord::Base
     #  i['_source']
     #end
 
-    return [b.to_a, b] if conf[:user].nil?
+    return [b.to_a, b] if conf[:user].nil? or conf[:user].rules.size == 0
 
     logger.debug("On commence la percolation")
     md5 = conf[:user].md5
@@ -89,7 +89,7 @@ class Tribune < ActiveRecord::Base
         by :id, 'desc'
       end
       from (page.to_i - 1) * s
-      size s
+      size s.to_i
     end
     #logger.debug(b.to_json)
     b
