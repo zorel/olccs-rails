@@ -15,6 +15,8 @@ Olccs::Application.routes.draw do
   match '/session/destroy', :to => 'sessions#destroy', :as => 'signout'
 
   match '/u' => 'user#index', :as => :user
+  match '/u/save_olcc_cookie' => 'user#save_olcc_cookie', :as => :save_olcc_cookie
+  match '/u/reload_olcc_cookie' => 'user#reload_olcc_cookie', :as => :reload_olcc_cookie
   match '/u(/:action(.:format))' => 'user'
 
   match '/about' => 'welcome#about'

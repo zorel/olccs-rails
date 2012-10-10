@@ -48,6 +48,11 @@
                     <li><%= link_to "Logout", signout_path %></li>
                     <li class="divider"></li>
                     <li><%= link_to "Règles", "/u/edit_rules"%></li>
+                    <li class="divider"></li>
+                    <li><%= link_to "Sauvegarder les cookies", :save_olcc_cookie %></li>
+                    <% unless current_user.olcc_cookie.blank? %>
+                    <li><%= link_to "Charger les cookies", :reload_olcc_cookie%></li>
+                    <%end%>
               <% else %>
                     <!--<li><%= link_to "Sign-in with Twitter", "/auth/twitter" %></li>-->
                     <li><%= link_to "avec Google", "/auth/google" %></li>

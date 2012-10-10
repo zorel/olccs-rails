@@ -18,7 +18,7 @@ Les fonctionnalités prévues ou implémentées sont (en vrac):
 
 - normalisation des remotes (xml tags non encodés) *done*
 - authentification par services tiers (openid/twitter/etc.) *done*
-- sauvegarde/restauration des cookies
+- sauvegarde/restauration des cookies *done*
 - gestion de filtres/règles personnels sur les messages en entrée (lors de la lecture du backend) ou en sortie (lors de la génération) *done*
 - gestion des substitutions dynamiques (par exemple #{totoz:boobs} pour avoir un totoz aléatoire de boobs)
 - historique et indexation du contenu des URL, avec remote.xml des URL postées par tribune, et pour toutes les tribunes configurées *done*
