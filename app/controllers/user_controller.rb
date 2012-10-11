@@ -1,4 +1,6 @@
-# Controleur de gestion de l'utilisateur et de ses préférences. Se référer à l'aide pour plus d'infos
+# encoding: UTF-8
+#
+## Controleur de gestion de l'utilisateur et de ses préférences. Se référer à l'aide pour plus d'infos
 class UserController < ApplicationController
   # TODO finir all this shit
   # TODO attention si user_id existant dans session mais pas dans base => 404 partout (sur tribune)
@@ -47,19 +49,21 @@ class UserController < ApplicationController
   def save_olcc_cookie
     save = []
     cookies.each do |c|
-      save << c unless c[0] == '_olccs_session'
+      save << c unless c[0] == '_olccs_sessionid'
     end
     current_user.update_column('olcc_cookie', Base64.encode64(save.to_json))
-    render :nothing => true
+    flash[:notice]='Cookies sauvegardés'
+    redirect_to :root
   end
 
   # Voir l'aide
   def reload_olcc_cookie
-    saved_cookie = JSON.parse(Base64.decode64(current_user.olcc_cookie))
+    saved_cookie = JSON.parse(Base64.decode64(@current_user.olcc_cookie))
     saved_cookie.each do |c|
       cookies[c[0]] = c[1]
     end
-    redirect_to '/olcc/'
+    flash[:notice]='Cookies rechargés'
+    redirect_to :root
   end
 
   # Voir l'aide
@@ -70,7 +74,7 @@ class UserController < ApplicationController
   private
   def set_user
     unless current_user
-      redirect_to root_url
+      redirect_to :root
     end
   end
 

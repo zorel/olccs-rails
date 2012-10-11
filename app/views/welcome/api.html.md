@@ -88,6 +88,10 @@ Exemples:
             <td>Présente les 42 dernières urls postées sur l'ensemble des tribunes d'olccs. 2 formats: rss et xml</td>
         </tr>
         <tr>
+            <td>GET /boards.:format</td>
+            <td>Une liste des tribunes au format discover, ou presque. Pour l'instant, seul le .xml est implémenté.</td>
+        </tr>
+        <tr>
             <td>backend.php post.php totoz.php attach.php</td>
             <td>API de compatibilité avec olcc</td>
         </tr>
