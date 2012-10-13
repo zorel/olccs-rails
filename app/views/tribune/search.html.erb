@@ -3,7 +3,7 @@
 <ol>
   <% @results.each do |res|
     if res['_type'] == 'link' %>
-        <li class="link"><%= p['href'] %></li>
+        <li class="link"><%= p['_source']['href'] %></li>
     <% else %>
       <%=  render 'search_result', post: res %>
     <%end%>
