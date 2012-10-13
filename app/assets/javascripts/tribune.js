@@ -472,7 +472,7 @@ function tribune_update() {
                 var a = url.attr('anchor');
 
                 if (a != '') {
-                    $.scrollTo("#"+a);
+                    $.scrollTo("#"+a, 0, { offset: {left: 0, top:-40 }});
                     $("#"+a).prepend('<i class="icon-arrow-right"></i>');
                 } else {
                     $.scrollTo("#message");
