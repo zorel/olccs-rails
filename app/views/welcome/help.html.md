@@ -65,7 +65,7 @@ Pour l'API, voir [cette page](/api).
         </tr>
         <tr>
             <td>/t/:tribune/stats</td>
-            <td>Des statistiques sur la tribune, plus gros posteurs, répartition temporelle, etc.</td>
+            <td>Des statistiques sur la tribune, plus gros posteurs, répartition temporelle, etc. </td>
         </tr>
 
     </tbody>
