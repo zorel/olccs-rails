@@ -85,4 +85,3 @@ gem 'thin'
 gem 'htmlentities'
 
 gem 'puma'
-
