@@ -5,6 +5,7 @@ var canfix;
 var tribune;
 var skip_update = 0;
 var post_template = "<li id='p{{id}}'><span class='horloge'>{{time}}</span> <span class='{{class_display}}' title='{{&info}}'>{{&ua_or_login}}</span> <span class='message'>{{&message}}</span></li>";
+var first_load = true;
 
 var myrules = {
     'a.smiley:mouseover':function (el, ev) {
@@ -465,7 +466,22 @@ function tribune_update() {
                     }
                 }
             }));
+
+            if (first_load) {
+                var url = $.url();
+                var a = url.attr('anchor');
+
+                if (a != '') {
+                    $.scrollTo("#"+a);
+                    $("#"+a).prepend('<i class="icon-arrow-right"></i>');
+                } else {
+                    $.scrollTo("#message");
+                }
+
+                first_load = false;
+            }
         }
+
     });
 //    new Ajax.Request("/tribune/update",
 //        {asynchronous:true,

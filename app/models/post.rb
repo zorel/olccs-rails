@@ -18,7 +18,7 @@ class Post < ActiveRecord::Base
   end
 
   def num_page(order = :id)
-    position = Post.where("#{order} >= ?", self.send(order)).count
+    position = Post.where("tribune_id = ? and #{order} >= ?", self.tribune.id, self.send(order)).count
     (position.to_f/150).ceil
   end
 
