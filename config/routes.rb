@@ -9,7 +9,7 @@ Olccs::Application.routes.draw do
   match '/totoz.php' => 'welcome#totozphp', :via => :get
   match '/urls(.:format)' => 'welcome#urls', :via => :get
   
-  match '/t(/:tribune(/:action))(.:format)' => 'tribune'
+  match '/t(/:tribune(/:action))(.:format)' => 'tribune', :as => 'tribune'
 
   match '/auth/:provider/callback', :to => 'sessions#create'
   match '/session/destroy', :to => 'sessions#destroy', :as => 'signout'

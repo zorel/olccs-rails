@@ -83,8 +83,9 @@ class Tribune < ActiveRecord::Base
   def query(q, page=1, s=150)
     b = Tire.search(name) do
       query do
-        string q
+        string q, default_operator: "AND", default_field: "message"
       end
+      highlight :message, :options => { :tag => '<span class="label">' }
       sort do
         by :id, 'desc'
       end
@@ -92,7 +93,7 @@ class Tribune < ActiveRecord::Base
       size s.to_i
     end
     #logger.debug(b.to_json)
-    b
+
   end
 
   # Effectue le rafraichissement de la tribune

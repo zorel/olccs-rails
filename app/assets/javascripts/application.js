@@ -17,5 +17,7 @@
 //= require bootstrap-tooltip
 //= require bootstrap-popover
 //= require mustache
+//= require purl
+//= require scrollTo
 //= require_tree .
 

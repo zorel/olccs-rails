@@ -106,7 +106,7 @@ class TribuneController < ApplicationController
     size = params[:size] || 150
     page = params[:page] || 1
     @results = []
-    if params[:query].nil? || params[:query] == ""
+    if params[:query].blank?
       respond_to do |format|
         format.html { render }
         format.xml { render :nothing => true}
@@ -115,7 +115,6 @@ class TribuneController < ApplicationController
     else
       @results = @tribune.query(params[:query],page,150).results
       #raise @results.to_yaml
-
       respond_to do |format|
         format.html
         format.xml { render :xml => to_xml(@results) }
