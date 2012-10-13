@@ -52,7 +52,16 @@ Pour l'API, voir [cette page](/api).
         </tr>
         <tr>
             <td>/t/:tribune/search</td>
-            <td>Permet d'effectuer une recherche sur la tribune.</td>
+            <td>Permet d'effectuer une recherche sur la tribune. La syntaxe est au format lucene. Le champ de recherche par défaut est le champ "message".
+            pour effectuer une recherche sur un champ spécifique, utiliser: login, info, time (pour les messages de la tribune), ou href et body pour les urls.
+            Body sert à effectuer une recherche sur le contenu des urls. Exemples:
+            <ul>
+                <li><code>body:moule</code> cherche le texte moule dans le contenu des urls</li>
+                <li><code>incubateur d'excellence</code> cherche les messages contenant incubateur ET excellence (opérateur par défaut)</li>
+                <li><code>time:20121013212223</code> cherche les messages postés le 13/10/2012 à 21:22:23</li>
+                <li><code>time:[20121013000000 TO 20121013235959]</code> cherche les messages postés le 13/10/2012</li>
+            </ul>
+            </td>
         </tr>
         <tr>
             <td>/t/:tribune/stats</td>
