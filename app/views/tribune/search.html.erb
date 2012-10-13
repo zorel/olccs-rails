@@ -2,11 +2,10 @@
 <% if @results.size !=0 %>
 <ol>
   <% @results.each do |res|
-    p = res['_source']
     if res['_type'] == 'link' %>
         <li class="link"><%= p['href'] %></li>
     <% else %>
-      <%=  render 'post', post: p %>
+      <%=  render 'search_result', post: res %>
     <%end%>
   <%end%>
 </ol>

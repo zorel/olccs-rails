@@ -17,6 +17,11 @@ class Post < ActiveRecord::Base
 
   end
 
+  def num_page(order = :id)
+    position = Post.where("#{order} >= ?", self.send(order)).count
+    (position.to_f/150).ceil
+  end
+
   private
   def update_message
 
