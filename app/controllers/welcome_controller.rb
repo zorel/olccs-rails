@@ -40,8 +40,9 @@ class WelcomeController < ApplicationController
 
   # Compatibilité olcc pour la recherche des totoz
   def totozphp
-    url = params[:url].sub(/\{question\}/,'?')
+    url = params[:url].sub(/\{question\}/,'?').sub(/ /,'+')
     client = HTTPClient.new
+    client.ssl_config.verify_mode=(OpenSSL::SSL::VERIFY_NONE)
     r = client.get(url)
     render :xml => r.body
   end
