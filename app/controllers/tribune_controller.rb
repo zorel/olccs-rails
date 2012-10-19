@@ -20,6 +20,7 @@ class TribuneController < ApplicationController
 
   # Voir la doc d'API
   def index
+    #raise Rails.application.config.assets.paths.to_yaml
     last = params[:last] || -1073741824
     page = params[:page] || 1
     # size = params[:size] || 150 cf partie dans tribune.rb => param supprimé

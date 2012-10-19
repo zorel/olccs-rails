@@ -12,5 +12,7 @@
    message = post['message'].gsub(re) {|s|
      "<span class='horloge_ref'>#{s}</span>"
    }
+
+
    display = post['login'].presence || post['info'] %>
 <li class='post' id="p<%=post['id']-%>"><span class="horloge"><%=time%></span> <span title="<%=post['info']%>" class="<%=class_d%>"><%=d%></span> <span class="message"><%=raw message %></span></li>
