@@ -1,0 +1,19 @@
+- redis (version squeeze trop vieille)
+- ruby 1.9
+- elasticsearch
+- elasticsearch attachment mapper
+- imagemagick (pour convert)
+
+- config elasticsearch
+- bundle install
+- config .env
+- config Apache pour mettre /public/preview en service hors proxifié, le reste en proxy.
+- mettre sur / sinon ça merde
+- config db/config.yml
+- . .env
+- création DB
+- rake db:migrate
+- check db/seed.rb
+- rake db:seed
+- foreman start
+- enjoy
