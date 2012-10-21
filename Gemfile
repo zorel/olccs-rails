@@ -84,4 +84,12 @@ gem 'thin'
 
 gem 'htmlentities'
 
+# Multithreaded web server
 gem 'puma'
+
+# Decorators
+gem 'draper'
+
+# Emoji
+gem 'gemoji', :require => 'emoji/railtie'
+
