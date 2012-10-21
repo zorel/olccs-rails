@@ -16,10 +16,11 @@ message.gsub!(totoz) {|s|
 }
 message.gsub!(/:([a-z0-9\+\-_]+):/) {|m|
     if Emoji.names.include?($1)
-       "<img height='20' src='" + asset_path("#{1}.png") + "' style='vertical-align:middle' width='20' />"
+       "<img height='20' src='" + asset_path("emoji/#{$1}.png") + "' style='vertical-align:middle' width='20' />"
     else
         m
-    end}
+    end
+}
 
 display = result['login'].presence || result['info']
 %>
