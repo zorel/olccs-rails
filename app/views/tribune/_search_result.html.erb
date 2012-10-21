@@ -9,16 +9,22 @@
      t = c['info']
      class_d = 'login'
    end
-   message = post['highlight']['message'][0] || message
+
+   if post['highlight']
+     message = post['highlight']['message'][0]
+   else
+     message = c['message']
+   end
+
    #re = Regexp.new("(?<=\s|^|>|#)(?:(?:([0-2]?[0-9])\:([0-5][0-9])\:([0-5][0-9])|([0-2]?[0-9])([0-5][0-9])([0-5][0-9]))(?:[\:\^]([0-9]{1,2})|([¹²³]))?)|([0-2]?[0-9])\:([0-5][0-9])(?=\s|$|<)")
    #message = message.gsub(re) {|s|
    #  "<span class='horloge_ref'>#{s}</span>"
    #}
 
    display = c['login'].presence || c['info'] %>
-<li class='c' id="p<%=c['id']-%>">
+<li class='c' id="p<%= c['id'] -%>">
   <a href="<%= tribune_path(tribune: @tribune.name, anchor: "p#{c['id']}", page: Post.where("tribune_id = ? and p_id = ?", @tribune.id, c['id'])[0].num_page) %>"><i class=" icon-share"></i></a>
-  <span class="horloge"><%=time%></span>
-  <span title="<%=c['info']%>" class="<%=class_d%>"><%=d%></span>
-  <span class="message"><%=raw message %></span>
+  <span class="horloge"><%= time %></span>
+  <span title="<%= c['info'] %>" class="<%= class_d %>"><%= d %></span>
+  <span class="message"><%= raw message %></span>
 </li>
