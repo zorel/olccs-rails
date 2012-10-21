@@ -468,101 +468,29 @@ function tribune_update() {
             }));
 
             if (first_load) {
-                var url = $.url();
-                var a = url.attr('anchor');
-
-                if (a != '') {
-                    $.scrollTo("#"+a, 0, { offset: {left: 0, top:-40 }});
-                    $("#"+a).prepend('<i class="icon-arrow-right"></i>');
-                } else {
-                    $.scrollTo("#message");
-                }
-
-                first_load = false;
+                point_to_anchor();
             }
         }
 
     });
-//    new Ajax.Request("/tribune/update",
-//        {asynchronous:true,
-//            onComplete:function (t) {
-//                try {
-//                    posts = eval(t.responseText)
-//                    if (typeof(posts) != 'undefined' && posts != null) {
-//                        var lastId = parseInt(last.substring(1, last.length));
-//                        var numposts = all.length;
-//                        posts.each(function (p) {
-//                                a = $("p" + p['id'])
-//                                if ((typeof(a) == 'undefined' || a == null) && p['id'] > lastId) {
-//                                    post = "<li " +
-//                                        p['li_class'] +
-//                                        " id=\"p" +
-//                                        p['id'] +
-//                                        "\"><span class=\"horloge\">" +
-//                                        p['horloge'] +
-//                                        "</span> <span title=\"" +
-//                                        p['user_agent'] +
-//                                        "\" class=\"" +
-//                                        p['span_class'] +
-//                                        "\"> " +
-//                                        p['affichage'] +
-//                                        "</span> "
-//                                        + p['post'] +
-//                                        "</li>";
-//                                    new Insertion.Bottom("list_tribune", post);
-//                                    var allsmiley = $$("#p" + p['id'] + " a.smiley");
-//                                    allsmiley.each(function (s) {
-//                                            s.onmouseover = function (e) {
-//                                                return overlib('<img src="' + s.href + '"/>', FULLHTML);
-//                                                /*(el.href,ev);*/
-//                                            }
-//                                            s.onmouseout = function (e) {
-//                                                return nd();
-//                                            }
-//                                        }
-//                                    )
-//                                    var alllinks = $("#p" + p['id'])
-//                                    try {
-//                                        SNAP_COM.shot.shot_scan(alllinks);
-//                                    } catch (e) {
-//                                    }
-//
-//                                    var allspans = $("p" + p['id']).getElementsByTagName('span');
-//                                    for (var i = 0; i < allspans.length; i++) {
-//                                        initSpan(allspans[i]);
-//                                    }
-//                                    if (++numposts > 150) {
-//                                        var first = $$("#list_tribune li").first()
-//                                        var ul = $$("#list_tribune").first()
-//                                        var spans = first.getElementsByTagName('span');
-//                                        ul.removeChild(first);
-//                                        for (var j = 0; j < spans.length; j++) {
-//                                            if (spans[j].className.indexOf('horloge_ref') != -1) {
-//                                                removeHorloge(spans[j].highlight, spans[j]);
-//                                            } else if (spans[j].className.indexOf('horloge') != -1) {
-//                                                removeHorloge(spans[j].highlight, spans[j].parentNode);
-//                                            }
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                        );
-//                    }
-//                } catch (ex) {
-//
-//                }
-//                $('autoreload').style.visibility = 'hidden';
-//            },
-//            onLoading:function () {
-//                $('autoreload').style.visibility = 'visible';
-//            },
-//            parameters:{last:last, first:first}
-//        }
-//    );
 
     return true;
 }
 
+function point_to_anchor() {
+    var url = $.url();
+    var a = url.attr('anchor');
+
+    if (a != '') {
+        $.scrollTo("#"+a, 0, { offset: {left: 0, top:-40 }});
+        $("#"+a).prepend('<i class="icon-arrow-right"></i>');
+    } else {
+        $.scrollTo("#message");
+    }
+
+    first_load = false;
+
+}
 /**
  * create an image tooltip and insert it at mouse coordinates.
  * @param imgSource the url to the image
@@ -665,7 +593,6 @@ $(document).ready(function () {
 //            })
 //        })
 //    });
-
 
     $("#form_post")
         .live("ajax:beforeSend", function() {

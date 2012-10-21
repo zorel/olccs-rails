@@ -61,3 +61,8 @@ une tribune perdue sur le net.
 Et pour finir, si ces tribunes étaient correctement codées, un simple cookie ne permettrait pas beaucoup plus que de poster
 un message (et pas de changer un mot de passe par exemple). L'accès aux préférences et la possibilité de changer de mot de
 passe devrait être protégé par une phase de login complète.
+
+
+## The cake is a lie
+
+"You just keep on trying 'till you run out of cake"

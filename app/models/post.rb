@@ -42,8 +42,20 @@ class Post < ActiveRecord::Base
     end
 
     begin
-      content = autre ? message_node.inner_html : message_node.child.text
-    rescue
+      if autre
+        content = message_node.inner_html
+      elsif cdata
+        content = message_node.child.text
+      else
+      n = Nokogiri::XML.fragment(message_node.child.text)
+        s = n.search("a","i","u","s","code","b").size
+        if s == 0
+          content = message_node.child.to_s
+        else
+          content = message_node.child.text
+        end
+      end
+    rescue Exception => e
       content = ""
     end
 
