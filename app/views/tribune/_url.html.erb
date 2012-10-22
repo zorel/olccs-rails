@@ -1,0 +1,12 @@
+<li class="span4">
+  <div class="thumbnail">
+    <% md5 = Digest::MD5.hexdigest(URI.escape(url.href)) %>
+    <%= image_tag "#{md5}/site-thumbnail.png" %>
+
+    <div class="caption">
+      <p><%= link_to truncate(url.href, length: 45), url.href %></p>
+
+      <p>
+    </div>
+  </div>
+</li>
