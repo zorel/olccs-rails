@@ -93,3 +93,6 @@ gem 'draper'
 # Emoji
 gem 'gemoji', :require => 'emoji/railtie'
 
+# Phantomjs for preview
+gem 'phantomjs.rb'
+
