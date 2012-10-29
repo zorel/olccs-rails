@@ -64,6 +64,7 @@ class TribuneController < ApplicationController
     page = params[:page] || 1
 
     @results = @tribune.backend({:last => last, :user => current_user, :page => page})[0]
+    #raise @results.to_yaml
     #res = nil
     #
     #if current_user
@@ -118,7 +119,7 @@ class TribuneController < ApplicationController
       #raise @results.to_yaml
       respond_to do |format|
         format.html
-        format.xml { render :xml => posts_to_xml(@results, @tribune.name) }
+        format.xml { render :xml => search_to_xml(@results, @tribune.name) }
         format.tsv
       end
     end

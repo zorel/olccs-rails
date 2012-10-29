@@ -51,6 +51,32 @@ private
     builder.to_xml(:encoding => 'UTF-8', :save_with => Nokogiri::XML::Node::SaveOptions::AS_XML)
   end
 
+  # Génération du remote à partir d'une liste de la recherche
+  # @param [Array] posts Le tableau de {Post}
+  # @param [String] site Le nom du site à générer dans le tag board
+  def search_to_xml(res, site)
+    posts = res.to_a
+    builder = Nokogiri::XML::Builder.new do |xml|
+      xml.board(:site => site) {
+        posts.each { |p|
+          p = p['_source']
+          xml.post(:id => p['id'], :time => p['time'], :board => p['board']) {
+            xml.info {
+              xml << p['info']
+            }
+            xml.login {
+              xml << p['login']
+            }
+            xml.message {
+              xml << p['message']
+            }
+          }
+        }
+      }
+    end
+    builder.to_xml(:encoding => 'UTF-8', :save_with => Nokogiri::XML::Node::SaveOptions::AS_XML)
+  end
+
   def urls_to_xml(urls, site)
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.board(:site => site) {
