@@ -48,6 +48,12 @@ class Link < ActiveRecord::Base
                 type: 'link'
         end
         update_column(:indexed, true)
+
+        if r.contenttype.include?("html")
+          executable = File.join(Rails.root, 'script', 'preview.sh')
+          string_args = "#{Digest::MD5.hexdigest(escaped_href)} #{escaped_href} #{Rails.root.to_s}"
+          `#{executable} #{string_args}`
+        end
       end
       update_column(:status, r.status)
     rescue HTTPClient::BadResponseError => e

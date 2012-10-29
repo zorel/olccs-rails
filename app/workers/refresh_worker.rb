@@ -11,9 +11,9 @@ class RefreshWorker
 #      tribune.with_lock do
         tribune.refresh
 #      end
-      tribune.logger.info "Reload fini pour board #{tribune.name}"
+#      tribune.logger.info "Reload fini pour board #{tribune.name}"
     else
-      tribune.logger.info "Pas de reload pour board #{tribune.name}"
+#      tribune.logger.info "Pas de reload pour board #{tribune.name}"
     end
     to_be
   end

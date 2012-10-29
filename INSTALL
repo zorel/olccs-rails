@@ -17,3 +17,71 @@
 - rake db:seed
 - foreman start
 - enjoy
+
+
+---- Conf ES:
+à la fin du config/elasticsearch.yml (attention à l'indentation):
+index:
+  analysis:
+    analyzer:
+      francais:
+        type: "custom"
+        tokenizer: "whitespace"
+        filter: [ "asciifolding", "elision", "lowercase", "stop_francais", "horloges", "fr_stemmer"]
+        char_filter: ["html_strip"]
+    filter:
+      fr_stemmer:
+        type: "stemmer"
+        name: "french"
+      horloges:
+        type: "word_delimiter"
+        generate_word_parts: "false"
+        generate_number_parts: "false"
+        catenate_words: "false"
+        catenate_numbers: "true"
+        catenate_all: "false"
+        split_on_case_change: "false"
+        split_on_numerics: "false"
+        stem_english_possessive: "false"
+        preserve_original: "false"
+        type_table: [":": "DIGIT"]
+      stop_francais:
+        type: "stop"
+        stopwords: ["url", "je", "tu", "il", "nous", "vous", "ils", "le", "la", "les", "un", "une", "des", "a", "ai", "et", "est", "ayons", "ça"]
+      elision:
+        type: "elision"
+        articles: ["l", "m", "t", "qu", "n", "s", "j"]
+
+
+Dans le répertoire config/mappings/_default (à créer):
+- fichier link.json
+{
+    "link" : {
+        "properties" : {
+            "href" : {"type" : "string", "index" : "not_analyzed"},
+            "created_at" : {"type" : "date", "format" : "yyyyMMddHHmmss"},
+            "body" : {"type" : "attachment",
+                      "fields": {
+                        "title": {"store":"yes"},
+                        "file": {"store":"no"}
+                      }
+           }
+        }
+    }
+}
+- fichier post.json:
+{
+    "post" : {
+        "_all" : {"enabled" : false},
+        "properties" : {
+            "board" : {"type" : "string", "index" : "not_analyzed"},
+            "time" : {"type" : "date", "format" : "yyyyMMddHHmmss"},
+            "info" : {"type" : "string", "index" : "not_analyzed"},
+            "login" : {"type" : "string", "index" : "not_analyzed"},
+            "message" : {"type" : "string", "analyzer" : "francais"}
+        }
+    }
+}
+
+
+

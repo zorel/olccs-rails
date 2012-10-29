@@ -134,6 +134,7 @@ class TribuneController < ApplicationController
     @urls = @tribune.links.order("created_at desc").limit(42)
 
     respond_to do |format|
+      format.html
       format.rss
       format.xml {render :xml => urls_to_xml(@urls, @tribune.name)}
     end
