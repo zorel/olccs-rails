@@ -48,7 +48,7 @@ class Post < ActiveRecord::Base
         content = message_node.child.text
       else
       n = Nokogiri::XML.fragment(message_node.child.text)
-        s = n.search("a","i","u","s","code","b").size
+        s = n.search("a","i","u","s","code","b","clock").size
         if s == 0
           content = message_node.child.to_s
         else
@@ -60,7 +60,7 @@ class Post < ActiveRecord::Base
     end
 
     n = Nokogiri::XML.fragment(content)
-
+    puts n
     n.search("clock").each do |t|
       t.add_next_sibling(t.inner_text)
       t.remove
