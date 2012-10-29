@@ -118,7 +118,7 @@ class TribuneController < ApplicationController
       #raise @results.to_yaml
       respond_to do |format|
         format.html
-        format.xml { render :xml => to_xml(@results) }
+        format.xml { render :xml => posts_to_xml(@results, @tribune.name) }
         format.tsv
       end
     end
