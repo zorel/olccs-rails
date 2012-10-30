@@ -158,6 +158,7 @@ class Tribune < ActiveRecord::Base
   # @return [Hash] Renvoie le hash de cookies
   def login(opts)
     client = HTTPClient.new
+    client.ssl_config.verify_mode=(OpenSSL::SSL::VERIFY_NONE)
     body = {
         user_parameter.to_sym => opts[:user],
         pwd_parameter.to_sym => opts[:password],
