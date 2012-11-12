@@ -161,9 +161,9 @@ class Tribune < ActiveRecord::Base
     client.ssl_config.verify_mode=(OpenSSL::SSL::VERIFY_NONE)
     body = {
         user_parameter.to_sym => opts[:user],
-        pwd_parameter.to_sym => opts[:password],
-        remember_me_parameter.to_sym => 1
+        pwd_parameter.to_sym => opts[:password]
     }
+    body[remember_me_parameter.to_sym] = 1 unless remember_me_parameter.nil?
     head = {
         :Referer => cookie_url,
         :User_Agent => opts[:ua]
