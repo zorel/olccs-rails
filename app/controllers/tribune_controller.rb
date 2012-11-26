@@ -5,7 +5,7 @@
 class TribuneController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, :with => :record_not_found
 
-  protect_from_forgery :except => :post
+  protect_from_forgery :except => [:post, :login]
 
   before_filter :set_tribune
 
