@@ -1,6 +1,6 @@
 class AddTypeToTribune < ActiveRecord::Migration
   def change
-    add_column :tribunes, :type_slip, :integer, :default => Tribune::TYPE_SLIP_ENCODED
+    add_column :tribunes, :type_slip, :integer, :default => 1
 
     #Tribune.all.each {|t|
     #  t.type_slip=Tribune::TYPE_SLIP_ENCODED
