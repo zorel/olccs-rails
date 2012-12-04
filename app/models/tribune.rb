@@ -7,9 +7,13 @@ class Tribune < ActiveRecord::Base
   has_many :links, :through => :posts
   has_many :rules
 
-  attr_accessible :cookie_name, :cookie_url, :get_url, :last_id_parameter, :name, :post_parameter, :post_url, :pwd_parameter, :user_parameter, :last_updated, :remember_me_parameter, :refresh_interval
+  attr_accessible :cookie_name, :cookie_url, :get_url, :last_id_parameter, :name, :post_parameter, :post_url,
+                  :pwd_parameter, :user_parameter, :last_updated, :remember_me_parameter, :refresh_interval, :type_slip
 
   validates_uniqueness_of :name
+
+  TYPE_SLIP_RAW = 0
+  TYPE_SLIP_ENCODED = 1
 
   # TODO Faire un chargement par fichier remote.xml afin de charger un historique
 

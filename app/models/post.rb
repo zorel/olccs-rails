@@ -28,36 +28,43 @@ class Post < ActiveRecord::Base
     login = self.login.strip
 
     message_node = Nokogiri::XML.fragment(self.message).xpath('message')[0]
-    cdata, text, autre = false, false, false
-    message_node.children.each do |n|
-      if n.cdata?
-        cdata = true
-        break
-      elsif n.text?
-        text = true
-      elsif n.element?
-        autre = true
-        break
-      end
+
+    if self.tribune.type_slip == Tribune::TYPE_SLIP_ENCODED
+      content = message_node.child.text
+    else
+      content = message_node.inner_html
     end
 
-    begin
-      if autre
-        content = message_node.inner_html
-      elsif cdata
-        content = message_node.child.text
-      else
-      n = Nokogiri::XML.fragment(message_node.child.text)
-        s = n.search("a","i","u","s","code","b","clock").size
-        if s == 0
-          content = message_node.child.to_s
-        else
-          content = message_node.child.text
-        end
-      end
-    rescue Exception => e
-      content = ""
-    end
+    #cdata, text, autre = false, false, false
+    #message_node.children.each do |n|
+    #  if n.cdata?
+    #    cdata = true
+    #    break
+    #  elsif n.text?
+    #    text = true
+    #  elsif n.element?
+    #    autre = true
+    #    break
+    #  end
+    #end
+    #
+    #begin
+    #  if autre
+    #    content = message_node.inner_html
+    #  elsif cdata
+    #    content = message_node.child.text
+    #  else
+    #    n = Nokogiri::XML.fragment(message_node.child.text)
+    #    s = n.search("a","i","u","s","code","b","clock").size
+    #    if s == 0
+    #      content = message_node.child.to_s
+    #    else
+    #      content = message_node.child.text
+    #    end
+    #  end
+    #rescue Exception => e
+    #  content = ""
+    #end
 
     n = Nokogiri::XML.fragment(content)
     puts n
