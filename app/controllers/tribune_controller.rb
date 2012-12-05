@@ -147,7 +147,9 @@ class TribuneController < ApplicationController
     tribune_login = @tribune.login({user: params[:user], password: params[:password], ua: "plop"})
 
     tribune_login.each {|c|
-      cookies[c.name] = { value: c.value, expires: c.expires }
+      if @tribune.cookie_name.include? c.name
+        cookies[c.name] = { value: c.value, expires: c.expires }
+      end
     }
     render :json => tribune_login.to_json
   end
