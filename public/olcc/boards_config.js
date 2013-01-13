@@ -114,3 +114,9 @@ gabu.getUrl = 'http://gabuzomeu.fr/tribune.xml';
 gabu.postUrl = 'http://gabuzomeu.fr/tribune/post';
 gabu.color = '#aaffbb';
 GlobalBoards['gabuzomeu'] = gabu;
+
+var devnewton = new Board('devnewton', false);
+devnewton.getUrl = 'http://devnewton.bci.im/home/?q=node/2/xml';
+devnewton.postUrl = 'http://devnewton.bci.im/home/?q=node/2/post';
+devnewton.color = '#F5D6CC';
+GlobalBoards['devnewton'] = devnewton;
