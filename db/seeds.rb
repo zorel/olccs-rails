@@ -250,3 +250,18 @@ Tribune.create(name: 'djangotribune-demo',
                user_parameter: '',
                pwd_parameter: ''
 )
+
+
+Tribune.create(name: 'devnewton',
+               refresh_interval: 120,
+               get_url: 'http://devnewton.bci.im/home/?q=node/2/xml',
+               last_id_parameter: 'last_id',
+               post_parameter: 'content',
+               post_url: 'http://devnewton.bci.im/home/?q=node/2/post',
+               cookie_url: '',
+               cookie_name: '',
+               remember_me_parameter: '',
+               user_parameter: '',
+               pwd_parameter: '',
+               type_slip: Tribune::TYPE_SLIP_RAW
+)
