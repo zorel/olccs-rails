@@ -89,7 +89,7 @@ private
               xml << u.post.login
             }
             xml.message {
-              xml << "#{time_to_full_horloge(u.post.time)}@#{u.post.tribune.name}: <a href='#{u.href}'>#{u.href}</a>"
+              xml << "#{time_to_full_horloge(u.post.time)}@#{u.post.tribune.name}: <a href=\"#{u.href}\">#{u.href}</a>"
             }
           }
         }
