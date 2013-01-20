@@ -1,0 +1,137 @@
+// Place all the styles related to the Tribune controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+/*____________________
+    Cadre et éléments pour la tribune
+*/
+#tribune{
+  padding:0 0.2em 0.4em 0.2em;
+  font: normal 0.8em verdana, arial, helvetica, sans-serif;
+}
+#tribune div{
+  margin:0 auto 0 auto;
+  text-align:center;
+}
+body #tribune ul{
+  margin:0 3% 0 3%;
+  padding:0 0 1em 0.80em;
+  text-align:left;
+}
+body #highlight li,
+body #tribune li{
+  margin:0.2em;
+  padding:1px 0;
+  font-size:1em;
+  list-style-type:none;
+}
+#tribune label{
+  display:none;
+}
+
+body #tribune input{
+  margin:0.2em;
+  font-size:1em;
+  border:1px solid #aaa;
+}
+
+body #tribune #missive{
+  padding:0.2em;
+  width:80%;
+}
+body #highlight .horloge {
+  padding-right:0;
+  color:red;
+  border:none;
+}
+
+body #highlight .horloge,
+body #tribune .horloge{
+  margin:1px;
+  padding-left:0.2em;
+  padding-right:0.2em;
+  color:red;
+}
+
+body #tribune .mypost .horloge {
+  margin:0;
+  border:1px solid #df8500;
+}
+
+body #highlight span.login,
+body #tribune span.login{
+  padding-right:0.3em;
+  color:green;
+}
+
+body #highlight span.ua,
+body #tribune span.ua{
+  padding-right:0.3em;
+  font-style:italic;
+  color:#660000;
+  width: 100px;
+}
+
+body #highlight span.login:before,
+body #tribune span.login:before{
+  content: '<';
+}
+
+body #highlight span.login:after,
+body #tribune span.login:after{
+  content: '>';
+}
+
+body #highlight span.ua:before,
+body #tribune span.ua:before{
+  content: '[';
+}
+
+body #highlight span.ua:after,
+body #tribune span.ua:after{
+  content: ']';
+}
+
+body #highlight li span.horloge_ref,
+body #tribune li span.horloge_ref{
+  color:blue;
+}
+body #tribune .answer .horloge {
+  margin:0;
+  border:1px solid #e3bf8d;
+}
+body #tribune .highlight {
+  background-color:#e2d5d4;
+}
+
+body #highlight {
+  position: fixed;
+  display: block;
+  top: 40px;
+  left: 100px;
+  right: 100px;
+  padding: 0;
+  background: #e0e0e0;
+  border: 1px solid black;
+  text-align: left !important;
+}
+
+body #tribune li {
+  line-height: 120%;
+}
+
+#overDiv {
+  opacity: 0.8;
+}
+//
+//.tribune-wrapper .tribune-post .tribune-message:hover {
+//  overflow: visible;
+//}
+//a.tribune-totoz img {
+//  display: none;
+//  margin-left: 2px;
+//  position: absolute;
+//}
+//a.tribune-totoz:hover img {
+//  display: inline;
+//}
