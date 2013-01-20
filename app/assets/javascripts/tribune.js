@@ -595,13 +595,13 @@ $(document).ready(function () {
 //    });
 
     $("#form_post")
-        .live("ajax:beforeSend", function() {
+        .on("ajax:beforeSend", function() {
             $("#submit").attr('disabled','disabled');
         })
-        .live("ajax:success", function() {
+        .on("ajax:success", function() {
             tribune_update();
         })
-        .live("ajax:complete", function() {
+        .on("ajax:complete", function() {
             $("#submit").removeAttr('disabled');
             $("#message").val("");
         })

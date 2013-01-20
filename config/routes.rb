@@ -1,5 +1,3 @@
-require 'sidekiq/web'
-
 Olccs::Application.routes.draw do
 
   root :to => 'welcome#index'
@@ -26,5 +24,4 @@ Olccs::Application.routes.draw do
 
   #match ':controller(/:action(/:id))(.:format)'
 
-  mount Sidekiq::Web => '/sidekiq'
 end

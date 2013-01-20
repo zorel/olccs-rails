@@ -24,8 +24,6 @@ ActiveRecord::Schema.define(:version => 20121204085858) do
     t.datetime "updated_at",                    :null => false
   end
 
-  add_index "links", ["post_id"], :name => "post_id_index"
-
   create_table "posts", :force => true do |t|
     t.integer "p_id"
     t.text    "login"
@@ -34,9 +32,6 @@ ActiveRecord::Schema.define(:version => 20121204085858) do
     t.text    "message"
     t.integer "tribune_id"
   end
-
-  add_index "posts", ["p_id", "tribune_id"], :name => "pid_tribuneid_unique_index", :unique => true
-  add_index "posts", ["p_id"], :name => "p_id_index"
 
   create_table "rules", :force => true do |t|
     t.text     "name"
@@ -70,11 +65,11 @@ ActiveRecord::Schema.define(:version => 20121204085858) do
     t.text     "user_parameter"
     t.text     "pwd_parameter"
     t.text     "remember_me_parameter"
-    t.datetime "last_updated",          :default => '2012-09-17 11:52:47'
+    t.datetime "last_updated",          :default => '2013-01-20 13:00:09'
     t.integer  "refresh_interval",      :default => 15
     t.datetime "created_at",                                               :null => false
     t.datetime "updated_at",                                               :null => false
-    t.integer  "type_slip"
+    t.integer  "type_slip",             :default => 1
   end
 
   create_table "users", :force => true do |t|
