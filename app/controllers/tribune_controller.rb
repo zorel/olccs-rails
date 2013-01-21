@@ -143,7 +143,7 @@ class TribuneController < ApplicationController
   end
 
   # Voir la doc d'API
-  // TODO ce code pue
+  # TODO ce code pue
   def login
     tribune_login = @tribune.login({user: params[:user], password: params[:password], ua: "plop"})
 
