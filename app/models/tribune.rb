@@ -91,7 +91,7 @@ class Tribune < ActiveRecord::Base
       end
       highlight :message, :options => { :tag => '<span class="label">' }
       sort do
-        by :id, 'desc'
+        by "time", 'desc'
       end
       from (page.to_i - 1) * s
       size s.to_i
@@ -162,6 +162,7 @@ class Tribune < ActiveRecord::Base
   # @return [Hash] Renvoie le hash de cookies
   def login(opts)
     client = HTTPClient.new
+    #client.debug_dev = File.open("/tmp/debug_login","a")
     client.ssl_config.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
     body = {
@@ -186,6 +187,7 @@ class Tribune < ActiveRecord::Base
   def post(opts)
 
     client = HTTPClient.new
+    #client.debug_dev = File.open("/tmp/debug_post.txt","a")
     body = {
         post_parameter.to_sym => opts[:message]
     }
