@@ -166,7 +166,8 @@ class Tribune < ActiveRecord::Base
 
     body = {
         user_parameter.to_sym => opts[:user],
-        pwd_parameter.to_sym => opts[:password]
+        pwd_parameter.to_sym => opts[:password],
+        'form_id' => 'user_login_block'
     }
     body[remember_me_parameter.to_sym] = 1 unless remember_me_parameter.nil?
     head = {
