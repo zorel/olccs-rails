@@ -143,12 +143,15 @@ class TribuneController < ApplicationController
   end
 
   # Voir la doc d'API
+  // TODO ce code pue
   def login
     tribune_login = @tribune.login({user: params[:user], password: params[:password], ua: "plop"})
 
     tribune_login.each {|c|
-      if @tribune.cookie_name.include? c.name
-        cookies[c.name] = { value: c.value, expires: c.expires }
+      @tribune.cookie_name.split(',').each do |cname|
+        if c.name.start_with? cname
+          cookies[c.name] = { value: c.value, expires: c.expires }
+        end
       end
     }
     render :json => tribune_login.to_json
