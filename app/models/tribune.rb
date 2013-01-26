@@ -3,6 +3,8 @@
 # Modèle de représentation de tribune. Effectue toutes les interractions avec la tribune cible et présente aux
 # modèles et controlleurs utilisateurs une API standard quelque soit la tribune.
 class Tribune < ActiveRecord::Base
+  include TorqueBox::Injectors
+
   has_many :posts
   has_many :links, :through => :posts
   has_many :rules
@@ -137,7 +139,7 @@ class Tribune < ActiveRecord::Base
         self.refresh
       end
     rescue HTTPClient::BadResponseError => e
-      logger.error ("Refresh failed for #{name}")
+      logger.error ("RefreshJob failed for #{name}")
       logger.error (e)
     ensure
       update_column :last_updated, Time.now
@@ -145,13 +147,17 @@ class Tribune < ActiveRecord::Base
   end
 
   def refresh?
-    RefreshWorker.perform_async(id)
+    queue = fetch '/queues/r_queue'
+    queue.publish id
+    #RefreshWorker.perform_async(id)
   end
 
   # Lance le refresh conditionnel sur toutes les tribunes
   def self.refresh_all
+    q = fetch '/queues/r_queue'
     Tribune.all.each do |t|
-      t.refresh?
+      q.publish t.id
+      puts q.count_messages
     end
   end
 
