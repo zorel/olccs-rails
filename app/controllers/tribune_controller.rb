@@ -1,4 +1,4 @@
-# encoding: UTF-8
+  # encoding: UTF-8
 
 # Controleur de gestion de tribune, gère le multiformat xml/rss/html/json là où c'est nécessaire. Se réferer à la document
 # de l'API pour les informations nécessaires
@@ -99,7 +99,6 @@ class TribuneController < ApplicationController
       format.xml {render xml: posts_to_xml(@results, @tribune.name) }
     end
 
-    #render :nothing => true
   end
 
   # Voir la doc d'API

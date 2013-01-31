@@ -30,8 +30,9 @@ class Tribune < ActiveRecord::Base
         :page => 1,
     }.merge(opts)
     # TODO ça merde avec la pagination, le p_id > 0 certainement
-    b = self.posts.page(conf[:page]).where("p_id > ?", conf[:last]).order("p_id DESC")
 
+    b = self.posts.page(conf[:page]).where("p_id > ?", conf[:last]).order("p_id DESC")
+    puts "Count: " + b.size.to_s
     #b = Tire.search(name) do
     #  query do
     #    range :id, {:from => last.to_i+1}
@@ -107,6 +108,12 @@ class Tribune < ActiveRecord::Base
   # * Lance la requête vers la tribune cible avec le last id positionné
   # * Filtre le contenu avec Nokogiri pour (au cas où la tribune n'accepte pas le last id)
   def refresh
+    now = Time.now
+    to_be = (now - last_updated) > refresh_interval
+    if !to_be
+      return 0
+    end
+
     client = HTTPClient.new
     last_post = self.posts.last(:order => "p_id")
     if last_post.nil?
@@ -139,7 +146,7 @@ class Tribune < ActiveRecord::Base
         self.refresh
       end
     rescue HTTPClient::BadResponseError => e
-      logger.error ("RefreshJob failed for #{name}")
+      logger.error ("Refresh failed for #{name}")
       logger.error (e)
     ensure
       update_column :last_updated, Time.now
@@ -147,17 +154,16 @@ class Tribune < ActiveRecord::Base
   end
 
   def refresh?
-    queue = fetch '/queues/r_queue'
+    queue = fetch '/queue/r_queue'
     queue.publish id
     #RefreshWorker.perform_async(id)
   end
 
   # Lance le refresh conditionnel sur toutes les tribunes
   def self.refresh_all
-    q = fetch '/queues/r_queue'
+    q = TorqueBox::Messaging::Queue.lookup '/queue/r_queue'
     Tribune.all.each do |t|
       q.publish t.id
-      puts q.count_messages
     end
   end
 

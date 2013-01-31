@@ -4,10 +4,12 @@
 #   Ensure the SQLite 3 gem is defined in your Gemfile
 #   gem 'sqlite3'
 development:
-  adapter: sqlite3
-  database: db/development.db
-  pool: 30
-
+            adapter: postgresql
+            database: zorel_olccs
+            host: 10.0.1.110
+            username: zorel
+            password: zorel
+            pool: 30
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -19,9 +21,9 @@ test:
   timeout: 5000
 
 production:
-  adapter: postgresql
-  database: <%= ENV['POSTGRESQL_DATABASE'] %>
-  host: <%= ENV['POSTGRESQL_HOST'] %>
-  username: <%= ENV['POSTGRESQL_USERNAME'] %>
-  password: <%= ENV['POSTGRESQL_PASSWORD'] %>
-  pool: 30
+            adapter: postgresql
+            database: zorel_olccs
+            host: 10.0.1.110
+            username: zorel
+            password: zorel
+            pool: 30

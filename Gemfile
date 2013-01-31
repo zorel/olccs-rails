@@ -5,8 +5,12 @@ gem 'rails', '>=3.2.11'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'activerecord-jdbcsqlite3-adapter'
+gem 'activerecord-jdbcpostgresql-adapter'
 gem 'jruby-openssl'
+
+gem 'torquebox', '2.3.0'
+gem 'ruby-debug-base', '>= 0.10.5.rc3'
+gem 'ruby-debug-ide', '>= 0.4.17.beta14'
 
 gem 'less-rails'
 gem 'twitter-bootstrap-rails'
@@ -65,6 +69,4 @@ gem 'htmlentities'
 # Decorators
 gem 'draper'
 
-gem 'torquebox'
-gem 'ruby-debug-base', '>= 0.10.5.rc3'
-gem 'ruby-debug-ide', '>= 0.4.17.beta14'
+

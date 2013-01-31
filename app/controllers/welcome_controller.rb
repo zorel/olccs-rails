@@ -2,7 +2,6 @@
 
 # Controleur de gestion de la racine du site
 class WelcomeController < ApplicationController
-
   protect_from_forgery :except => :postphp
 
   # Compatibilité olcc pour le post d'un message

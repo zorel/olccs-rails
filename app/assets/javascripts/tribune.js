@@ -434,7 +434,7 @@ function tribune_update() {
             }
         },
         dataType:'json',
-        data:{id:last_id},
+        data:{last:last_id},
         success:function (remote) {
             posts = remote['posts'].reverse();
             if (posts.size == 0) {
@@ -609,7 +609,7 @@ $(document).ready(function () {
 
     tribune_update();
 
-    var x = setInterval(function() {tribune_update()}, 30000);
+    var x = setInterval(function() {tribune_update()}, 10000);
 
 });
 

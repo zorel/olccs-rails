@@ -9,4 +9,5 @@
 //= require twitter/bootstrap
 //= require mustache
 //= require purl
+//= require scrollTo
 //= require_tree .
