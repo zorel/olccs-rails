@@ -142,7 +142,7 @@ function writeTotoz(message) {
     if (settings.value('totoz_mode') != TOTOZ_INLINE) {
         return message.replace(exp, '<span class="totoz" id="$1">[:$1]</span>');
     } else {
-        return message.replace(exp, '<img title="[:$1]" src="' + settings.value('totoz_server') + '$1.gif" />');
+        return message.replace(exp, '<img title="[:$1]" src="' + settings.value('totoz_server') + '/gif/$1.gif" />');
     }
 }
 
@@ -517,7 +517,7 @@ function getTotoz(totoz) {
     if (!img) {
         img = document.createElement('img');
         img.style.display = 'none';
-        img.setAttribute('src', settings.value('totoz_server') + '/' + totoz + '.gif');
+        img.setAttribute('src', settings.value('totoz_server') + '/gif/' + totoz + '.gif');
         img.className = 'totoz'; // setAttribute('class','totoz');
         img.setAttribute('id','totozImg[' + totoz + ']');
         document.getElementsByTagName('body')[0].appendChild(img);
