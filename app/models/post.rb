@@ -6,7 +6,7 @@ class Post < ActiveRecord::Base
 
   attr_accessible :tribune, :time, :info, :login, :message, :p_id
 
-  #validates_uniqueness_of :p_id, :scope => [:tribune_id]
+  validates_uniqueness_of :p_id, :scope => [:tribune_id]
 
   before_save :update_message
   after_save :update_tire
