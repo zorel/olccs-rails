@@ -422,7 +422,7 @@ function tribune_update() {
         last = all.last()[0].id;
         scroll = true;
     } else {
-        last = first = "p-1073741824";
+        last = first = "p0";
     }
 
     var last_id = parseInt(last.substring(1, last.length));

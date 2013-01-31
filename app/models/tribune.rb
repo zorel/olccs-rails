@@ -25,14 +25,14 @@ class Tribune < ActiveRecord::Base
   def backend(opts={})
     # s supprimé de la liste: utilisation de la pagination avec du per_page de kaminari
     conf = {
-        :last => -1073741824,
+        :last => 0,
         :user => nil,
         :page => 1,
     }.merge(opts)
     # TODO ça merde avec la pagination, le p_id > 0 certainement
 
     b = self.posts.page(conf[:page]).where("p_id > ?", conf[:last]).order("p_id DESC")
-    puts "Count: " + b.size.to_s
+
     #b = Tire.search(name) do
     #  query do
     #    range :id, {:from => last.to_i+1}
