@@ -14,6 +14,10 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
-/public/preview/*
+/public/preview
+/public/assets
 /vendor/p*
+/.idea
+/db/*.db
+/Gemfile.lock
 
