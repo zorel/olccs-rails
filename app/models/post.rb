@@ -4,7 +4,8 @@ class Post < ActiveRecord::Base
   belongs_to :tribune
   has_many :links
 
-  attr_accessible :tribune, :time, :info, :login, :message, :p_id
+  attr_accessible :tribune, :time, :info, :login, :message, :p_id, :content, :rules
+  attr_accessor :filtered, :rules
 
   validates_uniqueness_of :p_id, :scope => [:tribune_id]
 
