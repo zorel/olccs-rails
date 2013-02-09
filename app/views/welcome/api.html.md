@@ -93,7 +93,7 @@ Exemples:
         </tr>
         <tr>
             <td>backend.php post.php totoz.php attach.php</td>
-            <td>API de compatibilité avec olcc</td>
+            <td>API de compatibilité avec olcc. Les tribunes privées sont supportées, pas l'attachement de fichier.</td>
         </tr>
     </tbody>
 </table>

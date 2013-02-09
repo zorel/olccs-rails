@@ -127,10 +127,6 @@ class Tribune < ActiveRecord::Base
     begin
       r = client.get(get_url, query)
 
-      #puts "*"*80
-      #puts "#{name} => " + r.content.force_encoding('utf-8').encoding.to_s
-      #puts "#{name} => " + r.body_encoding.to_s
-      #puts "*"*80
       response = Nokogiri::XML(r.content)
       response.xpath("/board/post[@id > #{last_id}]").reverse.each do |p|
         p_id = p.xpath("@id").to_s.to_i
