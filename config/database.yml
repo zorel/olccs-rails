@@ -22,8 +22,8 @@ test:
 
 production:
             adapter: postgresql
-            database: zorel_olccs
-            host: 10.0.1.110
+            database: zorel_tribune
+            host: 127.0.0.1
             username: zorel
             password: zorel
             pool: 30

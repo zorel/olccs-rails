@@ -1,5 +1,8 @@
 TorqueBox.configure do
-
+  environment do
+    RAILS_ENV 'production'
+  end
+    
   queue '/queue/r_queue' do
     processor RefreshProcessor
     durable false

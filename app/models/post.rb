@@ -29,13 +29,13 @@ class Post < ActiveRecord::Base
     login = self.login.strip
 
     message_node = Nokogiri::XML.fragment(self.message).xpath('message')[0]
-
+    
     if self.tribune.type_slip == Tribune::TYPE_SLIP_ENCODED
       content = message_node.child.text
     else
       content = message_node.inner_html
     end
-
+    puts "==> #{content} <=="
     #cdata, text, autre = false, false, false
     #message_node.children.each do |n|
     #  if n.cdata?
@@ -68,7 +68,7 @@ class Post < ActiveRecord::Base
     #end
 
     n = Nokogiri::XML.fragment(content)
-    puts n
+
     n.search("clock").each do |t|
       t.add_next_sibling(t.inner_text)
       t.remove
