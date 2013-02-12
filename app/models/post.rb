@@ -25,7 +25,7 @@ class Post < ActiveRecord::Base
 
   private
   def update_message
-
+    @logger = TorqueBox::Logger.new(self.class)
     login = self.login.strip
 
     message_node = Nokogiri::XML.fragment(self.message).xpath('message')[0]
@@ -35,7 +35,7 @@ class Post < ActiveRecord::Base
     else
       content = message_node.inner_html
     end
-    puts "==> #{content} <=="
+    @logger.debug "Content after typeslip detection ==> #{content} <=="
     #cdata, text, autre = false, false, false
     #message_node.children.each do |n|
     #  if n.cdata?
