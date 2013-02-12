@@ -70,4 +70,4 @@ gem 'htmlentities'
 # Decorators
 gem 'draper'
 
-
+gem 'figaro'
