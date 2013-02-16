@@ -60,7 +60,7 @@ shoop.color = '#EDEDDB';
 GlobalBoards['shoop'] = shoop;
 
 var tif = new Board('jplop', false);
-tif.getUrl = 'http://catwitch.eu/jplop/backend';
+tif.getUrl = 'http://catwitch.eu/jplop/backend?last=%i';
 tif.postUrl = 'http://catwitch.eu/jplop/post';
 tif.postData = "message=%m";
 tif.alias = "tif";
@@ -68,55 +68,55 @@ tif.color = '#a9f9b9';
 GlobalBoards['jplop'] = tif;
 
 var olo = new Board('olo', false);
-olo.getUrl = 'http://board.olivierl.org/remote.xml';
+olo.getUrl = 'http://board.olivierl.org/remote.xml?last=%i';
 olo.postUrl = 'http://board.olivierl.org/add.php';
 olo.color = '#80dafc';
 olo.alias = "olivierl";
 GlobalBoards['olo'] = olo;
 
 var ygllo = new Board('ygllo', false);
-ygllo.getUrl = 'http://ygllo.com/?q=tribune.xml';
+ygllo.getUrl = 'http://ygllo.com/?q=tribune.xml&last=%i';
 ygllo.postUrl = 'http://ygllo.com/?q=tribune/post';
 ygllo.color = '#eee887';
 ygllo.alias = "yg,llo,fdg";
 GlobalBoards['ygllo'] = ygllo;
 
 var kad = new Board('kadreg', false);
-kad.getUrl = 'http://kadreg.org/board/backend.php';
+kad.getUrl = 'http://kadreg.org/board/backend.php?last=%i';
 kad.postUrl = 'http://kadreg.org/board/add.php';
 kad.color = '#dae6e6';
 kad.alias = "kad,rincevent";
 GlobalBoards['kadreg'] = kad;
 
 var dae = new Board('darkside', false);
-dae.getUrl = 'http://quadaemon.free.fr/remote.xml';
+dae.getUrl = 'http://quadaemon.free.fr/remote.xml?last=%i';
 dae.postUrl = 'http://quadaemon.free.fr/add.php';
 dae.color = '#daedae';
 dae.alias = "dae,daemon";
 GlobalBoards['darkside'] = dae;
 
 var axel = new Board('hadoken', false);
-axel.getUrl = 'http://hadoken.free.fr/board/remote.php';
+axel.getUrl = 'http://hadoken.free.fr/board/remote.php?last=%i';
 axel.postUrl = 'http://hadoken.free.fr/board/post.php';
 axel.color = '#77AADD';
 axel.alias = "axel,waf";
 GlobalBoards['hadoken'] = axel;
 
 var lo = new Board('comptoir', false);
-lo.getUrl = 'http://lordoric.free.fr/daBoard/remote.xml';
+lo.getUrl = 'http://lordoric.free.fr/daBoard/remote.xml?last=%i';
 lo.postUrl = 'http://lordoric.free.fr/daBoard/add.php';
 lo.color = '#dedede';
 lo.alias = "lo,lordoric";
 GlobalBoards['comptoir'] = lo;
 
 var gabu = new Board('gabuzomeu', false);
-gabu.getUrl = 'http://gabuzomeu.fr/tribune.xml';
+gabu.getUrl = 'http://gabuzomeu.fr/tribune.xml?last=%i';
 gabu.postUrl = 'http://gabuzomeu.fr/tribune/post';
 gabu.color = '#aaffbb';
 GlobalBoards['gabuzomeu'] = gabu;
 
 var devnewton = new Board('devnewton', false);
-devnewton.getUrl = 'http://devnewton.bci.im/home/?q=node/2/xml';
+devnewton.getUrl = 'http://devnewton.bci.im/home/?q=node/2/xml&last=%i';
 devnewton.postUrl = 'http://devnewton.bci.im/home/?q=node/2/post';
 devnewton.color = '#F5D6CC';
 GlobalBoards['devnewton'] = devnewton;
