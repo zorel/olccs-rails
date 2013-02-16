@@ -43,7 +43,7 @@ Olccs::Application.configure do
   config.log_tags = [ :subdomain ]
 
   # Use a different logger for distributed setups
-  #config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
+  config.logger = TorqueBox::Logger.new
 
   config.middleware.delete Rack::ETag
 end

@@ -55,7 +55,7 @@ class Tribune < ActiveRecord::Base
     index = Tire.index(name)
 
     res = b.collect do |content|
-      @logger.debug (content.to_yaml)
+      @logger.debug(content.to_yaml)
       matches = index.percolate(message: content.message, time: content.time, login: content.login, info: content.info, type: 'post') do
         term :md5, md5
       end
