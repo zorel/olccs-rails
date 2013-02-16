@@ -25,7 +25,6 @@ class Post < ActiveRecord::Base
 
   private
   def update_message
-    @logger = TorqueBox::Logger.new(self.class)
     login = self.login.strip
 
     message_node = Nokogiri::XML.fragment(self.message).xpath('message')[0]
@@ -35,7 +34,7 @@ class Post < ActiveRecord::Base
     else
       content = message_node.inner_html
     end
-    @logger.debug "Content after typeslip detection ==> #{content} <=="
+    logger.debug "Content after typeslip detection ==> #{content} <=="
     #cdata, text, autre = false, false, false
     #message_node.children.each do |n|
     #  if n.cdata?
@@ -69,16 +68,18 @@ class Post < ActiveRecord::Base
 
     n = Nokogiri::XML.fragment(content)
 
-    n.search("clock").each do |t|
-      t.add_next_sibling(t.inner_text)
+    n.search('clock').each do |t|
+      t.add_previous_sibling(t.inner_text)
       t.remove
     end
-    n.search("a").each do |t|
+    logger.debug "Content after clock sanitize ==> #{n.to_xml} <=="
+
+    n.search('a').each do |t|
       if t['class'] != 'smiley'
         self.links.build({href: t['href']})
       end
     end
-    m = n.to_xml(:encoding => 'UTF-8', :save_with => Nokogiri::XML::Node::SaveOptions::AS_XML).strip
+    m = n.to_xml(:encoding => 'UTF-8', save_with: Nokogiri::XML::Node::SaveOptions::AS_XML).strip
     self.message = m
   end
 
