@@ -39,7 +39,7 @@ class WelcomeController < ApplicationController
       message.slice!("#{tribune.post_parameter}=")
       message = message.gsub('#{plus}#','+').gsub('#{amp}#','&').gsub('#{dcomma}#',';').gsub('#{percent}#','%')
 
-      tribune.post({message: message, cookies: cookie, ua: ua})
+      tribune.post({message: message, cookies: cookies, ua: ua})
     end
 
     render :text => 'plop'
