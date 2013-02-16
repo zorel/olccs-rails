@@ -4,7 +4,8 @@ class Post < ActiveRecord::Base
   belongs_to :tribune
   has_many :links
 
-  attr_accessible :tribune, :time, :info, :login, :message, :p_id
+  attr_accessible :tribune, :time, :info, :login, :message, :p_id, :content, :rules
+  attr_accessor :filtered, :rules
 
   validates_uniqueness_of :p_id, :scope => [:tribune_id]
 
@@ -24,17 +25,17 @@ class Post < ActiveRecord::Base
 
   private
   def update_message
-
+    @logger = TorqueBox::Logger.new(self.class)
     login = self.login.strip
 
     message_node = Nokogiri::XML.fragment(self.message).xpath('message')[0]
-
+    
     if self.tribune.type_slip == Tribune::TYPE_SLIP_ENCODED
       content = message_node.child.text
     else
       content = message_node.inner_html
     end
-
+    @logger.debug "Content after typeslip detection ==> #{content} <=="
     #cdata, text, autre = false, false, false
     #message_node.children.each do |n|
     #  if n.cdata?
@@ -67,7 +68,7 @@ class Post < ActiveRecord::Base
     #end
 
     n = Nokogiri::XML.fragment(content)
-    puts n
+
     n.search("clock").each do |t|
       t.add_next_sibling(t.inner_text)
       t.remove

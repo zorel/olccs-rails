@@ -1,7 +1,8 @@
-# encoding: UTF-8
+  # encoding: UTF-8
 
 # Controleur de gestion de tribune, gère le multiformat xml/rss/html/json là où c'est nécessaire. Se réferer à la document
 # de l'API pour les informations nécessaires
+# TODO: controlleur twitter + service
 class TribuneController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, :with => :record_not_found
 
@@ -10,18 +11,18 @@ class TribuneController < ApplicationController
   before_filter :set_tribune
 
   #def populate_perco
-  #  redirect_to root_url if current_user.nil?
-  #  user = current_user
-  #  md5 = Digest::MD5.hexdigest("#{user.provider}#{user.uid}")
+  #  #redirect_to root_url if current_user.nil?
+  #  #user = current_user
+  #  md5 = 42 # Digest::MD5.hexdigest("#{user.provider}#{user.uid}")
   #  Tire.index(@tribune.name) do
-  #    register_percolator_query("#{md5}_ototu", :md5 => md5) { string 'login:ototu' }
+  #    register_percolator_query("#{md5}_zorel", :md5 => md5) { string 'info:zorel' }
   #  end
   #end
 
   # Voir la doc d'API
   def index
     #raise Rails.application.config.assets.paths.to_yaml
-    last = params[:last] || -1073741824
+    last = params[:last] || 0
     page = params[:page] || 1
     # size = params[:size] || 150 cf partie dans tribune.rb => param supprimé
     r = @tribune.backend(:last => last, :user => current_user, :page => page)
@@ -81,7 +82,7 @@ class TribuneController < ApplicationController
 
   # Voir la doc d'API
   def post
-    last = params[:last] || -1073741824
+    last = params[:last] || 0
 
     x = @tribune.post message: params[:message],
         ua: request.user_agent,
@@ -99,7 +100,6 @@ class TribuneController < ApplicationController
       format.xml {render xml: posts_to_xml(@results, @tribune.name) }
     end
 
-    #render :nothing => true
   end
 
   # Voir la doc d'API
@@ -143,7 +143,6 @@ class TribuneController < ApplicationController
   end
 
   # Voir la doc d'API
-  # TODO ce code pue
   def login
     tribune_login = @tribune.login({user: params[:user], password: params[:password], ua: "plop"})
 

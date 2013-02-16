@@ -422,7 +422,7 @@ function tribune_update() {
         last = all.last()[0].id;
         scroll = true;
     } else {
-        last = first = "p-1073741824";
+        last = first = "p0";
     }
 
     var last_id = parseInt(last.substring(1, last.length));
@@ -434,7 +434,7 @@ function tribune_update() {
             }
         },
         dataType:'json',
-        data:{id:last_id},
+        data:{last:last_id},
         success:function (remote) {
             posts = remote['posts'].reverse();
             if (posts.size == 0) {
@@ -595,13 +595,13 @@ $(document).ready(function () {
 //    });
 
     $("#form_post")
-        .live("ajax:beforeSend", function() {
+        .on("ajax:beforeSend", function() {
             $("#submit").attr('disabled','disabled');
         })
-        .live("ajax:success", function() {
+        .on("ajax:success", function() {
             tribune_update();
         })
-        .live("ajax:complete", function() {
+        .on("ajax:complete", function() {
             $("#submit").removeAttr('disabled');
             $("#message").val("");
         })
@@ -609,7 +609,7 @@ $(document).ready(function () {
 
     tribune_update();
 
-    var x = setInterval(function() {tribune_update()}, 30000);
+    var x = setInterval(function() {tribune_update()}, 10000);
 
 });
 

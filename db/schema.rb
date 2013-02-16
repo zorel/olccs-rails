@@ -65,7 +65,7 @@ ActiveRecord::Schema.define(:version => 20121204085858) do
     t.text     "user_parameter"
     t.text     "pwd_parameter"
     t.text     "remember_me_parameter"
-    t.datetime "last_updated",          :default => '2012-09-30 21:19:56'
+    t.datetime "last_updated",          :default => '2013-02-10 20:33:49'
     t.integer  "refresh_interval",      :default => 15
     t.datetime "created_at",                                               :null => false
     t.datetime "updated_at",                                               :null => false

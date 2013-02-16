@@ -303,6 +303,7 @@ function BoardGetBackend(board) {
     get_url += '&name=' + encodeURIComponent(board.name);
     if (board.cookie) get_url += '&cookie=' + encodeURIComponent(board.cookie);
     if (board.lastModified) get_url += '&lastModified=' + encodeURIComponent(board.lastModified);
+    if (board.perso) get_url += '&private=true';
     get_url += '&url=' + to_url(board.getUrl.replace("%i", board.lastId || ""));
     xhr.open('GET', get_url, true);
     xhr.onreadystatechange = function () {
@@ -351,7 +352,7 @@ function BoardPost(board, msg) {
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     var data = 'ua=' + to_url(board.ua || settings.value('default_ua'))
         + '&name=' + encodeURIComponent(board.name)
-        + '&perso=' + encodeURIComponent(board.perso)
+        + '&private=' + encodeURIComponent(board.perso)
         + '&cookie=' + encodeURIComponent(board.cookie)
         + '&posturl=' + encodeURIComponent(board.postUrl)
         + '&postdata=' + to_url(postdata);

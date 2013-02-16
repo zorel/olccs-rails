@@ -42,9 +42,11 @@ Olccs::Application.configure do
 
   # Use a different cache store in production
   # config.cache_store = :mem_cache_store
+  # Use TorqueBox::Infinispan::Cache for the Rails cache store
+  config.cache_store = :torque_box_store
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server
-  config.action_controller.asset_host = "https://d2bfic82sj834s.cloudfront.net"
+  #config.action_controller.asset_host = "https://d2bfic82sj834s.cloudfront.net"
 
   # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
   # config.assets.precompile += %w( search.js )
@@ -53,7 +55,7 @@ Olccs::Application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   # Enable threaded mode
-  config.threadsafe!
+  #config.threadsafe!
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation can not be found)

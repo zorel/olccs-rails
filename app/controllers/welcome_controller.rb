@@ -2,40 +2,70 @@
 
 # Controleur de gestion de la racine du site
 class WelcomeController < ApplicationController
-
   protect_from_forgery :except => :postphp
 
   # Compatibilité olcc pour le post d'un message
   # TODO: gestion des tribunes persos non indexées
   def postphp
     postdata = params[:postdata]
-    cookie = params[:cookie]
+    cookies = params[:cookie]
+    # Param singulier, variable purielle
     ua = params[:ua]
+    private = params[:private]
 
-    tribune = Tribune.find_by_name(params[:name])
+    if private == 'true'
+      post_url = params[:posturl]
+      msg_array = postdata.partition('=')
+      client = HTTPClient.new
+      body = {
+          msg_array[0].to_sym => msg_array[2].gsub('#{plus}#','+').gsub('#{amp}#','&').gsub('#{dcomma}#',';').gsub('#{percent}#','%')
+      }
+      head = {
+          :Referer => post_url,
+          "User-Agent" => ua
+      }
 
-    message = postdata
-    message.slice!("#{tribune.post_parameter}=")
-    message = message.gsub('#{plus}#','+').gsub('#{amp}#','&').gsub('#{dcomma}#',';').gsub('#{percent}#','%')
+      unless cookies.blank?
+        client.cookie_manager.parse(cookies, URI.parse(post_url))
+      end
 
-    tribune.post({message: message, cookies: cookie, ua: ua})
+      res = client.post(post_url, body, head)
+      return res.headers['X-Post-Id']
 
-    render :text => "plop"
+    else
+      tribune = Tribune.find_by_name(params[:name])
+
+      message = postdata
+      message.slice!("#{tribune.post_parameter}=")
+      message = message.gsub('#{plus}#','+').gsub('#{amp}#','&').gsub('#{dcomma}#',';').gsub('#{percent}#','%')
+
+      tribune.post({message: message, cookies: cookie, ua: ua})
+    end
+
+    render :text => 'plop'
   end
 
   # Compatibilité olcc pour la demande du backend
   # TODO: gestion des tribunes persos non indexées
   def backendphp
-    tribune = Tribune.find_by_name(params[:name])
-    uri = URI.parse(params[:url])
-    last = 0
-    if uri.query && CGI.parse(uri.query)
-      if CGI.parse(uri.query)['last'][0]
-        last = CGI.parse(uri.query)['last'][0].to_i
-      end
-    end
+    private = params[:private]
+    if private == 'true'
+      client = HTTPClient.new
 
-    render :xml => posts_to_xml(tribune.backend(:last => last, :size => 300, :user => current_user)[0], tribune.name)
+      response = client.get(params[:url]).content
+      render :text => response, :content_type => 'application/xml'
+    else
+      tribune = Tribune.find_by_name(params[:name])
+      uri = URI.parse(params[:url])
+      last = 0
+      if uri.query && CGI.parse(uri.query)
+        if CGI.parse(uri.query)['last'][0]
+          last = CGI.parse(uri.query)['last'][0].to_i
+        end
+      end
+
+      render :xml => posts_to_xml(tribune.backend(:last => last, :size => 300, :user => current_user)[0], tribune.name)
+    end
   end
 
   # Compatibilité olcc pour la recherche des totoz

@@ -1,12 +1,20 @@
 source 'http://rubygems.org'
 
-gem 'rails', '>=3.2.11'
+gem 'rails', '>=3.2.12'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'sqlite3'
-gem 'activerecord-postgresql-adapter'
+gem 'activerecord-jdbc-adapter', '= 1.2.5'
+gem 'activerecord-jdbcpostgresql-adapter', '= 1.2.5'
+gem 'jruby-openssl'
+
+gem 'torquebox', '2.3.0'
+gem 'ruby-debug-base', '>= 0.10.5.rc3'
+gem 'ruby-debug-ide', '>= 0.4.17.beta14'
+
+gem 'less-rails'
+gem 'twitter-bootstrap-rails'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -15,11 +23,10 @@ group :assets do
   gem 'coffee-rails' #, '~> 3.2.1'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  gem 'therubyracer', "~> 0.10.2"
+  gem 'therubyrhino'
 
-  gem 'uglifier', '>= 1.0.3'
+  gem 'uglifier'
 
-  gem 'bootstrap-sass', '~> 2.1.0.0'
   #gem 'twitter-bootstrap-rails' #, :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git', :branch => "static"
 end
 
@@ -49,9 +56,6 @@ gem 'omniauth-browserid'
 gem 'omniauth-openid'
 gem 'omniauth-twitter'
 
-# certificats SSL pour omniauth
-gem 'certified'
-
 # http client
 gem 'httpclient'
 
@@ -61,38 +65,9 @@ gem 'nokogiri'
 # Pagination
 gem 'kaminari'
 
-# perform async
-gem 'sidekiq'
-gem 'slim'
-gem 'sinatra', :require => nil
-
-# Markdown rendering
-gem 'redcarpet'
-gem 'markdown-rails'
-
-# growl for jquery
-gem "gritter", ">=1.0.1"
-
-# crontab for ruby
-gem 'clockwork'
-
-# foreman, lancement de process
-gem 'foreman'
-
-# https://github.com/macournoyer/thin/issues/119 (sudo gem install thin -- --with-cflags=\"-O2 -pipe -march=native -w\")
-gem 'thin'
-
 gem 'htmlentities'
-
-# Multithreaded web server
-gem 'puma'
 
 # Decorators
 gem 'draper'
 
-# Emoji
-gem 'gemoji', :require => 'emoji/railtie'
-
-# Phantomjs for preview
-gem 'phantomjs.rb'
-
+gem 'figaro'

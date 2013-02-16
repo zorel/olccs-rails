@@ -7,7 +7,8 @@ class Link < ActiveRecord::Base
 
   attr_accessible :indexed, :previewed, :status, :href, :post
 
-  after_commit :index_link, :on => :create
+  # after_commit :index_link, :on => :create
+
   # DONE Faire un truc propre pour gestion asynchrone (to_index? / indexed / etc.)
   # DONE faire en sorte que la même URL ne soit pas indexée plusieurs fois
 
@@ -68,6 +69,6 @@ class Link < ActiveRecord::Base
 
   def index_link
     logger.debug("Link after create for #{inspect} ")
-    LinkWorker.perform_async(id)
+    # LinkWorker.perform_async(id)
   end
 end

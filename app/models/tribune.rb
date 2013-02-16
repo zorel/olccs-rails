@@ -3,6 +3,8 @@
 # Modèle de représentation de tribune. Effectue toutes les interractions avec la tribune cible et présente aux
 # modèles et controlleurs utilisateurs une API standard quelque soit la tribune.
 class Tribune < ActiveRecord::Base
+  include TorqueBox::Injectors
+
   has_many :posts
   has_many :links, :through => :posts
   has_many :rules
@@ -23,11 +25,12 @@ class Tribune < ActiveRecord::Base
   def backend(opts={})
     # s supprimé de la liste: utilisation de la pagination avec du per_page de kaminari
     conf = {
-        :last => -1073741824,
+        :last => 0,
         :user => nil,
         :page => 1,
     }.merge(opts)
     # TODO ça merde avec la pagination, le p_id > 0 certainement
+
     b = self.posts.page(conf[:page]).where("p_id > ?", conf[:last]).order("p_id DESC")
 
     #b = Tire.search(name) do
@@ -45,19 +48,20 @@ class Tribune < ActiveRecord::Base
     #end
 
     return [b.to_a, b] if conf[:user].nil? or conf[:user].rules.size == 0
-
-    logger.debug("On commence la percolation")
+    @logger = TorqueBox::Logger.new(self.class)
+    @logger.debug('On commence la percolation')
     md5 = conf[:user].md5
 
     index = Tire.index(name)
 
     res = b.collect do |content|
-      #raise content['message'].to_yaml
+      @logger.debug (content.to_yaml)
       matches = index.percolate(message: content.message, time: content.time, login: content.login, info: content.info, type: 'post') do
         term :md5, md5
       end
 
-      #raise matches.to_yaml
+      content['filtered'] = content['message']
+      logger.debug (matches.to_yaml)
       unless matches.nil?
         matched = []
         matches.each do |m|
@@ -66,11 +70,11 @@ class Tribune < ActiveRecord::Base
 
           action = rule.action.to_sym
           #raise rule.to_yaml
-          logger.debug "ici, dans le filtre, #{content.inspect} pour #{rule_name}"
+          @logger.debug "ici, dans le filtre, #{content.inspect} pour #{rule_name}"
           plop = OlccsPluginsManager.instance.repository[action]
           unless plop.nil?
             new_message = plop.instance.process(content['message'])
-            content['message'] = new_message
+            content['filtered'] = new_message
             matched << action
           end
         end
@@ -105,8 +109,9 @@ class Tribune < ActiveRecord::Base
   # * Lance la requête vers la tribune cible avec le last id positionné
   # * Filtre le contenu avec Nokogiri pour (au cas où la tribune n'accepte pas le last id)
   def refresh
+    @logger = TorqueBox::Logger.new( self.class )
     client = HTTPClient.new
-    last_post = self.posts.last(:order => "p_id")
+    last_post = self.posts.last(:order => 'p_id')
     if last_post.nil?
       last_id = 0
     else
@@ -117,18 +122,14 @@ class Tribune < ActiveRecord::Base
     begin
       r = client.get(get_url, query)
 
-      #puts "*"*80
-      #puts "#{name} => " + r.content.force_encoding('utf-8').encoding.to_s
-      #puts "#{name} => " + r.body_encoding.to_s
-      #puts "*"*80
       response = Nokogiri::XML(r.content)
       response.xpath("/board/post[@id > #{last_id}]").reverse.each do |p|
-        p_id = p.xpath("@id").to_s.to_i
-        self.posts.build({p_id: p.xpath("@id").to_s.to_i,
-                          time: p.xpath("@time").to_s,
-                          info: p.xpath("info").text.encode('utf-8').strip,
-                          login: p.xpath("login").text.encode('utf-8').strip,
-                          message: p.xpath("message")
+        #p_id = p.xpath("@id").to_s.to_i
+        self.posts.build({p_id: p.xpath('@id').to_s.to_i,
+                          time: p.xpath('@time').to_s,
+                          info: p.xpath('info').text.encode('utf-8').strip,
+                          login: p.xpath('login').text.encode('utf-8').strip,
+                          message: p.xpath('message')
                          })
 
       end
@@ -137,21 +138,22 @@ class Tribune < ActiveRecord::Base
         self.refresh
       end
     rescue HTTPClient::BadResponseError => e
-      logger.error ("Refresh failed for #{name}")
-      logger.error (e)
+      @logger.error ("Refresh failed for #{name}")
+      @logger.error (e)
     ensure
       update_column :last_updated, Time.now
     end
   end
 
-  def refresh?
-    RefreshWorker.perform_async(id)
-  end
-
   # Lance le refresh conditionnel sur toutes les tribunes
   def self.refresh_all
+    @logger = TorqueBox::Logger.new( self.class )
+    q = TorqueBox::Messaging::Queue.lookup '/queue/r_queue'
     Tribune.all.each do |t|
-      t.refresh?
+      now = Time.now
+      to_be = (now - t.last_updated) > t.refresh_interval
+      @logger.debug("Pour tribune #{t.name} reload: #{to_be}")
+      q.publish t.id if to_be
     end
   end
 
@@ -161,6 +163,7 @@ class Tribune < ActiveRecord::Base
   # @param [Hash<user,password>] opts Paramètre contenant nom d'utilisateur et mot de passe
   # @return [Hash] Renvoie le hash de cookies
   def login(opts)
+    @logger = TorqueBox::Logger.new( self.class )
     client = HTTPClient.new
     #client.debug_dev = File.open("/tmp/debug_login","a")
     client.ssl_config.verify_mode = OpenSSL::SSL::VERIFY_NONE
@@ -175,8 +178,8 @@ class Tribune < ActiveRecord::Base
         :Referer => cookie_url,
         :User_Agent => opts[:ua]
     }
-
-    r = client.post(cookie_url, body, head)
+    @logger.debug("Login for user #{opts[:user]}")
+    client.post(cookie_url, body, head)
     client.cookie_manager.cookies
   end
 
@@ -186,7 +189,7 @@ class Tribune < ActiveRecord::Base
   # @param [Hash<message, ua, cookies>] opts Hash de paramètre
   # @return [Integer] Renvoie le X-Post-Id du post (nil si la tribune ne renvoie pas de X-Post-Id)
   def post(opts)
-
+    @logger = TorqueBox::Logger.new( self.class )
     client = HTTPClient.new
     #client.debug_dev = File.open("/tmp/debug_post.txt","a")
     body = {
@@ -194,15 +197,17 @@ class Tribune < ActiveRecord::Base
     }
     head = {
         :Referer => post_url,
-        "User-Agent" => opts[:ua]
+        'User-Agent' => opts[:ua]
     }
 
     unless opts[:cookies].nil? and opts[:cookies]==''
       if opts[:cookies].class == String
+        @logger.debug('Cookies format chaine de caractères')
         client.cookie_manager.parse(opts[:cookies], URI.parse(post_url))
       elsif opts[:cookies].class == Hash
         opts[:cookies].each do |k, v|
-          if v != ""
+          if v != ''
+            @logger.debug('Cookies format chaine de hash')
             c = "#{k}=#{v.encode('utf-8')}"
             client.cookie_manager.parse(c, URI.parse(post_url))
           end
@@ -217,10 +222,10 @@ class Tribune < ActiveRecord::Base
     return res.headers['X-Post-Id']
 
   rescue Exception => e
-    logger.error("Post fail for #{name}")
-    logger.error(opts)
-    logger.error(e)
-    logger.error(e.backtrace)
+    @logger.error("Post fail for #{name}")
+    @logger.error(opts)
+    @logger.error(e)
+    @logger.error(e.backtrace)
   end
 
   # Chargement en masse de posts dans la base
