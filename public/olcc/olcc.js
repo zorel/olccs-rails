@@ -1131,7 +1131,7 @@ function searchTotoz() {
     var totoz = document.getElementById('totoz-search').value;
     if (!totoz) { return; }
     document.getElementById('totoz-status').src = "img/wait.gif";
-    var url = settings.value('totoz_server') + "search/xml{question}keys=" + escape(totoz); // + "{amp}xml=true";
+    var url = settings.value('totoz_server') + "search.xml{question}terms=" + escape(totoz); // + "{amp}xml=true";
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/totoz.php?url='+url, true);
     xhr.onreadystatechange = function() {
