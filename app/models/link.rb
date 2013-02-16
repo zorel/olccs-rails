@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Modèle de gestion des URLs
 class Link < ActiveRecord::Base
   belongs_to :post
@@ -52,7 +53,7 @@ class Link < ActiveRecord::Base
         if r.contenttype.include?("html")
           executable = File.join(Rails.root, 'script', 'preview.sh')
           string_args = "#{Digest::MD5.hexdigest(escaped_href)} #{escaped_href} #{Rails.root.to_s}"
-          `#{executable} #{string_args}`
+#          `#{executable} #{string_args}`
         end
       end
       update_column(:status, r.status)
