@@ -1166,7 +1166,7 @@ function displayTotoz(xhr) {
         document.getElementById('totoz-status').src = "img/blank.gif";
         var res = xhr.responseText;
         var totozfound = loadXML(res);
-        var totozNodes = totozfound.getElementsByTagName("filename") || [];
+        var totozNodes = totozfound.getElementsByTagName("name") || [];
         var totozList = document.getElementById('totoz-list');
         totozList.innerHTML = '';
         totozwrap = document.createElement('table');
@@ -1177,11 +1177,11 @@ function displayTotoz(xhr) {
         var server = settings.value('totoz_server');
         for (var i=totozNodes.length; i--;) {
             var curtotoz = getNodeText(totozNodes[i]); //.textContent.strip();
-            var totoz = "[:"+curtotoz.substr(0,curtotoz.length-4)+"]";
+            var totoz = "[:"+curtotoz+"]";
             var tr = document.createElement('tr');
             tr.setAttribute('onclick', 'insertInPalmi("'+totoz+" "+'")');
             var td = document.createElement('td');
-            td.innerHTML = '<img src="'+server+curtotoz+'" alt="'+totoz+'" />';
+            td.innerHTML = '<img src="'+server+'/gif/'+curtotoz+'" alt="'+totoz+'" />';
             tr.appendChild(td);
             td = document.createElement('td');
             td.innerHTML = '<span class="totoz">'+totoz+'</span>';
