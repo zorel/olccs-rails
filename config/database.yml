@@ -5,10 +5,10 @@
 #   gem 'sqlite3'
 development:
             adapter: postgresql
-            database: zorel_olccs
-            host: 10.0.1.110
-            username: zorel
-            password: zorel
+            database: <%=Figaro.env.db_name%>
+            host: <%=Figaro.env.host%>
+            username: <%=Figaro.env.db_user%>
+            password: <%=Figaro.env.db_password%>
             pool: 10
 
 # Warning: The database defined as "test" will be erased and
@@ -22,8 +22,8 @@ test:
 
 production:
             adapter: postgresql
-            database: zorel_tribune
-            host: 127.0.0.1
-            username: zorel
-            password: zorel
+            database: <%=Figaro.env.db_name%>
+            host: <%=Figaro.env.host%>
+            username: <%=Figaro.env.db_user%>
+            password: <%=Figaro.env.db_password%>
             pool: 10
