@@ -111,6 +111,7 @@ class Tribune < ActiveRecord::Base
   def refresh
     @logger = TorqueBox::Logger.new( self.class )
     client = HTTPClient.new
+    client.receive_timeout=10
     last_post = self.posts.last(:order => 'p_id')
     if last_post.nil?
       last_id = 0
@@ -138,8 +139,14 @@ class Tribune < ActiveRecord::Base
         self.refresh
       end
     rescue HTTPClient::BadResponseError => e
-      @logger.error ("Refresh failed for #{name}")
-      @logger.error (e)
+      @logger.error("Refresh failed for #{name}")
+      @logger.error(e)
+    rescue HTTPClient::ReceiveTimeoutError => e
+      @logger.error("Timeout for #{name}")
+      @logger.error(e)
+    rescue Exception => e
+      @logger.error("Truc fail for #{name}")
+      @logger.error(e)
     ensure
       update_column :last_updated, Time.now
     end
