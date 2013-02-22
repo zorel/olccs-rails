@@ -9,7 +9,7 @@ development:
             host: 10.0.1.110
             username: zorel
             password: zorel
-            pool: 30
+            pool: 10
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -26,4 +26,4 @@ production:
             host: 127.0.0.1
             username: zorel
             password: zorel
-            pool: 30
+            pool: 10

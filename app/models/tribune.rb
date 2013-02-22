@@ -71,7 +71,7 @@ class Tribune < ActiveRecord::Base
           action = rule.action.to_sym
           #raise rule.to_yaml
           @logger.debug "ici, dans le filtre, #{content.inspect} pour #{rule_name}"
-          plop = OlccsPluginsManager.instance.repository[action]
+          plop = OlccsPluginsManager.instance.filters[action]
           unless plop.nil?
             new_message = plop.instance.process(content['message'])
             content['filtered'] = new_message
@@ -198,9 +198,28 @@ class Tribune < ActiveRecord::Base
   def post(opts)
     @logger = TorqueBox::Logger.new( self.class )
     client = HTTPClient.new
+
     #client.debug_dev = File.open("/tmp/debug_post.txt","a")
+
+    # Traitement des filtres input
+    @logger.info("="*99)
+    m = opts[:message].clone
+
+    opts[:message].scan(/(#\{(.*?) (.*?)\})/) do |match|
+      text, input, param = match
+      if OlccsPluginsManager.instance.input.has_key?(input.to_sym)
+        @logger.info("Match input filter")
+        replacement = OlccsPluginsManager.instance.input[input.to_sym].instance.process(param)
+        @logger.info("#{replacement} for #{text}")
+        m.sub!(text, replacement)
+      end
+    end
+
+
+    @logger.info("Infos pour le post: #{m}")
+
     body = {
-        post_parameter.to_sym => opts[:message]
+        post_parameter.to_sym => m
     }
     head = {
         :Referer => post_url,
