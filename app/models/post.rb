@@ -30,7 +30,7 @@ class Post < ActiveRecord::Base
     message_node = Nokogiri::XML.fragment(self.message).xpath('message')[0]
     
     if self.tribune.type_slip == Tribune::TYPE_SLIP_ENCODED
-      content = message_node.child.text
+      content = message_node.child.nil? ? '' : message_node.child.text
     else
       content = message_node.inner_html
     end

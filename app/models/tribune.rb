@@ -126,10 +126,13 @@ class Tribune < ActiveRecord::Base
       response = Nokogiri::XML(r.content)
       response.xpath("/board/post[@id > #{last_id}]").reverse.each do |p|
         #p_id = p.xpath("@id").to_s.to_i
+        info = p.xpath('info').nil? ? '' : p.xpath('info').text.encode('utf-8').strip
+        login = p.xpath('login').nil? ? '' : p.xpath('login').text.encode('utf-8').strip
         self.posts.build({p_id: p.xpath('@id').to_s.to_i,
+
                           time: p.xpath('@time').to_s,
-                          info: p.xpath('info').text.encode('utf-8').strip,
-                          login: p.xpath('login').text.encode('utf-8').strip,
+                          info: info,
+                          login: login,
                           message: p.xpath('message')
                          })
 
@@ -146,7 +149,7 @@ class Tribune < ActiveRecord::Base
       @logger.error(e)
     rescue Exception => e
       @logger.error("Truc fail for #{name}")
-      @logger.error(e)
+      @logger.error(e.backtrace)
     ensure
       update_column :last_updated, Time.now
     end
