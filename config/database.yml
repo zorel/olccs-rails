@@ -6,7 +6,7 @@
 development:
             adapter: postgresql
             database: <%=Figaro.env.db_name%>
-            host: <%=Figaro.env.host%>
+            host: <%=Figaro.env.db_host%>
             username: <%=Figaro.env.db_user%>
             password: <%=Figaro.env.db_password%>
             pool: 10
@@ -23,7 +23,7 @@ test:
 production:
             adapter: postgresql
             database: <%=Figaro.env.db_name%>
-            host: <%=Figaro.env.host%>
+            host: <%=Figaro.env.db_host%>
             username: <%=Figaro.env.db_user%>
             password: <%=Figaro.env.db_password%>
             pool: 10

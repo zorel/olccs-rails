@@ -4,12 +4,14 @@ TorqueBox.configure do
   end
     
   queue '/queue/r_queue' do
-    processor RefreshProcessor
+    processor RefreshProcessor do
+      concurrency 4
+    end
     durable false
   end
 
   job RefreshJob do
-    cron '*/5 * * * * ?'
+    cron '*/10 * * * * ?'
     timeout '10s'
   end
 
