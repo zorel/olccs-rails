@@ -210,19 +210,19 @@ Tribune.create(name: "hadoken",
 #
 #)
 
-Tribune.create(name: "darkside",
-               refresh_interval: 120,
-               get_url: "http://quadaemon.free.fr/remote.xml",
-               last_id_parameter: "",
-               post_parameter: "message",
-               post_url: "http://quadaemon.free.fr/add.xml",
-               cookie_url: "",
-               cookie_name: "",
-               remember_me_parameter: "",
-               user_parameter: "",
-               pwd_parameter: ""
-
-)
+#Tribune.create(name: "darkside",
+#               refresh_interval: 120,
+#               get_url: "http://quadaemon.free.fr/remote.xml",
+#               last_id_parameter: "",
+#               post_parameter: "message",
+#               post_url: "http://quadaemon.free.fr/add.xml",
+#               cookie_url: "",
+#               cookie_name: "",
+#               remember_me_parameter: "",
+#               user_parameter: "",
+#               pwd_parameter: ""
+#
+#)
 
 Tribune.create(name: "ygllo",
                refresh_interval: 120,

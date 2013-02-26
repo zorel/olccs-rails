@@ -28,7 +28,7 @@ class Post < ActiveRecord::Base
     login = self.login.strip
 
     message_node = Nokogiri::XML.fragment(self.message).xpath('message')[0]
-    
+
     if self.tribune.type_slip == Tribune::TYPE_SLIP_ENCODED
       content = message_node.child.nil? ? '' : message_node.child.text
     else
@@ -81,6 +81,10 @@ class Post < ActiveRecord::Base
     end
     m = n.to_xml(:encoding => 'UTF-8', save_with: Nokogiri::XML::Node::SaveOptions::AS_XML).strip
     self.message = m
+  rescue Exception => e
+    @logger.error('Truc fail for post')
+    @logger.error(e.message)
+    @logger.error(e.backtrace)
   end
 
   def update_tire

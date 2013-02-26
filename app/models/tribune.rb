@@ -109,7 +109,7 @@ class Tribune < ActiveRecord::Base
   # * Lance la requête vers la tribune cible avec le last id positionné
   # * Filtre le contenu avec Nokogiri pour (au cas où la tribune n'accepte pas le last id)
   def refresh
-    @logger = TorqueBox::Logger.new( self.class )
+    @logger = TorqueBox::Logger.new( self.class.to_s + '::' + self.name )
     client = HTTPClient.new
     client.receive_timeout=10
     last_post = self.posts.last(:order => 'p_id')
@@ -129,7 +129,6 @@ class Tribune < ActiveRecord::Base
         info = p.xpath('info').nil? ? '' : p.xpath('info').text.encode('utf-8').strip
         login = p.xpath('login').nil? ? '' : p.xpath('login').text.encode('utf-8').strip
         self.posts.build({p_id: p.xpath('@id').to_s.to_i,
-
                           time: p.xpath('@time').to_s,
                           info: info,
                           login: login,
@@ -149,6 +148,7 @@ class Tribune < ActiveRecord::Base
       @logger.error(e)
     rescue Exception => e
       @logger.error("Truc fail for #{name}")
+      @logger.error(e)
       @logger.error(e.backtrace)
     ensure
       update_column :last_updated, Time.now
