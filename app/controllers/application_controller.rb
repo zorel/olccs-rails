@@ -45,8 +45,13 @@ private
               xml << p.message
             }
             xml.ext {
-              xml.rules << p.rules
-              xml.filtered << p.filtered
+              xml.rules {
+                xml << p.rules
+              }
+              xml.filtered {
+                xml << p.filtered
+              }
+
             }
           }
         }
