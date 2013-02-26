@@ -49,19 +49,20 @@ class Tribune < ActiveRecord::Base
 
     return [b.to_a, b] if conf[:user].nil? or conf[:user].rules.size == 0
     @logger = TorqueBox::Logger.new(self.class)
-    @logger.debug('On commence la percolation')
+    @logger.info('==========================')
+    @logger.info('On commence la percolation')
     md5 = conf[:user].md5
 
     index = Tire.index(name)
 
     res = b.collect do |content|
-      @logger.debug(content.to_yaml)
+      @logger.info(content.to_yaml)
       matches = index.percolate(message: content.message, time: content.time, login: content.login, info: content.info, type: 'post') do
         term :md5, md5
       end
 
       content['filtered'] = content['message']
-      logger.debug (matches.to_yaml)
+      logger.info(matches.to_yaml)
       unless matches.nil?
         matched = []
         matches.each do |m|
