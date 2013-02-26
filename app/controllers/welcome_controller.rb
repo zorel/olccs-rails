@@ -83,6 +83,12 @@ class WelcomeController < ApplicationController
 
   end
 
+  # Compatibilité olcc pour le chargement du fichier cookies
+  # TODO: ben todo
+  def loadstorephp
+
+  end
+
   # Voir la doc d'API
   def urls
     @urls = Link.limit(42).order("created_at desc")
