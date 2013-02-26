@@ -95,6 +95,7 @@ class WelcomeController < ApplicationController
 
     respond_to do |format|
       format.rss
+      format.tsv
       format.xml {
         render :xml => urls_to_xml(@urls, root_url)
       }
