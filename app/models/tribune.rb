@@ -68,14 +68,16 @@ class Tribune < ActiveRecord::Base
         matches.each do |m|
           rule_name = m.split('_')[1]
           rule = conf[:user].rules.find_by_name(rule_name)
-
+          @logger.info('On a trouvé une règle: ' + rule.name)
           action = rule.action.to_sym
           #raise rule.to_yaml
-          @logger.debug "ici, dans le filtre, #{content.inspect} pour #{rule_name}"
+          @logger.info "ici, dans le filtre, #{content.inspect} pour #{rule_name}"
           plop = OlccsPluginsManager.instance.filters[action]
           unless plop.nil?
+            @logger.info('Action trouvée')
             new_message = plop.instance.process(content['message'])
             content['filtered'] = new_message
+            @logger.info('New message: ' + new_message)
             matched << action
           end
         end
@@ -83,7 +85,7 @@ class Tribune < ActiveRecord::Base
       end
       content
     end
-    #raise res.to_yaml
+    @logger.info res.to_yaml
     [res, b]
   end
 
