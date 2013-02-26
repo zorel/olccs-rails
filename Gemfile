@@ -55,6 +55,7 @@ gem 'omniauth'
 gem 'omniauth-browserid'
 gem 'omniauth-openid'
 gem 'omniauth-twitter'
+gem 'omniauth-linuxfr'
 
 # http client
 gem 'httpclient'
