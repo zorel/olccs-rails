@@ -1,0 +1,4 @@
+<%= %w(id time info login message).join("\t") %>
+<% @urls.each do |u| %>
+    <%=raw [u.id, u.post.time, u.post.info, u.post.login, "#{time_to_full_horloge(u.post.time)}@#{u.post.tribune.name}: <a href=\"#{URI.escape(u.href)}\">#{u.href}</a>"].join("\t") %>
+<% end %>

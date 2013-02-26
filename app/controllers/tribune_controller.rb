@@ -137,6 +137,7 @@ class TribuneController < ApplicationController
     respond_to do |format|
       format.html
       format.rss
+      format.tsv { render template: 'welcome/urls'}
       format.xml {render :xml => urls_to_xml(@urls, @tribune.name)}
     end
 
