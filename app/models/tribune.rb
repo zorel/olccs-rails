@@ -48,36 +48,27 @@ class Tribune < ActiveRecord::Base
     #end
 
     return [b.to_a, b] if conf[:user].nil? or conf[:user].rules.size == 0
-    @logger = TorqueBox::Logger.new(self.class)
-    @logger.info('==========================')
-    @logger.info('On commence la percolation')
     md5 = conf[:user].md5
 
     index = Tire.index(name)
 
     res = b.collect do |content|
-      @logger.info(content.to_yaml)
       matches = index.percolate(message: content.message, time: content.time, login: content.login, info: content.info, type: 'post') do
         term :md5, md5
       end
 
       content['filtered'] = content['message']
-      logger.info(matches.to_yaml)
+
       unless matches.nil?
         matched = []
         matches.each do |m|
           rule_name = m.split('_')[1]
           rule = conf[:user].rules.find_by_name(rule_name)
-          @logger.info('On a trouvé une règle: ' + rule.name)
           action = rule.action.to_sym
-          #raise rule.to_yaml
-          @logger.info "ici, dans le filtre, #{content.inspect} pour #{rule_name}"
           plop = OlccsPluginsManager.instance.filters[action]
           unless plop.nil?
-            @logger.info('Action trouvée')
             new_message = plop.instance.process(content['message'])
             content['filtered'] = new_message
-            @logger.info('New message: ' + new_message)
             matched << action
           end
         end
@@ -85,7 +76,6 @@ class Tribune < ActiveRecord::Base
       end
       content
     end
-    @logger.info res.to_yaml
     [res, b]
   end
 
