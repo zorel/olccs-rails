@@ -104,7 +104,7 @@ class Tribune < ActiveRecord::Base
   def refresh
     @logger = TorqueBox::Logger.new( self.class.to_s + '::' + self.name )
     client = HTTPClient.new
-    client.receive_timeout=10
+    client.receive_timeout=5
     last_post = self.posts.last(:order => 'p_id')
     if last_post.nil?
       last_id = 0
@@ -114,7 +114,9 @@ class Tribune < ActiveRecord::Base
     query = {"#{last_id_parameter}" => last_id}
 
     begin
+      @logger.info("Debut requete")
       r = client.get(get_url, query)
+      @logger.info("Fin requete")
 
       response = Nokogiri::XML(r.content)
       response.xpath("/board/post[@id > #{last_id}]").reverse.each do |p|
