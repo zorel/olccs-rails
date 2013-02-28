@@ -24,27 +24,28 @@ class Post < ActiveRecord::Base
   end
 
   def self.test(m, type)
-    message="<message><![CDATA[test=&amp;plop;]]></message>"
+    message="<message>#{m}</message>"
     logger.debug(message)
     message_node = Nokogiri::XML.fragment(message).xpath('message')[0]
 
+
     if type==1
-      #content = message_node.child.nil? ? '' : message_node.child.text
-      cdata = false
-      message_node.children.each do |n|
-        if n.cdata?
-          cdata = true
-          break
-        end
-      end
-      if cdata
-        content = message_node.child.text
-      else
-        t = message_node.child.text.gsub(/&/, '&amp;')
+      ##content = message_node.child.nil? ? '' : message_node.child.text
+      #cdata = false
+      #message_node.children.each do |n|
+      #  if n.cdata?
+      #    cdata = true
+      #    break
+      #  end
+      #end
+      #if cdata
+      #  content = message_node.child.text
+      #else
+        #t = message_node.child.text.gsub(/&/, '&amp;')
         logger.debug("text => #{message_node.child.text}")
-        logger.debug("t => #{t}")
-        content = Nokogiri::XML.fragment(t).inner_html
-      end
+        #logger.debug("t => #{t}")
+        content = Nokogiri::HTML.fragment(message_node.content).inner_html
+      #end
     else
       content = message_node.inner_html
     end
@@ -79,21 +80,7 @@ class Post < ActiveRecord::Base
     message_node = Nokogiri::XML.fragment(self.message).xpath('message')[0]
 
     if self.tribune.type_slip == Tribune::TYPE_SLIP_ENCODED
-      cdata = false
-      message_node.children.each do |n|
-        if n.cdata?
-          cdata = true
-          break
-        end
-      end
-      if cdata
-        content = message_node.child.text
-      else
-        t = message_node.child.text.gsub(/&/, '&amp;')
-        logger.debug("text => #{message_node.child.text}")
-        logger.debug("t => #{t}")
-        content = Nokogiri::XML.fragment(t).inner_html
-      end
+      content = Nokogiri::HTML.fragment(message_node.content).inner_html
     else
       content = message_node.inner_html
     end
