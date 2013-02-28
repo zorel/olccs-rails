@@ -23,6 +23,45 @@ class Post < ActiveRecord::Base
     (position.to_f/150).ceil
   end
 
+  def self.test(m, type)
+    message="<message>#{m}</message>"
+    logger.debug(message)
+    message_node = Nokogiri::XML.fragment(message).xpath('message')[0]
+
+    if type==1
+      #content = message_node.child.nil? ? '' : message_node.child.text
+      coder = HTMLEntities.new
+      t = message_node.child.text.gsub(/&/, '&amp;')
+      logger.debug("text => #{message_node.child.text}")
+      logger.debug("t => #{t}")
+      content = Nokogiri::XML.fragment(t).inner_html
+    else
+      content = message_node.inner_html
+    end
+    logger.debug "Content after typeslip detection ==> #{content} <=="
+
+    n = Nokogiri::XML.fragment(content)
+
+    #n.search('clock').each do |t|
+    #  t.add_previous_sibling(t.inner_text)
+    #  t.remove
+    #end
+    logger.debug "Content after clock sanitize ==> #{n.inspect} <=="
+    logger.debug "Content after clock sanitize ==> #{n.to_xml} <=="
+
+    #n.search('a').each do |t|
+    #  if t['class'] != 'smiley'
+    #    self.links.build({href: t['href']})
+    #  end
+    #end
+    m = n.to_xml(:encoding => 'UTF-8', save_with: Nokogiri::XML::Node::SaveOptions::AS_XML).strip
+    logger.debug "=> #{m} <="
+  rescue Exception => e
+    logger.error('Truc fail for post')
+    logger.error(e.message)
+    logger.error(e.backtrace)
+  end
+
   private
   def update_message
     login = self.login.strip
@@ -30,41 +69,13 @@ class Post < ActiveRecord::Base
     message_node = Nokogiri::XML.fragment(self.message).xpath('message')[0]
 
     if self.tribune.type_slip == Tribune::TYPE_SLIP_ENCODED
-      content = message_node.child.nil? ? '' : message_node.child.text
+      t = message_node.child.text.gsub(/&/, '&amp;')
+      content = Nokogiri::XML.fragment(t).inner_html
+      #content = message_node.child.nil? ? '' : message_node.child.text
     else
       content = message_node.inner_html
     end
     logger.debug "Content after typeslip detection ==> #{content} <=="
-    #cdata, text, autre = false, false, false
-    #message_node.children.each do |n|
-    #  if n.cdata?
-    #    cdata = true
-    #    break
-    #  elsif n.text?
-    #    text = true
-    #  elsif n.element?
-    #    autre = true
-    #    break
-    #  end
-    #end
-    #
-    #begin
-    #  if autre
-    #    content = message_node.inner_html
-    #  elsif cdata
-    #    content = message_node.child.text
-    #  else
-    #    n = Nokogiri::XML.fragment(message_node.child.text)
-    #    s = n.search("a","i","u","s","code","b","clock").size
-    #    if s == 0
-    #      content = message_node.child.to_s
-    #    else
-    #      content = message_node.child.text
-    #    end
-    #  end
-    #rescue Exception => e
-    #  content = ""
-    #end
 
     n = Nokogiri::XML.fragment(content)
 
@@ -82,9 +93,9 @@ class Post < ActiveRecord::Base
     m = n.to_xml(:encoding => 'UTF-8', save_with: Nokogiri::XML::Node::SaveOptions::AS_XML).strip
     self.message = m
   rescue Exception => e
-    @logger.error('Truc fail for post')
-    @logger.error(e.message)
-    @logger.error(e.backtrace)
+    logger.error('Truc fail for post')
+    logger.error(e.message)
+    logger.error(e.backtrace)
   end
 
   def update_tire
