@@ -8,6 +8,7 @@ class RefreshJob
   def run
     @logger.info(' RefreshJob : run')
     Tribune.refresh_all
+    @logger.info(' RefreshJob : done')
   end
 
   def on_timeout

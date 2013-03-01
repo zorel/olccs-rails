@@ -23,7 +23,6 @@ class Tribune < ActiveRecord::Base
   # des posts du backend pour lancer les actions dessus.
   # @param [Hash] opts
   def backend(opts={})
-    # s supprimé de la liste: utilisation de la pagination avec du per_page de kaminari
     conf = {
         :last => 0,
         :user => nil,
@@ -103,8 +102,8 @@ class Tribune < ActiveRecord::Base
   # * Filtre le contenu avec Nokogiri pour (au cas où la tribune n'accepte pas le last id)
   def refresh
     @logger = TorqueBox::Logger.new( self.class.to_s + '::' + self.name )
-    client = HTTPClient.new
-    client.receive_timeout=5
+    client = HTTP::Client.new(timeout_in_seconds: 10)
+
     last_post = self.posts.last(:order => 'p_id')
     if last_post.nil?
       last_id = 0
@@ -118,7 +117,7 @@ class Tribune < ActiveRecord::Base
       r = client.get(get_url, query)
       @logger.info("Fin requete")
 
-      response = Nokogiri::XML(r.content)
+      response = Nokogiri::XML(r)
       response.xpath("/board/post[@id > #{last_id}]").reverse.each do |p|
         #p_id = p.xpath("@id").to_s.to_i
         info = p.xpath('info').nil? ? '' : p.xpath('info').text.encode('utf-8').strip

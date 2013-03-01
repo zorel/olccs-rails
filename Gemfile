@@ -58,6 +58,7 @@ gem 'omniauth-twitter'
 gem 'omniauth-linuxfr'
 
 # http client
+gem 'jruby-httpclient', require: 'http_client'
 gem 'httpclient'
 
 # xml parser/builder
@@ -69,6 +70,6 @@ gem 'kaminari'
 gem 'htmlentities'
 
 # Decorators
-gem 'draper'
+# gem 'draper'
 
 gem 'figaro'
