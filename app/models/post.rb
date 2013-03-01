@@ -84,7 +84,7 @@ class Post < ActiveRecord::Base
     else
       content = message_node.inner_html
     end
-    logger.debug "Content after typeslip detection ==> #{content} <=="
+    logger.info "Content after typeslip detection ==> #{content} <=="
 
     n = Nokogiri::XML.fragment(content)
 
@@ -100,6 +100,7 @@ class Post < ActiveRecord::Base
       end
     end
     m = n.to_xml(:encoding => 'UTF-8', save_with: Nokogiri::XML::Node::SaveOptions::AS_XML).strip
+    logger.info("Message final: #{m}")
     self.message = m
   rescue Exception => e
     logger.error('Truc fail for post')
