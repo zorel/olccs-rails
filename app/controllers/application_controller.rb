@@ -42,14 +42,14 @@ private
               xml << p.login
             }
             xml.message {
-              xml << p.message
+              xml << p.filtered
             }
             xml.ext {
               xml.rules {
                 xml << p.rules
               }
-              xml.filtered {
-                xml << p.filtered
+              xml.original {
+                xml << p.message
               }
 
             }
